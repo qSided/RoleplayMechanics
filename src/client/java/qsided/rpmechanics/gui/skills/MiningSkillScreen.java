@@ -158,6 +158,11 @@ public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     client.setScreen(new CraftingSkillScreen());
                 })
                 .divider()
+                .button(Text.translatable("skills.rpmechanics.smithing"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("smithing");
+                    client.setScreen(new SmithingSkillScreen());
+                })
+                .divider()
                 .button(Text.translatable("skills.rpmechanics.combat"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("combat");
                     client.setScreen(new CombatSkillScreen());

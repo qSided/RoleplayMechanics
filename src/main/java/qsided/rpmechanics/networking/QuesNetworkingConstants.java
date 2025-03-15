@@ -11,4 +11,5 @@ public class QuesNetworkingConstants {
     public static final Identifier SEND_PLAYER_FALL = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_player_fall");
     public static final Identifier SEND_PLAYER_JUMP = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_player_jump");
     public static final Identifier SEND_CLASS_SELECTED = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_class_selected");
+    public static final Identifier SEND_PLAYER_FIRST_JOIN = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_player_first_join");
 }

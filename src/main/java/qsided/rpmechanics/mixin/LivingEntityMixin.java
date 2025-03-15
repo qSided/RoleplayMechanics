@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import qsided.rpmechanics.events.PlayerHurtByEntityCallback;
 
 @Mixin(LivingEntity.class)
-public abstract class OnDamagedMixin {
+public abstract class LivingEntityMixin {
 
     @WrapOperation(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/criterion/EntityHurtPlayerCriterion;trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/entity/damage/DamageSource;FFZ)V"))
     public void damage(EntityHurtPlayerCriterion instance, ServerPlayerEntity player, DamageSource source, float dealt, float taken, boolean blocked, Operation<Void> original) {

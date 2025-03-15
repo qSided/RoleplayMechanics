@@ -35,6 +35,14 @@
   "classes.rpmechanics.starting_gear": "Starting Gear:",
   "classes.rpmechanics.levels": "Starting Levels:",
   "classes.rpmechanics.modifiers": "Bonus Modifiers:",
+  "classes.rpmechanics.finish": "Finish",
+
+  "character.rpmechanics.name_selection": [
+    {
+      "text": "Type you're desired display name, then press accept. This is the name seen by other players. Once done, press the next page button in the bottom right."
+    }
+  ],
+  "character.rpmechanics.accept": "Accept",
 
   "key.category.rpmechanics": "Roleplay Mechanics Mod",
   "key.rpmechanics.open_skills": "Open Skills",
@@ -115,7 +123,7 @@
     { "text": "You are using ", "color": "#2e469e"},
     { "text": "Roleplay Mechanics", "color": "#2e6391"},
     { "text": " version ", "color": "#2e469e"},
-    { "text": "0.6.3-", "color": "#3533d4"},
+    { "text": "0.6.4-", "color": "#3533d4"},
     { "text": "alpha", "color": "#b633d4"},
     { "text": ".", "color": "#2e469e"},
     { "text": " Press ", "color": "#2e469e"},
@@ -265,6 +273,14 @@
   ],
   "skills.level_up.rpmechanics.agility": [
     { "text": "Agility ", "color": "green"},
+    { "text": "↑", "color": "#8f8f96"}
+  ],
+
+  "skills.rpmechanics.smithing": [
+    { "text": "Smithing", "color": "#a3a3a3"}
+  ],
+  "skills.level_up.rpmechanics.smithing": [
+    { "text": "Smithing ", "color": "#a3a3a3"},
     { "text": "↑", "color": "#8f8f96"}
   ],
 

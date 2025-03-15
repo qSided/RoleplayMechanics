@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.network.ServerPlayerEntity;
 import qsided.rpmechanics.PlayerData;
-import qsided.rpmechanics.StateSaverAndLoader;
+import qsided.rpmechanics.StateManager;
 import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 import qsided.rpmechanics.events.IncreaseSkillLevelCallback;
 
@@ -25,7 +25,7 @@ public class SkillsCommand {
                                                 final String skill = StringArgumentType.getString(context, "skill");
                                                 final int value = IntegerArgumentType.getInteger(context, "value");
                                                 final ServerPlayerEntity player = context.getSource().getPlayer();
-                                                PlayerData state = StateSaverAndLoader.getPlayerState(player);
+                                                PlayerData state = StateManager.getPlayerState(player);
                                                 IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, value - state.skillLevels.getOrDefault(skill, 1), true);
                                                 return 1;
                                             })
@@ -37,7 +37,7 @@ public class SkillsCommand {
                                                 final String skill = StringArgumentType.getString(context, "skill");
                                                 final float value = FloatArgumentType.getFloat(context, "value");
                                                 final ServerPlayerEntity player = context.getSource().getPlayer();
-                                                PlayerData state = StateSaverAndLoader.getPlayerState(player);
+                                                PlayerData state = StateManager.getPlayerState(player);
                                                 IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, skill, value);
                                                 return 1;
                                             })))));

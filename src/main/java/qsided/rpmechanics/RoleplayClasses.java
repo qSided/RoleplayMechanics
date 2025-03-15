@@ -26,7 +26,7 @@ public class RoleplayClasses {
         RoleplayClassSelectedCallback.EVENT.register((player, state, rpClassId) -> {
             
             if (state.rpClass.equals("")) {
-                player.sendMessage(Text.translatable("classes.ques-mod.class_selected")
+                player.sendMessage(Text.translatable("classes.rpmechanics.class_selected")
                     .append(Text.literal(
                             RoleplayMechanicsCommon.getRpClasses().get(rpClassId).getName()).getWithStyle(Style.EMPTY.withColor(Color.decode(RoleplayMechanicsCommon.getRpClasses().get(rpClassId).getColor()).getRGB())).getFirst()
                     )
@@ -48,7 +48,7 @@ public class RoleplayClasses {
                 
                 state.rpClass = RoleplayMechanicsCommon.getRpClasses().get(rpClassId).getName();
             } else {
-                player.sendMessage(Text.translatable("classes.ques-mod.already_selected"));
+                player.sendMessage(Text.translatable("classes.rpmechanics.already_selected"));
             }
             
             

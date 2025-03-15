@@ -15,7 +15,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import qsided.rpmechanics.PlayerData;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
-import qsided.rpmechanics.StateSaverAndLoader;
+import qsided.rpmechanics.StateManager;
 import qsided.rpmechanics.config.requirements.ItemWithRequirements;
 import qsided.rpmechanics.config.requirements.Requirements;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
@@ -33,7 +33,7 @@ public class SkillCheckHandler {
         CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemWithRequirements.class);
         ServerEntityEvents.EQUIPMENT_CHANGE.register((livingEntity, equipmentSlot, previousStack, currentStack) -> {
             if (livingEntity instanceof PlayerEntity player && !player.isCreative()) {
-                PlayerData state = StateSaverAndLoader.getPlayerState(player);
+                PlayerData state = StateManager.getPlayerState(player);
                 
                 if (RoleplayMechanicsCommon.OWO_CONFIG.enableRequirements()) {
                     try {

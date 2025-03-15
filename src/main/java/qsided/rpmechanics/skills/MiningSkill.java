@@ -10,7 +10,7 @@ import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 
 import java.util.Random;
 
-import static qsided.rpmechanics.StateSaverAndLoader.getPlayerState;
+import static qsided.rpmechanics.StateManager.getPlayerState;
 
 public class MiningSkill {
     
@@ -23,7 +23,7 @@ public class MiningSkill {
             PlayerData state = getPlayerState(player);
             int miningLevel = state.skillLevels.getOrDefault("mining", 1);
             
-            RoleplayMechanicsCommon.getBlockValues().forEach(block -> {
+            RoleplayMechanicsCommon.getBlockXpValues().forEach(block -> {
                 if (blockState.getBlock().asItem().toString().equals(block.getId())) {
                     
                     block.getExperience().forEach((skill, value) -> {

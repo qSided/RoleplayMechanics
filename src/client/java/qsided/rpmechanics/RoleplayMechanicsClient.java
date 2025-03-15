@@ -21,12 +21,10 @@ import org.lwjgl.glfw.GLFW;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.requirements.ItemWithRequirements;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
-import qsided.rpmechanics.gui.classes.ClassSelection;
+import qsided.rpmechanics.gui.other.ClassSelectionScreen;
+import qsided.rpmechanics.gui.other.RoleplayNameSelectionScreen;
 import qsided.rpmechanics.gui.skills.*;
-import qsided.rpmechanics.networking.LevelUpPayload;
-import qsided.rpmechanics.networking.RequestSkillsPayload;
-import qsided.rpmechanics.networking.SendSkillsExperiencePayload;
-import qsided.rpmechanics.networking.SendSkillsLevelsPayload;
+import qsided.rpmechanics.networking.*;
 
 import java.awt.*;
 import java.io.File;
@@ -111,7 +109,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
                 }
 			}
 			while (openClassSelection.wasPressed()) {
-				client.setScreen(new ClassSelection());
+				client.setScreen(new ClassSelectionScreen());
 			}
 		});
 		
@@ -124,7 +122,9 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 			});
 		});
 		
-		
+		ClientPlayNetworking.registerGlobalReceiver(PlayerFirstJoinPayload.ID, (payload, context) -> {
+			context.client().setScreen(new RoleplayNameSelectionScreen());
+		});
 		
 		ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, lines) -> {
 			
@@ -166,6 +166,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 			AgilitySkillScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.JUMP_STRENGTH).getValue());
 			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE).getValue());
 			CraftingSkillScreen.setCraftingLevel(payload.crafting());
+			SmithingSkillScreen.setSmithingLevel(payload.smithing());
 			});
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperiencePayload.ID, (payload, context) -> {
 			MiningSkillScreen.setMiningExperience(payload.mining());
@@ -178,6 +179,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 			AgilitySkillScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.JUMP_STRENGTH).getValue());
 			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE).getValue());
 			CraftingSkillScreen.setCraftingExperience(payload.crafting());
+			SmithingSkillScreen.setSmithingExperience(payload.smithing());
 			});
 	}
 	

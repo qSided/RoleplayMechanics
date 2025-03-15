@@ -6,62 +6,42 @@ import io.wispforest.owo.ui.component.DropdownComponent;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.container.GridLayout;
 import io.wispforest.owo.ui.core.Color;
-import io.wispforest.owo.ui.core.Component;
 import io.wispforest.owo.ui.core.HorizontalAlignment;
 import io.wispforest.owo.ui.core.Positioning;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.RoleplayMechanicsClient;
+import qsided.rpmechanics.RoleplayMechanicsCommon;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
-public class AgilitySkillScreen extends BaseUIModelScreen<FlowLayout> {
-    public static Integer agilityLevel = 1;
-    public static Float agilityExperience = 0F;
-    public static Double safeDistance = 3.0;
+public class SmithingSkillScreen extends BaseUIModelScreen<FlowLayout> {
+    public static Integer smithingLevel = 1;
+    public static Float smithingExperience = 0F;
     
-    
-    public static Double jumpStrength = 0.42;
-    
-    public AgilitySkillScreen() {
-        super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "agility")));
+    public SmithingSkillScreen() {
+        super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "smithing")));
     }
     
-    public static void setAgilityLevel(int level) {
-        AgilitySkillScreen.agilityLevel = level;
+    public static void setSmithingLevel(int level) {
+        SmithingSkillScreen.smithingLevel = level;
     }
-    public static void setAgilityExperience(float experience) {
-        AgilitySkillScreen.agilityExperience = experience;
-    }
-    public static void setJumpStrength(Double jumpStrength) {
-        AgilitySkillScreen.jumpStrength = jumpStrength;
-    }
-    public static void setSafeDistance(Double safeDistance) {
-        AgilitySkillScreen.safeDistance = safeDistance;
+    public static void setSmithingExperience(float experience) {
+        SmithingSkillScreen.smithingExperience = experience;
     }
     
     @Override
     protected void build(FlowLayout rootComponent) {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
-        DecimalFormat df2 = new DecimalFormat();
-        df2.setMaximumFractionDigits(0);
-        
-        List<Component> gridChildren = List.of(
-                Components.label(Text.translatable("skills.rpmechanics.current_level"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
-        );
-        
-        rootComponent.childById(GridLayout.class, "agility")
+        rootComponent.childById(GridLayout.class, "smithing")
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_level"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT),
                 0,
                 0)
                 .child(
-                        Components.label(Text.of(String.valueOf(agilityLevel)))
+                        Components.label(Text.of(String.valueOf(smithingLevel)))
                                 .color(Color.ofArgb(0xd1d0cd))
                                 .horizontalTextAlignment(HorizontalAlignment.RIGHT),
                         0,
@@ -71,55 +51,22 @@ public class AgilitySkillScreen extends BaseUIModelScreen<FlowLayout> {
                         Components.label(Text.translatable("skills.rpmechanics.current_experience"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT),
                         1,
-                        0)
-                .child(
-                        Components.label(Text.translatable("skills.rpmechanics.agility.movement_speed"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
-                        2,
-                        0)
-                .child(
-                        Components.label(Text.translatable("skills.rpmechanics.agility.jump_strength"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
-                        3,
-                        0)
-                .child(
-                        Components.label(Text.translatable("skills.rpmechanics.agility.safe_distance"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
-                        4,
-                        0)
-                .child(
-                        Components.label(Text.of("+" + agilityLevel + "%"))
-                                .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
-                        2,
-                        2)
-                .child(
-                        Components.label(Text.of(df.format(jumpStrength)))
-                                .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
-                        3,
-                        2)
-                .child(
-                        Components.label(Text.of(df.format(safeDistance) + " Blocks"))
-                                .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
-                        4,
-                        2);
+                        0);
         
-        if (agilityLevel < 100) {
+        if (smithingLevel < 100) {
             
             if (!RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.useGlobal()) {
-                switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.agilityOptions.multiplicativeOrAdditive()) {
-                    case ADD -> rootComponent.childById(GridLayout.class, "agility")
+                switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.multiplicativeOrAdditive()) {
+                    case ADD -> rootComponent.childById(GridLayout.class, "smithing")
                             .child(
-                                    Components.label(Text.of(df.format(agilityExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.agilityOptions.baseExperience() + (agilityLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.agilityOptions.amount()))))
+                                    Components.label(Text.of(df.format(smithingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.baseExperience() + (smithingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT),
                                     1,
                                     2);
-                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "agility")
+                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "smithing")
                             .child(
-                                    Components.label(Text.of(df.format(agilityExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.agilityOptions.baseExperience() * (agilityLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.agilityOptions.amount()))))
+                                    Components.label(Text.of(df.format(smithingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.baseExperience() * (smithingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT),
                                     1,
@@ -127,16 +74,16 @@ public class AgilitySkillScreen extends BaseUIModelScreen<FlowLayout> {
                 }
             } else {
                 switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.multiplicativeOrAdditive()) {
-                    case ADD -> rootComponent.childById(GridLayout.class, "agility")
+                    case ADD -> rootComponent.childById(GridLayout.class, "smithing")
                             .child(
-                                    Components.label(Text.of(df.format(agilityExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (agilityLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
+                                    Components.label(Text.of(df.format(smithingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (smithingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT),
                                     1,
                                     2);
-                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "agility")
+                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "smithing")
                             .child(
-                                    Components.label(Text.of(df.format(agilityExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (agilityLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
+                                    Components.label(Text.of(df.format(smithingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (smithingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT),
                                     1,
@@ -145,7 +92,7 @@ public class AgilitySkillScreen extends BaseUIModelScreen<FlowLayout> {
             }
             
         } else {
-            rootComponent.childById(GridLayout.class, "agility")
+            rootComponent.childById(GridLayout.class, "smithing")
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))

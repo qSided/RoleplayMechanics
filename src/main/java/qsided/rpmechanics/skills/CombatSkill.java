@@ -13,7 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import qsided.rpmechanics.PlayerData;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
-import qsided.rpmechanics.StateSaverAndLoader;
+import qsided.rpmechanics.StateManager;
 import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 
 import java.io.File;
@@ -25,7 +25,7 @@ public class CombatSkill {
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, entity, killedEntity) -> {
             if (entity instanceof ServerPlayerEntity player) {
                 
-                PlayerData state = StateSaverAndLoader.getPlayerState(player);
+                PlayerData state = StateManager.getPlayerState(player);
                 float combatExp = state.skillExperience.getOrDefault("combat", 0F);
                 int combatLevel = state.skillLevels.getOrDefault("combat", 1);
                 
@@ -37,7 +37,7 @@ public class CombatSkill {
         
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
            if (entity instanceof LivingEntity livingEntity && !(entity instanceof PlayerEntity) && world.getClosestPlayer(livingEntity, 120) instanceof PlayerEntity player) {
-               PlayerData state = StateSaverAndLoader.getPlayerState(player);
+               PlayerData state = StateManager.getPlayerState(player);
                
                ObjectMapper mapper = new ObjectMapper();
                try {

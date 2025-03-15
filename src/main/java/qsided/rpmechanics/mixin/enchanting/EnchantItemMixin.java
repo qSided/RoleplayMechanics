@@ -1,4 +1,4 @@
-package qsided.rpmechanics.mixin;
+package qsided.rpmechanics.mixin.enchanting;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
@@ -17,7 +17,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Util;
 import org.spongepowered.asm.mixin.*;
 import qsided.rpmechanics.PlayerData;
-import qsided.rpmechanics.StateSaverAndLoader;
+import qsided.rpmechanics.StateManager;
 import qsided.rpmechanics.events.EnchantItemCallback;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public abstract class EnchantItemMixin {
             } else {
                 context.run((world, pos) -> {
                     int enchantingPower;
-                    PlayerData state = StateSaverAndLoader.getPlayerState(player);
+                    PlayerData state = StateManager.getPlayerState(player);
                     
                     if (isBetween(state.skillLevels.getOrDefault("enchantingLevel", 1), 20, 39)) {
                         enchantingPower = 1;

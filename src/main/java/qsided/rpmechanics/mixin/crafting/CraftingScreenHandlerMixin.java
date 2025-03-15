@@ -23,7 +23,7 @@ import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import java.util.List;
 import java.util.Optional;
 
-import static qsided.rpmechanics.StateSaverAndLoader.getPlayerState;
+import static qsided.rpmechanics.StateManager.getPlayerState;
 
 @Mixin(CraftingScreenHandler.class)
 public class CraftingScreenHandlerMixin {

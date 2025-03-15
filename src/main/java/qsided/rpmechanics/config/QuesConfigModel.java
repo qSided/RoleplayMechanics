@@ -8,7 +8,7 @@ import io.wispforest.owo.config.annotation.Sync;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
 
 @Modmenu(modId = RoleplayMechanicsCommon.MOD_ID)
-@Config(name = "rpmechanics", wrapperName = "QuesConfig")
+@Config(name = "rpmechanics", wrapperName = "RpMechanicsConfig")
 public class QuesConfigModel {
     
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
@@ -16,23 +16,25 @@ public class QuesConfigModel {
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     public boolean enableRequirements = true;
     
-    
-    
-    @Nest
-    public SkillOptions skillOptions = new SkillOptions();
     @Nest
     public ExperienceOptions experienceOptions = new ExperienceOptions();
     
-    public static class SkillOptions {
-        
-        @Nest
-        public AgilityRewards agilityRewardOptions = new AgilityRewards();
-        public static class AgilityRewards {
-            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-            public float jumpHeightIncrease = 60;
-        }
-        
-    }
+    //@Nest
+    //public SkillOptions skillOptions = new SkillOptions();
+    //public static class SkillOptions {
+    //    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+    //    public boolean enableAgility = true;
+    //    @Nest
+    //    public AgilitySettings agilitySettings = new AgilitySettings();
+    //    public static class AgilitySettings {
+    //        @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+    //        public double jumpHeightIncrease = 0.0058;
+    //        @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+    //        public double safeFallDistanceIncrease = 0.1;
+    //        @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+    //        public double movementSpeedIncrease = 0.001;
+    //    }
+    //}
     
     public static class ExperienceOptions {
         @Sync(Option.SyncMode.OVERRIDE_CLIENT)
@@ -100,6 +102,16 @@ public class QuesConfigModel {
         @Nest
         public MiningOptions miningOptions = new MiningOptions();
         public static class MiningOptions {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public float baseExperience = 60;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public Choices multiplicativeOrAdditive = Choices.MULTIPLY;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double amount = 3.4;
+        }
+        @Nest
+        public SmithingOptions smithingOptions = new SmithingOptions();
+        public static class SmithingOptions {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
             public float baseExperience = 60;
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)

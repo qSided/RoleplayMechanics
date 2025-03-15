@@ -3,11 +3,12 @@
   "package": "qsided.rpmechanics.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "EnchantItemMixin",
-    "IncreaseTravelMotionStatsAndJumpMixin",
-    "OnDamagedMixin",
+    "LivingEntityMixin",
+    "ServerPlayerEntityMixin",
     "crafting.CraftingResultSlotMixin",
-    "crafting.CraftingScreenHandlerMixin"
+    "crafting.CraftingScreenHandlerMixin",
+    "enchanting.EnchantItemMixin",
+    "smithing.AnvilScreenHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

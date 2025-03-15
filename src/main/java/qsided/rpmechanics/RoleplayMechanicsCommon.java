@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.commands.SkillsCommand;
 import qsided.rpmechanics.config.ConfigGenerator;
-import qsided.rpmechanics.config.QuesConfig;
+import qsided.rpmechanics.config.RpMechanicsConfig;
 import qsided.rpmechanics.config.experience_values.BlockExperience;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
@@ -59,33 +59,38 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("rpmechanics");
 	public static final String MOD_ID = "rpmechanics";
 	public static final RegistryKey<PlacedFeature> MYTHRIL_DEBRIS_FEATURE = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(MOD_ID, "mythril_debris_feature"));
-    public static final QuesConfig OWO_CONFIG = QuesConfig.createAndLoad();
-    static Map<Integer, RoleplayClass> rpClasses;
-    static List<BlockExperience> blockValues;
-    static List<ItemCraftingRequirement> craftingReqs;
+    public static final RpMechanicsConfig OWO_CONFIG = RpMechanicsConfig.createAndLoad();
+    
+    public static final File RP_CLASSES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/classes/classes.json");
+    public static final File MINING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/mining.json");
+    public static final File CRAFTING_REQS_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting.json");
+    
+    static Map<Integer, RoleplayClass> RP_CLASSES;
+    static List<BlockExperience> BLOCK_XP_VALUES;
+    static List<ItemCraftingRequirement> CRAFTING_REQS;
     
     public static Map<Integer, RoleplayClass> getRpClasses() {
-        return rpClasses;
+        return RP_CLASSES;
     }
     
     public void setRpClasses(Map<Integer, RoleplayClass> rpClasses) {
-        RoleplayMechanicsCommon.rpClasses = rpClasses;
+        RoleplayMechanicsCommon.RP_CLASSES = rpClasses;
     }
     
-    public static List<BlockExperience> getBlockValues() {
-        return blockValues;
+    public static List<BlockExperience> getBlockXpValues() {
+        return BLOCK_XP_VALUES;
     }
     
-    public static void setBlockValues(List<BlockExperience> blockValues) {
-        RoleplayMechanicsCommon.blockValues = blockValues;
+    public static void setBlockXpValues(List<BlockExperience> blockXpValues) {
+        RoleplayMechanicsCommon.BLOCK_XP_VALUES = blockXpValues;
     }
     
     public static List<ItemCraftingRequirement> getCraftingReqs() {
-        return craftingReqs;
+        return CRAFTING_REQS;
     }
     
-    public static void setCraftingReqs(List<ItemCraftingRequirement> craftingReqs) {
-        RoleplayMechanicsCommon.craftingReqs = craftingReqs;
+    public static void setCraftingReqs(List<ItemCraftingRequirement> craftingReqsFile) {
+        RoleplayMechanicsCommon.CRAFTING_REQS = craftingReqsFile;
     }
     
     @Override
@@ -106,14 +111,12 @@ public class RoleplayMechanicsCommon implements ModInitializer {
             ConfigGenerator.genPassiveMobs();
             ConfigGenerator.genCraftingConfig();
             
-            Map<Integer, RoleplayClass> rpClasses = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/classes/classes.json"), new TypeReference<Map<Integer, RoleplayClass>>() {});
-            List<BlockExperience> experience = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir()
-                    + "/rpmechanics/skills/mining.json"), miningRef);
-            List<ItemCraftingRequirement> craftingReqs = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir()
-                    + "/rpmechanics/skills/crafting.json"), craftingRef);
+            Map<Integer, RoleplayClass> rpClasses = mapper.readValue(RP_CLASSES_FILE, new TypeReference<Map<Integer, RoleplayClass>>() {});
+            List<BlockExperience> miningXpValues = mapper.readValue(MINING_XP_VALUES_FILE, miningRef);
+            List<ItemCraftingRequirement> craftingReqs = mapper.readValue(CRAFTING_REQS_FILE, craftingRef);
             
             setRpClasses(rpClasses);
-            setBlockValues(experience);
+            setBlockXpValues(miningXpValues);
             setCraftingReqs(craftingReqs);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -140,41 +143,36 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         PayloadTypeRegistry.playC2S().register(SendPlayerFallPayload.ID, SendPlayerFallPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SendPlayerJumpPayload.ID, SendPlayerJumpPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SendClassSelectedPayload.ID, SendClassSelectedPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(PlayerFirstJoinPayload.ID, PlayerFirstJoinPayload.CODEC);
         
         ServerPlayNetworking.registerGlobalReceiver(RequestSkillsPayload.ID, (payload, context) -> {
-            PlayerData playerState = StateSaverAndLoader.getPlayerState(context.player());
+            PlayerData playerState = StateManager.getPlayerState(context.player());
             
             sendSkillData(playerState, context.player());
         });
         
-        ServerPlayNetworking.registerGlobalReceiver(SendPlayerFallPayload.ID, ((payload, context) -> {
-            PlayerData state = StateSaverAndLoader.getPlayerState(context.player());
+        ServerPlayNetworking.registerGlobalReceiver(SendPlayerFallPayload.ID, (payload, context) -> {
+            PlayerData state = StateManager.getPlayerState(context.player());
             IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(context.player(), state, "agility", (float) Math.min((payload.integer() / 100), 50));
-        }));
+        });
         
-        ServerPlayNetworking.registerGlobalReceiver(SendPlayerJumpPayload.ID, ((payload, context) -> {
-            PlayerData state = StateSaverAndLoader.getPlayerState(context.player());
+        ServerPlayNetworking.registerGlobalReceiver(SendPlayerJumpPayload.ID, (payload, context) -> {
+            PlayerData state = StateManager.getPlayerState(context.player());
             IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(context.player(), state, "agility", (float) (payload.integer()));
-        }));
+        });
         
-        ServerPlayNetworking.registerGlobalReceiver(SendClassSelectedPayload.ID, (((payload, context) -> {
-            
-            //context.player().sendMessage(Text.translatable("classes.rpmechanics.class_selected")
-            //        .append(Text.literal(
-            //                rpClasses.get(payload.rpClassId()).getName()).getWithStyle(Style.EMPTY.withColor(Color.decode(rpClasses.get(payload.rpClassId()).getColor()).getRGB())).getFirst()
-            //        )
-            //);
-            //getRpClasses().get(payload.rpClassId()).getStartingEquipment().forEach(startingEquipment -> {
-            //    for (int i = 0; i<startingEquipment.getCount(); i++) {
-            //        context.player().giveItemStack(Registries.ITEM.get(Identifier.of(startingEquipment.getItem())).getDefaultStack());
-            //    }
-            //});
-            
+        ServerPlayNetworking.registerGlobalReceiver(SendClassSelectedPayload.ID, (payload, context) -> {
             RoleplayClassSelectedCallback.EVENT.invoker().selectClass(context.player(), getPlayerState(context.player()), payload.rpClassId());
-        })));
+        });
         
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             PlayerData state = getPlayerState(handler.getPlayer());
+            
+            if (!state.hasJoinedBefore) {
+                ServerPlayNetworking.send(handler.getPlayer(), new PlayerFirstJoinPayload(1));
+                System.out.println("Player joined for the first time!");
+                state.hasJoinedBefore = true;
+            }
             
             if (OWO_CONFIG.displayJoinMessage()) {
                 handler.getPlayer().sendMessage(Text.translatable("rpmechanics.player_joined"));
@@ -195,7 +193,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         });
         
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, player, alive) -> {
-            PlayerData state = StateSaverAndLoader.getPlayerState(player);
+            PlayerData state = StateManager.getPlayerState(player);
             
             Identifier combatModifier = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "combat_modifier");
             player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).overwritePersistentModifier(
@@ -229,7 +227,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
     }
 	
 	public PlayerData getPlayerState(ServerPlayerEntity player) {
-		return StateSaverAndLoader.getPlayerState(player);
+		return StateManager.getPlayerState(player);
 	}
 	
 	public static void sendSkillData(PlayerData playerState, ServerPlayerEntity player) {
@@ -240,6 +238,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 		Integer enduranceLevel = playerState.skillLevels.getOrDefault("endurance", 1);
         Integer agilityLevel = playerState.skillLevels.getOrDefault("agility", 1);
 		Integer craftingLevel = playerState.skillLevels.getOrDefault("crafting", 1);
+		Integer smithingLevel = playerState.skillLevels.getOrDefault("smithing", 1);
 		
 		Float miningExp = playerState.skillExperience.getOrDefault("mining", 0F);
 		Float enchantingExp = playerState.skillExperience.getOrDefault("enchanting", 0F);
@@ -248,8 +247,9 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 		Float enduranceExp = playerState.skillExperience.getOrDefault("endurance", 0F);
         Float agilityExp = playerState.skillExperience.getOrDefault("agility", 0F);
 		Float craftingExp = playerState.skillExperience.getOrDefault("crafting", 0F);
+		Float smithingExp = playerState.skillExperience.getOrDefault("smithing", 0F);
 		
-		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, combatLevel, woodcuttingLevel, enduranceLevel, agilityLevel, craftingLevel));
-		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, combatExp, woodcuttingExp, enduranceExp, agilityExp, craftingExp));
+		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, combatLevel, woodcuttingLevel, enduranceLevel, agilityLevel, craftingLevel, smithingLevel));
+		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, combatExp, woodcuttingExp, enduranceExp, agilityExp, craftingExp, smithingExp));
 	}
 }

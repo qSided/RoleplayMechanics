@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import qsided.rpmechanics.PlayerData;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
-import qsided.rpmechanics.StateSaverAndLoader;
+import qsided.rpmechanics.StateManager;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 
@@ -34,7 +34,7 @@ public class CraftingResultSlotMixin {
     private void awardXp(List<ItemCraftingRequirement> items, String itemId) {
         items.stream().filter(item -> item.getItemId().equals(itemId)).forEach(
                 item -> {
-                    PlayerData state = StateSaverAndLoader.getPlayerState(player);
+                    PlayerData state = StateManager.getPlayerState(player);
                     IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp((ServerPlayerEntity) player, state, "crafting", item.getExpWorth());
                     System.out.println("Crafted " + item.getItemId() + " for " + item.getExpWorth() + "XP");
                 }

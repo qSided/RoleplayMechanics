@@ -92,7 +92,7 @@ public class CraftingSkillScreen extends BaseUIModelScreen<FlowLayout> {
             }
             
         } else {
-            rootComponent.childById(GridLayout.class, "endurance")
+            rootComponent.childById(GridLayout.class, "crafting")
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))
@@ -124,6 +124,11 @@ public class CraftingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     client.setScreen(new CraftingSkillScreen());
                 })
                 .divider()
+                .button(Text.translatable("skills.rpmechanics.smithing"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("smithing");
+                    client.setScreen(new SmithingSkillScreen());
+                })
+                .divider()
                 .button(Text.translatable("skills.rpmechanics.combat"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("combat");
                     client.setScreen(new CombatSkillScreen());
@@ -131,7 +136,7 @@ public class CraftingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.endurance"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("endurance");
-                    client.setScreen(new CraftingSkillScreen());
+                    client.setScreen(new EnduranceSkillScreen());
                 })
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.agility"), button -> {

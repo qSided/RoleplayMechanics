@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class StateSaverAndLoader extends PersistentState {
+public class StateManager extends PersistentState {
     
     public HashMap<UUID, PlayerData> players = new HashMap<>();
     
@@ -21,6 +21,8 @@ public class StateSaverAndLoader extends PersistentState {
         NbtCompound playersNbt = new NbtCompound();
         players.forEach((uuid, playerData) -> {
             NbtCompound playerNbt = new NbtCompound();
+            
+            playerNbt.putBoolean("hasJoinedBefore", playerData.hasJoinedBefore);
             
             NbtCompound skillLevelsNbt = new NbtCompound();
             playerData.skillLevels.forEach(skillLevelsNbt::putInt);
@@ -51,12 +53,14 @@ public class StateSaverAndLoader extends PersistentState {
         return nbt;
     }
     
-    public static StateSaverAndLoader createFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        StateSaverAndLoader state = new StateSaverAndLoader();
+    public static StateManager createFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        StateManager state = new StateManager();
         
         NbtCompound playersNbt = nbt.getCompound("players");
         playersNbt.getKeys().forEach(key -> {
             PlayerData playerData = new PlayerData();
+            
+            playerData.hasJoinedBefore = playersNbt.getCompound(key).getBoolean("hasJoinedBefore");
             
             NbtCompound skillLevelsNbt = playersNbt.getCompound(key).getCompound("skillLevels");
             skillLevelsNbt.getKeys().forEach(s -> {
@@ -89,16 +93,16 @@ public class StateSaverAndLoader extends PersistentState {
         return state;
     }
     
-    private static Type<StateSaverAndLoader> type = new Type<>(
-            StateSaverAndLoader::new,
-            StateSaverAndLoader::createFromNbt,
+    private static Type<StateManager> type = new Type<>(
+            StateManager::new,
+            StateManager::createFromNbt,
             null
     );
     
-    public static StateSaverAndLoader getServerState(MinecraftServer server) {
+    public static StateManager getServerState(MinecraftServer server) {
         
         PersistentStateManager persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
-        StateSaverAndLoader state = persistentStateManager.getOrCreate(type, RoleplayMechanicsCommon.MOD_ID);
+        StateManager state = persistentStateManager.getOrCreate(type, RoleplayMechanicsCommon.MOD_ID);
         
         state.markDirty();
         
@@ -106,7 +110,7 @@ public class StateSaverAndLoader extends PersistentState {
     }
     
     public static PlayerData getPlayerState(LivingEntity player) {
-        StateSaverAndLoader serverState = getServerState(player.getWorld().getServer());
+        StateManager serverState = getServerState(player.getWorld().getServer());
         
         return serverState.players.computeIfAbsent(player.getUuid(), uuid -> new PlayerData());
     }
