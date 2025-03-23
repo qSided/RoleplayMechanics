@@ -10,5 +10,7 @@ public class PlayerData {
     public HashMap<String, HashMap<String, Integer>> expModifiers = new HashMap<>();
     
     public String rpClass = "";
+    public Integer rpClassLevel = 1;
+    public Float rpClassExp = 0F;
     public Boolean hasJoinedBefore = false;
 }

@@ -42,6 +42,8 @@ public class StateManager extends PersistentState {
             
             NbtCompound rpClassNbt = new NbtCompound();
             rpClassNbt.putString("rpClass", playerData.rpClass);
+            rpClassNbt.putInt("rpClassLevel", playerData.rpClassLevel);
+            rpClassNbt.putFloat("rpClassExp", playerData.rpClassExp);
             playerNbt.put("rpClass", rpClassNbt);
             
             //Puts each player's data into nbt
@@ -85,6 +87,8 @@ public class StateManager extends PersistentState {
             });
             
             playerData.rpClass = playersNbt.getCompound(key).getString("rpClass");
+            playerData.rpClassLevel = playersNbt.getCompound(key).getInt("rpClassLevel");
+            playerData.rpClassExp = playersNbt.getCompound(key).getFloat("rpClassExp");
             
             UUID uuid = UUID.fromString(key);
             state.players.put(uuid, playerData);

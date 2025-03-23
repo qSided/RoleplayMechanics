@@ -8,6 +8,7 @@ import io.wispforest.owo.ui.container.GridLayout;
 import io.wispforest.owo.ui.core.Color;
 import io.wispforest.owo.ui.core.HorizontalAlignment;
 import io.wispforest.owo.ui.core.Positioning;
+import io.wispforest.owo.ui.core.Sizing;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
@@ -37,21 +38,25 @@ public class CraftingSkillScreen extends BaseUIModelScreen<FlowLayout> {
         rootComponent.childById(GridLayout.class, "crafting")
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_level"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                 0,
                 0)
                 .child(
                         Components.label(Text.of(String.valueOf(craftingLevel)))
                                 .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         0,
-                        2)
+                        1)
                 
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_experience"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         1,
-                        0);
+                        0)
+                .sizing(Sizing.fill(34), Sizing.content());
         
         if (craftingLevel < 100) {
             
@@ -61,16 +66,18 @@ public class CraftingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(craftingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.craftingOptions.baseExperience() + (craftingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.craftingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "crafting")
                             .child(
                                     Components.label(Text.of(df.format(craftingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.craftingOptions.baseExperience() * (craftingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.craftingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             } else {
                 switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.multiplicativeOrAdditive()) {
@@ -78,16 +85,18 @@ public class CraftingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(craftingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (craftingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "crafting")
                             .child(
                                     Components.label(Text.of(df.format(craftingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (craftingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             }
             
@@ -96,9 +105,10 @@ public class CraftingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             1,
-                            2);
+                            1);
         }
         
         rootComponent.childById(DropdownComponent.class, "skill-selection")

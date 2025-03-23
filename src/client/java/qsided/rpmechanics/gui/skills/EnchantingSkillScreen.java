@@ -8,6 +8,7 @@ import io.wispforest.owo.ui.container.GridLayout;
 import io.wispforest.owo.ui.core.Color;
 import io.wispforest.owo.ui.core.HorizontalAlignment;
 import io.wispforest.owo.ui.core.Positioning;
+import io.wispforest.owo.ui.core.Sizing;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
@@ -40,81 +41,99 @@ public class EnchantingSkillScreen extends BaseUIModelScreen<FlowLayout> {
         rootComponent.childById(GridLayout.class, "enchanting")
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_level"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                 0,
                 0)
                 .child(
                         Components.label(Text.of(String.valueOf(enchantingLevel)))
                                 .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         0,
-                        2)
+                        1)
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_experience"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         1,
                         0)
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.enchanting.cost"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                        .sizing(Sizing.fill(50), Sizing.content())
                                 .tooltip(Text.translatable("skills.rpmechanics.enchanting.cost.tooltip")),
                         2,
                         0)
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.enchanting.modifier"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                        .sizing(Sizing.fill(50), Sizing.content())
                                 .tooltip(Text.translatable("skills.rpmechanics.enchanting.modifier.tooltip")),
                         3,
                         0
-                );
+                )
+                .sizing(Sizing.fill(34), Sizing.content());
         
         if (isBetween(enchantingLevel, 20, 39)) {
             rootComponent.childById(GridLayout.class, "enchanting")
                     .child(
                             Components.label(Text.of(String.valueOf(1)))
-                                    .color(Color.ofArgb(0xd1d0cd)),
+                                    .color(Color.ofArgb(0xd1d0cd))
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             3,
-                            2
+                            1
                     );
         } else if (isBetween(enchantingLevel, 40, 59)) {
             rootComponent.childById(GridLayout.class, "enchanting")
                     .child(
                             Components.label(Text.of(String.valueOf(2)))
-                                    .color(Color.ofArgb(0xd1d0cd)),
+                                    .color(Color.ofArgb(0xd1d0cd))
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             3,
-                            2
+                            1
                     );
         } else if (isBetween(enchantingLevel, 60, 79)) {
             rootComponent.childById(GridLayout.class, "enchanting")
                     .child(
                             Components.label(Text.of(String.valueOf(3)))
-                                    .color(Color.ofArgb(0xd1d0cd)),
+                                    .color(Color.ofArgb(0xd1d0cd))
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             3,
-                            2
+                            1
                     );
         } else if (isBetween(enchantingLevel, 80, 99)) {
             rootComponent.childById(GridLayout.class, "enchanting")
                     .child(
                             Components.label(Text.of(String.valueOf(4)))
-                                    .color(Color.ofArgb(0xd1d0cd)),
+                                    .color(Color.ofArgb(0xd1d0cd))
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             3,
-                            2
+                            1
                     );
         } else if (enchantingLevel == 100) {
             rootComponent.childById(GridLayout.class, "enchanting")
                     .child(
                             Components.label(Text.of(String.valueOf(5)))
-                                    .color(Color.ofArgb(0xd1d0cd)),
+                                    .color(Color.ofArgb(0xd1d0cd))
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             3,
-                            2
+                            1
                     );
         } else {
             rootComponent.childById(GridLayout.class, "enchanting")
                     .child(
                             Components.label(Text.of(String.valueOf(0)))
-                                    .color(Color.ofArgb(0xd1d0cd)),
+                                    .color(Color.ofArgb(0xd1d0cd))
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             3,
-                            2
+                            1
                     );
         }
         
@@ -123,25 +142,28 @@ public class EnchantingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     .child(
                             Components.label(Text.of("-" + 0))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             2,
-                            2);
+                            1);
         } else if (isBetween(enchantingLevel, 33, 65)) {
             rootComponent.childById(GridLayout.class, "enchanting")
                     .child(
                             Components.label(Text.of("-" + 1))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             2,
-                            2);
+                            1);
         } else if (isBetween(enchantingLevel, 66, 100)) {
             rootComponent.childById(GridLayout.class, "enchanting")
                     .child(
                             Components.label(Text.of("-" + 2))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             2,
-                            2);
+                            1);
         }
         
         if (enchantingLevel < 100) {
@@ -152,16 +174,18 @@ public class EnchantingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(enchantingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enchantingOptions.baseExperience() + (enchantingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enchantingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "enchanting")
                             .child(
                                     Components.label(Text.of(df.format(enchantingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enchantingOptions.baseExperience() * (enchantingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enchantingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             } else {
                 switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.multiplicativeOrAdditive()) {
@@ -169,16 +193,18 @@ public class EnchantingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(enchantingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (enchantingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "enchanting")
                             .child(
                                     Components.label(Text.of(df.format(enchantingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (enchantingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             }
             
@@ -187,9 +213,10 @@ public class EnchantingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             1,
-                            2);
+                            1);
         }
         
         rootComponent.childById(DropdownComponent.class, "skill-selection")

@@ -5,11 +5,11 @@
             <children>
                 <!-- This one is for the main Container! -->
                 <dropdown id="skill-selection">
-                <surface>
-                    <flat>#171717</flat>
-                    <outline>#121212</outline>
-                </surface>
-            </dropdown>
+                    <surface>
+                        <flat>#171717</flat>
+                        <outline>#121212</outline>
+                    </surface>
+                </dropdown>
                 <flow-layout direction="vertical">
                     <children>
                         <item>
@@ -26,21 +26,19 @@
                             <positioning type="relative">50,50</positioning>
                             <max-width>300</max-width>
                         </label>
-                        <grid-layout rows="5" columns="3" id="agility">
+                        <grid-layout rows="5" columns="2" id="agility">
                             <children/>
                             <positioning type="relative">50,78</positioning>
                             <surface>
                                 <panel dark="true"/>
-                             </surface>
+                            </surface>
                             <padding><all>7</all></padding>
                         </grid-layout>
                     </children>
-
                     <sizing>
                         <vertical method="fill">100</vertical>
                         <horizontal method="fill">100</horizontal>
                     </sizing>
-
                 </flow-layout>
             </children>
 

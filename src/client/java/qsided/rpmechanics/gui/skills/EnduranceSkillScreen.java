@@ -8,6 +8,7 @@ import io.wispforest.owo.ui.container.GridLayout;
 import io.wispforest.owo.ui.core.Color;
 import io.wispforest.owo.ui.core.HorizontalAlignment;
 import io.wispforest.owo.ui.core.Positioning;
+import io.wispforest.owo.ui.core.Sizing;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
@@ -41,32 +42,38 @@ public class EnduranceSkillScreen extends BaseUIModelScreen<FlowLayout> {
         rootComponent.childById(GridLayout.class, "endurance")
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_level"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                 0,
                 0)
                 .child(
                         Components.label(Text.of(String.valueOf(enduranceLevel)))
                                 .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         0,
-                        2)
+                        1)
                 
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_experience"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         1,
                         0)
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.endurance.max_health"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         2,
                         0)
                 .child(
                         Components.label(Text.of(String.valueOf(maxHealth)))
                                 .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         2,
-                        2);
+                        1)
+                .sizing(Sizing.fill(34), Sizing.content());
         
         if (enduranceLevel < 100) {
             
@@ -76,16 +83,18 @@ public class EnduranceSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(enduranceExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enduranceOptions.baseExperience() + (enduranceLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enduranceOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "endurance")
                             .child(
                                     Components.label(Text.of(df.format(enduranceExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enduranceOptions.baseExperience() * (enduranceLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enduranceOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             } else {
                 switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.multiplicativeOrAdditive()) {
@@ -93,16 +102,18 @@ public class EnduranceSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(enduranceExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (enduranceLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "endurance")
                             .child(
                                     Components.label(Text.of(df.format(enduranceExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (enduranceLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             }
             
@@ -111,9 +122,10 @@ public class EnduranceSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             1,
-                            2);
+                            1);
         }
         
         rootComponent.childById(DropdownComponent.class, "skill-selection")

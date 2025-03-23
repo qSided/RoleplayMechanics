@@ -8,7 +8,8 @@
     "crafting.CraftingResultSlotMixin",
     "crafting.CraftingScreenHandlerMixin",
     "enchanting.EnchantItemMixin",
-    "smithing.AnvilScreenHandlerMixin"
+    "smithing.AnvilScreenHandlerMixin",
+    "smithing.SmithingScreenHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

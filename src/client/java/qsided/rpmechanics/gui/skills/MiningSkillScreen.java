@@ -8,6 +8,7 @@ import io.wispforest.owo.ui.container.GridLayout;
 import io.wispforest.owo.ui.core.Color;
 import io.wispforest.owo.ui.core.HorizontalAlignment;
 import io.wispforest.owo.ui.core.Positioning;
+import io.wispforest.owo.ui.core.Sizing;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
@@ -36,55 +37,66 @@ public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
         rootComponent.childById(GridLayout.class, "mining")
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_level"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content())
+                        ,
                 0,
                 0)
                 .child(
                         Components.label(Text.of(String.valueOf(miningLevel)))
                                 .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         0,
-                        2)
+                        1)
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_experience"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content())
+                        ,
                         1,
                         0)
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.mining.efficiency"))
                             .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                        .sizing(Sizing.fill(50), Sizing.content())
                                 .tooltip(Text.translatable("skills.rpmechanics.mining.efficiency.tooltip")),
                         2,
                         0)
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.mining.degrade_chance"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                        .sizing(Sizing.fill(50), Sizing.content())
                                 .tooltip(Text.translatable("skills.rpmechanics.mining.degrade_chance.tooltip")),
                         3,
                         0)
                 .child(
                         Components.label(Text.of("-" + miningLevel + "%"))
                                 .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         3,
-                        2);
+                        1)
+                .sizing(Sizing.fill(34), Sizing.content());
         
         if (miningLevel.equals(1)) {
             rootComponent.childById(GridLayout.class, "mining")
                     .child(
                             Components.label(Text.of(String.valueOf(0)))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             2,
-                            2);
+                            1);
         } else {
             rootComponent.childById(GridLayout.class, "mining")
                     .child(
                         Components.label(Text.of(String.valueOf(miningLevel * .5)))
                                 .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                         2,
-                        2);
+                        1);
         }
         
         if (miningLevel < 100) {
@@ -95,16 +107,18 @@ public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(miningExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.baseExperience() + (miningLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "mining")
                             .child(
                                     Components.label(Text.of(df.format(miningExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.baseExperience() * (miningLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             } else {
                 switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.multiplicativeOrAdditive()) {
@@ -112,16 +126,18 @@ public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(miningExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (miningLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "mining")
                             .child(
                                     Components.label(Text.of(df.format(miningExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (miningLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             }
             
@@ -130,9 +146,10 @@ public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             1,
-                            2);
+                            1);
         }
         
         rootComponent.childById(DropdownComponent.class, "skill-selection")

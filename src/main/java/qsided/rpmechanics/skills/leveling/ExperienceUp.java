@@ -1,5 +1,6 @@
 package qsided.rpmechanics.skills.leveling;
 
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
@@ -23,6 +24,17 @@ public class ExperienceUp {
                 });
                 
             }
+            
+            if (state.rpClassLevel < 50) {
+                state.rpClassExp = state.rpClassExp + value;
+                
+                if (state.rpClassExp >= (90 * (state.rpClassLevel * 3.4))) {
+                    state.rpClassExp = (float) (state.rpClassExp - (90 * (state.rpClassLevel * 3.4)));
+                    state.rpClassLevel = state.rpClassLevel + 1;
+                    player.sendMessage(Text.of("Levelled up!"));
+                }
+            }
+            
             
             //player.sendMessage(Text.translatable("skills.ques-mod." + skill).append(Text.of(" +" + df.format(value) + "XP")).formatted(Formatting.BOLD, Formatting.GRAY), true);
             

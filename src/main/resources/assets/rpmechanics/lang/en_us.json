@@ -19,6 +19,10 @@
   "itemGroup.ques_items": "Roleplay Mechanics Items",
 
   "classes.rpmechanics.select": "Select",
+  "classes.rpmechanics.yes": "Yes",
+  "classes.rpmechanics.no": "No",
+  "classes.rpmechanics.selected_one": "Are you sure you want to select the ",
+  "classes.rpmechanics.selected_two": " class? This cannot be changed.",
   "classes.rpmechanics.already_selected": [
     {
       "text": "You have already selected a class!",
@@ -277,10 +281,18 @@
   ],
 
   "skills.rpmechanics.smithing": [
-    { "text": "Smithing", "color": "#a3a3a3"}
+    { "text": "Smithing", "color": "#ffffff"}
+  ],
+  "skills.rpmechanics.smithing.material_save": [
+    { "text": "Material Save", "color": "#869970"},
+    { "text": ": ", "color": "#8ca66d"}
+  ],
+  "skills.rpmechanics.smithing.exp_save": [
+    { "text": "Experience Save", "color": "#869970"},
+    { "text": ": ", "color": "#8ca66d"}
   ],
   "skills.level_up.rpmechanics.smithing": [
-    { "text": "Smithing ", "color": "#a3a3a3"},
+    { "text": "Smithing ", "color": "#ffffff"},
     { "text": "↑", "color": "#8f8f96"}
   ],
 
@@ -360,5 +372,14 @@
     { "text": "crafting", "color": "gold"},
     { "text": " skill determines what you are able to craft. Hover over an item to see it's crafting level requirement. If none is displayed, it can be crafted from level 1.", "color": "#d1d0cd"},
     { "text": " Experience is gained by crafting at a crafting table.", "color": "#d1d0cd"}
+  ],
+  "skills.descriptions.rpmechanics.smithing": [
+    { "text": "Your ", "color": "#d1d0cd"},
+    { "text": "smithing", "color": "#ffffff"},
+    { "text": " skill determines the ", "color": "#d1d0cd"},
+    { "text": "chance of costing no experience", "color": "#5e5d5d"},
+    { "text": " when using an anvil and the ", "color": "#d1d0cd"},
+    { "text": "chance of saving materials", "color": "#5e5d5d"},
+    { "text": " when using an anvil or smithing table.", "color": "#d1d0cd"}
   ]
 }

@@ -23,7 +23,7 @@ public class MiningSkill {
             PlayerData state = getPlayerState(player);
             int miningLevel = state.skillLevels.getOrDefault("mining", 1);
             
-            RoleplayMechanicsCommon.getBlockXpValues().forEach(block -> {
+            RoleplayMechanicsCommon.getMiningXpValues().forEach(block -> {
                 if (blockState.getBlock().asItem().toString().equals(block.getId())) {
                     
                     block.getExperience().forEach((skill, value) -> {

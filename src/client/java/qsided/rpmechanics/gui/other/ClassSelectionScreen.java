@@ -5,6 +5,7 @@ import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.component.DropdownComponent;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
+import io.wispforest.owo.ui.container.OverlayContainer;
 import io.wispforest.owo.ui.core.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -14,9 +15,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
+import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
 import qsided.rpmechanics.networking.SendClassSelectedPayload;
 
 import java.awt.Color;
+import java.util.Map;
 
 public class ClassSelectionScreen extends BaseOwoScreen<FlowLayout> {
     Integer rpClassId = 0;
@@ -194,9 +197,44 @@ public class ClassSelectionScreen extends BaseOwoScreen<FlowLayout> {
             }
         });
         
-        rootComponent.child(Components.button(Text.translatable("classes.rpmechanics.select").append(" ").append(Text.of(RoleplayMechanicsCommon.getRpClasses().get(getRpClassId()).getName()).getWithStyle(Style.EMPTY.withColor(Color.decode(RoleplayMechanicsCommon.getRpClasses().get(getRpClassId()).getColor()).getRGB())).getFirst()), buttonComponent -> {
-            ClientPlayNetworking.send(new SendClassSelectedPayload(getRpClassId()));
-            //MinecraftClient.getInstance().currentScreen.close();
+        rootComponent.child(Components.button(Text.translatable("classes.rpmechanics.select").append(" ").append(getFormattedName(RoleplayMechanicsCommon.getRpClasses(), getRpClassId())), buttonComponent -> {
+            
+            rootComponent.clearChildren();
+            
+            rootComponent.child(Containers.overlay(
+                    Containers.horizontalFlow(Sizing.fill(), Sizing.fill())
+                            .child(
+                                    Components.label(Text.translatable("classes.rpmechanics.selected_one").append(getFormattedName(RoleplayMechanicsCommon.getRpClasses(), getRpClassId())).append(Text.translatable("classes.rpmechanics.selected_two")))
+                                            .maxWidth(130 + (40 * (client.options.getGuiScale().getValue())))
+                                            .horizontalTextAlignment(HorizontalAlignment.CENTER)
+                                            .shadow(true)
+                                            .positioning(Positioning.relative(50, 15))
+                            )
+                            .child(
+                                    Components.button(Text.translatable("classes.rpmechanics.yes"), onClick -> {
+                                        ClientPlayNetworking.send(new SendClassSelectedPayload(getRpClassId()));
+                                        MinecraftClient.getInstance().currentScreen.close();
+                                    })
+                                            .positioning(Positioning.relative(95, 95))
+                                            .sizing(Sizing.fill(16), Sizing.fixed(23))
+                            )
+                            .child(
+                                    Components.button(Text.translatable("classes.rpmechanics.no"), onClick -> {
+                                                rootComponent.childById(OverlayContainer.class, "confirmation").remove();
+                                                build(rootComponent);
+                                            })
+                                            .positioning(Positioning.relative(5, 95))
+                                            .sizing(Sizing.fill(16), Sizing.fixed(23))
+                            )
+                            )
+                    .closeOnClick(false)
+                    .surface(Surface.DARK_PANEL)
+                    .positioning(Positioning.relative(50, 50))
+                    .sizing(Sizing.fill(40), Sizing.fill(30))
+                    .id("confirmation")
+            );
+            
+            
         })
                 .sizing(Sizing.content(3), Sizing.fixed(20))
                 .positioning(Positioning.relative(50, 10)));
@@ -204,19 +242,33 @@ public class ClassSelectionScreen extends BaseOwoScreen<FlowLayout> {
         
         rootComponent.child(
                 Containers.horizontalFlow(Sizing.content(), Sizing.content())
-                        .child(
-                                //Previous page button
-                                Components.button(Text.of("←"), onPress -> {
-                                    client.setScreen(new RoleplayNameSelectionScreen());
-                                })
-                        )
-                        .child(
-                                //Close page button
-                                Components.button(Text.translatable("classes.rpmechanics.finish"), onPress -> {
-                                    client.currentScreen.close();
-                                })
-                        )
+                        //.child(
+                        //        //Previous page button
+                        //        Components.button(Text.of("←"), onPress -> {
+                        //            client.setScreen(new RoleplayNameSelectionScreen());
+                        //        })
+                        //)
+                        //.child(
+                        //        //Close page button
+                        //        Components.button(Text.translatable("classes.rpmechanics.finish"), onPress -> {
+                        //            client.currentScreen.close();
+                        //        })
+                        //)
                         .positioning(Positioning.relative(96, 96))
         );
+    }
+    
+    public Text getFormattedName(Map<Integer, RoleplayClass> classes, Integer rpClassId) {
+        return Text.of(classes.get(rpClassId).getName()).getWithStyle(Style.EMPTY.withColor(Color.decode(RoleplayMechanicsCommon.getRpClasses().get(getRpClassId()).getColor()).getRGB())).getFirst();
+    }
+    
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return true;
+    }
+    
+    @Override
+    public boolean shouldPause() {
+        return true;
     }
 }

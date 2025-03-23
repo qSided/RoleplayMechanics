@@ -6,6 +6,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
+import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 import qsided.rpmechanics.events.IncreaseSkillLevelCallback;
 import qsided.rpmechanics.networking.LevelUpPayload;
 
@@ -114,6 +115,8 @@ public class LevelUp {
                     );
                 }
             }
+            
+            IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, skill, 0F);
             
             sendSkillData(state, player);
             return ActionResult.PASS;

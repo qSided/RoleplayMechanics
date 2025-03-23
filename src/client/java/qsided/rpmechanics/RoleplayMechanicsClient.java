@@ -9,8 +9,10 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -22,7 +24,6 @@ import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.requirements.ItemWithRequirements;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
 import qsided.rpmechanics.gui.other.ClassSelectionScreen;
-import qsided.rpmechanics.gui.other.RoleplayNameSelectionScreen;
 import qsided.rpmechanics.gui.skills.*;
 import qsided.rpmechanics.networking.*;
 
@@ -34,6 +35,26 @@ import java.util.Map;
 
 public class RoleplayMechanicsClient implements ClientModInitializer {
 	public static String lastScreenOpen = "";
+	
+	public static String getPlayerClassName() {
+		return playerClassName;
+	}
+	
+	public static void setPlayerClassName(String playerClassName) {
+		RoleplayMechanicsClient.playerClassName = playerClassName;
+	}
+	
+	public static Integer getPlayerClassLevel() {
+		return playerClassLevel;
+	}
+	
+	public static void setPlayerClassLevel(Integer playerClassLevel) {
+		RoleplayMechanicsClient.playerClassLevel = playerClassLevel;
+	}
+	
+	public static String playerClassName = "";
+	
+	public static Integer playerClassLevel = 1;
 	
 	public static String getLastScreenOpen() {
 		return lastScreenOpen;
@@ -98,6 +119,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client1 -> {
 			while (openSkills.wasPressed()) {
 				ClientPlayNetworking.send(new RequestSkillsPayload(client.player.getUuid().toString()));
+				
 				switch (getLastScreenOpen()) {
                     case "enchanting" -> client.setScreen(new EnchantingSkillScreen());
 					case "combat" -> client.setScreen(new CombatSkillScreen());
@@ -105,12 +127,18 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
                     case "endurance" -> client.setScreen(new EnduranceSkillScreen());
 					case "agility" -> client.setScreen(new AgilitySkillScreen());
 					case "crafting" -> client.setScreen(new CraftingSkillScreen());
+					case "smithing" -> client.setScreen(new SmithingSkillScreen());
                     default -> client.setScreen(new MiningSkillScreen());
                 }
 			}
 			while (openClassSelection.wasPressed()) {
 				client.setScreen(new ClassSelectionScreen());
 			}
+		});
+		
+		ClientPlayNetworking.registerGlobalReceiver(SendClassAndLevelPayload.ID, (payload, context) -> {
+			setPlayerClassName(payload.rpClassId());
+			setPlayerClassLevel(payload.level());
 		});
 		
 		ClientPlayNetworking.registerGlobalReceiver(LevelUpPayload.ID, (payload, context) -> {
@@ -123,7 +151,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		});
 		
 		ClientPlayNetworking.registerGlobalReceiver(PlayerFirstJoinPayload.ID, (payload, context) -> {
-			context.client().setScreen(new RoleplayNameSelectionScreen());
+			context.client().setScreen(new ClassSelectionScreen());
 		});
 		
 		ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, lines) -> {

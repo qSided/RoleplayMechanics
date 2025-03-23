@@ -8,6 +8,7 @@ import io.wispforest.owo.ui.container.GridLayout;
 import io.wispforest.owo.ui.core.Color;
 import io.wispforest.owo.ui.core.HorizontalAlignment;
 import io.wispforest.owo.ui.core.Positioning;
+import io.wispforest.owo.ui.core.Sizing;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
@@ -36,65 +37,75 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
         rootComponent.childById(GridLayout.class, "combat")
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_level"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                 0,
                 0)
                 .child(
                         Components.label(Text.of(String.valueOf(combatLevel)))
                                 .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         0,
-                        2)
+                        1)
                 
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_experience"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         1,
                         0)
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.combat.attack_damage"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         2,
                         0)
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.combat.attack_speed"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT),
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         3,
-                        0);
+                        0)
+                .sizing(Sizing.fill(34), Sizing.content());
         
         if (combatLevel.equals(1)) {
             rootComponent.childById(GridLayout.class, "combat")
                     .child(
                             Components.label(Text.of(String.valueOf(0)))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             2,
-                            2);
+                            1);
         } else {
             rootComponent.childById(GridLayout.class, "combat")
                     .child(
                             Components.label(Text.of(String.valueOf(df.format(combatLevel * .18))))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             2,
-                            2);
+                            1);
         }
         if (combatLevel.equals(1)) {
             rootComponent.childById(GridLayout.class, "combat")
                     .child(
                             Components.label(Text.of(String.valueOf(0)))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             3,
-                            2);
+                            1);
         } else {
             rootComponent.childById(GridLayout.class, "combat")
                     .child(
                             Components.label(Text.of(String.valueOf(df.format(combatLevel * .03))))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             3,
-                            2);
+                            1);
         }
         
         if (combatLevel < 100) {
@@ -105,16 +116,18 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(combatExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.baseExperience() + (combatLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "combat")
                             .child(
                                     Components.label(Text.of(df.format(combatExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.baseExperience() * (combatLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             } else {
                 switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.multiplicativeOrAdditive()) {
@@ -122,16 +135,18 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             .child(
                                     Components.label(Text.of(df.format(combatExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (combatLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                     case MULTIPLY -> rootComponent.childById(GridLayout.class, "combat")
                             .child(
                                     Components.label(Text.of(df.format(combatExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (combatLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
-                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                            .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                            .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
-                                    2);
+                                    1);
                 }
             }
             
@@ -140,9 +155,10 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT),
+                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                    .sizing(Sizing.fill(50), Sizing.content()),
                             1,
-                            2);
+                            1);
         }
         
         rootComponent.childById(DropdownComponent.class, "skill-selection")
