@@ -26,8 +26,6 @@ import java.util.List;
 
 public class SkillCheckHandler {
     
-    public static ItemWithRequirements lastItemNotMet = new ItemWithRequirements("null", new Requirements());
-    
     public static void register() {
         ObjectMapper mapper = new ObjectMapper();
         CollectionType typeReference = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemWithRequirements.class);
@@ -37,7 +35,7 @@ public class SkillCheckHandler {
                 
                 if (RoleplayMechanicsCommon.OWO_CONFIG.enableRequirements()) {
                     try {
-                        List<ItemWithRequirements> items = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/reqs.json"), typeReference);
+                        List<ItemWithRequirements> items = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/item_use_reqs.json"), typeReference);
                         items.forEach(item -> {
                             //Check if current item being iterated is the same id as one currently equipped.
                             if (currentStack.getItem().toString().equals(item.getItemId())) {
@@ -60,25 +58,15 @@ public class SkillCheckHandler {
                     if (currentStack.isIn(ItemTags.PICKAXES) || currentStack.isIn(ItemTags.SHOVELS) && equipmentSlot.equals(EquipmentSlot.MAINHAND)) {
                         player.getAttributeInstance(EntityAttributes.MINING_EFFICIENCY).overwritePersistentModifier(
                                 new EntityAttributeModifier(efficiencyModifier, state.skillLevels.getOrDefault("mining", 1) * .5, EntityAttributeModifier.Operation.ADD_VALUE));
-                        RoleplayMechanicsCommon.LOGGER.info(String.valueOf(player.getAttributeInstance(EntityAttributes.MINING_EFFICIENCY).getModifier(efficiencyModifier)));
                     } else if (currentStack.isIn(ItemTags.AXES) && equipmentSlot.equals(EquipmentSlot.MAINHAND)) {
                         player.getAttributeInstance(EntityAttributes.MINING_EFFICIENCY).overwritePersistentModifier(
                                 new EntityAttributeModifier(efficiencyModifier, state.skillLevels.getOrDefault("woodcutting", 1) * .5, EntityAttributeModifier.Operation.ADD_VALUE)
                         );
-                        RoleplayMechanicsCommon.LOGGER.info(String.valueOf(player.getAttributeInstance(EntityAttributes.MINING_EFFICIENCY).getModifier(efficiencyModifier)));
                     } else {
                         player.getAttributeInstance(EntityAttributes.MINING_EFFICIENCY).removeModifier(efficiencyModifier);
                     }
                 }
             }
         });
-    }
-    
-    public static ItemWithRequirements getLastItemNotMet() {
-        return lastItemNotMet;
-    }
-    
-    public static void setLastItemNotMet(ItemWithRequirements lastItemNotMet) {
-        SkillCheckHandler.lastItemNotMet = lastItemNotMet;
     }
 }

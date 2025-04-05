@@ -62,12 +62,23 @@ public class RoleplayMechanicsCommon implements ModInitializer {
     public static final RpMechanicsConfig OWO_CONFIG = RpMechanicsConfig.createAndLoad();
     
     public static final File RP_CLASSES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/classes/classes.json");
-    public static final File MINING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/mining.json");
-    public static final File CRAFTING_REQS_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting.json");
-    public static final File FARMING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/farming.json");
+    public static final File MINING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/mining_xp_values.json");
+    public static final File CRAFTING_REQS_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting_level_reqs.json");
+    public static final File FARMING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/farming_xp_values.json");
+    public static final File WOODCUTTING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/woodcutting_xp_values.json");
     
     static Map<Integer, RoleplayClass> RP_CLASSES;
     static List<BlockExperience> MINING_XP_VALUES;
+    
+    public static List<BlockExperience> getWoodcuttingXpValues() {
+        return WOODCUTTING_XP_VALUES;
+    }
+    
+    public static void setWoodcuttingXpValues(List<BlockExperience> woodcuttingXpValues) {
+        WOODCUTTING_XP_VALUES = woodcuttingXpValues;
+    }
+    
+    static List<BlockExperience> WOODCUTTING_XP_VALUES;
     static List<ItemCraftingRequirement> CRAFTING_REQS;
     
     public static List<BlockExperience> getFarmingXpValues() {
@@ -127,12 +138,14 @@ public class RoleplayMechanicsCommon implements ModInitializer {
             Map<Integer, RoleplayClass> rpClasses = mapper.readValue(RP_CLASSES_FILE, new TypeReference<Map<Integer, RoleplayClass>>() {});
             List<BlockExperience> miningXpValues = mapper.readValue(MINING_XP_VALUES_FILE, miningRef);
             List<BlockExperience> farmingXpValues = mapper.readValue(FARMING_XP_VALUES_FILE, miningRef);
+            List<BlockExperience> woodcuttingXpValues = mapper.readValue(WOODCUTTING_XP_VALUES_FILE, miningRef);
             List<ItemCraftingRequirement> craftingReqs = mapper.readValue(CRAFTING_REQS_FILE, craftingRef);
             
             setRpClasses(rpClasses);
             setMiningXpValues(miningXpValues);
             setCraftingReqs(craftingReqs);
             setFarmingXpValues(farmingXpValues);
+            setWoodcuttingXpValues(woodcuttingXpValues);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -143,6 +156,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         EnduranceSkill.register();
         FarmingSkill.register();
         SkillCheckHandler.register();
+        Harvesting.initialize();
         
         LevelUp.onLevelUp();
         ExperienceUp.onExperienceUp();
@@ -155,7 +169,9 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(LevelUpPayload.ID, LevelUpPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(RequestSkillsPayload.ID, RequestSkillsPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendSkillsLevelsPayload.ID, SendSkillsLevelsPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendSkillsLevelsTwoPayload.ID, SendSkillsLevelsTwoPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendSkillsExperiencePayload.ID, SendSkillsExperiencePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendSkillsExperienceTwoPayload.ID, SendSkillsExperienceTwoPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SendPlayerFallPayload.ID, SendPlayerFallPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SendPlayerJumpPayload.ID, SendPlayerJumpPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SendClassSelectedPayload.ID, SendClassSelectedPayload.CODEC);
@@ -185,11 +201,11 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             PlayerData state = getPlayerState(handler.getPlayer());
             
-            //if (!state.hasJoinedBefore) {
-            //    ServerPlayNetworking.send(handler.getPlayer(), new PlayerFirstJoinPayload(1));
-            //    System.out.println("Player joined for the first time!");
-            //    state.hasJoinedBefore = true;
-            //}
+            if (!state.hasJoinedBefore) {
+                state.hasJoinedBefore = true;
+                ServerPlayNetworking.send(handler.getPlayer(), new PlayerFirstJoinPayload(1));
+                LOGGER.info(handler.getPlayer().getNameForScoreboard() + " has joined for the first time!");
+            }
             
             if (OWO_CONFIG.displayJoinMessage()) {
                 handler.getPlayer().sendMessage(Text.translatable("rpmechanics.player_joined"));
@@ -256,6 +272,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         Integer agilityLevel = playerState.skillLevels.getOrDefault("agility", 1);
 		Integer craftingLevel = playerState.skillLevels.getOrDefault("crafting", 1);
 		Integer smithingLevel = playerState.skillLevels.getOrDefault("smithing", 1);
+		Integer farmingLevel = playerState.skillLevels.getOrDefault("farming", 1);
 		
 		Float miningExp = playerState.skillExperience.getOrDefault("mining", 0F);
 		Float enchantingExp = playerState.skillExperience.getOrDefault("enchanting", 0F);
@@ -265,10 +282,13 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         Float agilityExp = playerState.skillExperience.getOrDefault("agility", 0F);
 		Float craftingExp = playerState.skillExperience.getOrDefault("crafting", 0F);
 		Float smithingExp = playerState.skillExperience.getOrDefault("smithing", 0F);
+        Float farmingExp = playerState.skillExperience.getOrDefault("farming", 0F);
         
         ServerPlayNetworking.send(player, new SendClassAndLevelPayload(playerState.rpClass, playerState.rpClassLevel, playerState.rpClassExp));
 		
 		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, combatLevel, woodcuttingLevel, enduranceLevel, agilityLevel, craftingLevel, smithingLevel));
+		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel));
 		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, combatExp, woodcuttingExp, enduranceExp, agilityExp, craftingExp, smithingExp));
+        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp));
 	}
 }

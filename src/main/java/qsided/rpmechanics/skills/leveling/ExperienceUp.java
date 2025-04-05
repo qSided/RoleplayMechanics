@@ -25,13 +25,12 @@ public class ExperienceUp {
                 
             }
             
-            if (state.rpClassLevel < 50) {
+            if (state.rpClassLevel < 100) {
                 state.rpClassExp = state.rpClassExp + value;
                 
-                if (state.rpClassExp >= (90 * (state.rpClassLevel * 3.4))) {
-                    state.rpClassExp = (float) (state.rpClassExp - (90 * (state.rpClassLevel * 3.4)));
+                if (state.rpClassExp >= (300 * (state.rpClassLevel * 3.4))) {
+                    state.rpClassExp = (float) (state.rpClassExp - (300 * (state.rpClassLevel * 3.4)));
                     state.rpClassLevel = state.rpClassLevel + 1;
-                    player.sendMessage(Text.of("Levelled up!"));
                 }
             }
             
@@ -133,6 +132,34 @@ public class ExperienceUp {
                             }
                             case MULTIPLY -> {
                                 if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.woodcuttingOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.woodcuttingOptions.amount())) {
+                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                                }
+                            }
+                        }
+                    }
+                    case "smithing" -> {
+                        switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.multiplicativeOrAdditive()) {
+                            case ADD -> {
+                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.baseExperience() + (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.amount())) {
+                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                                }
+                            }
+                            case MULTIPLY -> {
+                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.smithingOptions.amount())) {
+                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                                }
+                            }
+                        }
+                    }
+                    case "farming" -> {
+                        switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.multiplicativeOrAdditive()) {
+                            case ADD -> {
+                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.baseExperience() + (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.amount())) {
+                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                                }
+                            }
+                            case MULTIPLY -> {
+                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.amount())) {
                                     IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
                                 }
                             }

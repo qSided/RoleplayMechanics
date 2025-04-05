@@ -9,10 +9,8 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -66,7 +64,6 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 	
 	public static List<ItemCraftingRequirement> itemCraftingReqs;
 	public static List<ItemWithRequirements> itemUseReqs;
-	static Map<Integer, RoleplayClass> rpClasses;
 	
 	public static List<ItemCraftingRequirement> getItemCraftingReqs() {
 		return itemCraftingReqs;
@@ -84,14 +81,6 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		RoleplayMechanicsClient.itemUseReqs = itemUseReqs;
 	}
 	
-	public static Map<Integer, RoleplayClass> getRpClasses() {
-		return rpClasses;
-	}
-	
-	public static void setRpClasses(Map<Integer, RoleplayClass> rpClasses) {
-		RoleplayMechanicsClient.rpClasses = rpClasses;
-	}
-	
 	@Override
 	public void onInitializeClient() {
 		
@@ -102,13 +91,11 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		CollectionType useRef = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemWithRequirements.class);
 		CollectionType craftingRef = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemCraftingRequirement.class);
 		try {
-			List<ItemWithRequirements> itemUseReqs = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/reqs.json"), useRef);
-			List<ItemCraftingRequirement> itemCraftReqs = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting.json"), craftingRef);
-			Map<Integer, RoleplayClass> rpClasses = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/classes/classes.json"), new TypeReference<Map<Integer, RoleplayClass>>() {});
+			List<ItemWithRequirements> itemUseReqs = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/item_use_reqs.json"), useRef);
+			List<ItemCraftingRequirement> itemCraftReqs = mapper.readValue(new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting_level_reqs.json"), craftingRef);
 		
 			setItemUseReqs(itemUseReqs);
 			setItemCraftingReqs(itemCraftReqs);
-			setRpClasses(rpClasses);
 		} catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -128,6 +115,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 					case "agility" -> client.setScreen(new AgilitySkillScreen());
 					case "crafting" -> client.setScreen(new CraftingSkillScreen());
 					case "smithing" -> client.setScreen(new SmithingSkillScreen());
+					case "farming" -> client.setScreen(new FarmingSkillScreen());
                     default -> client.setScreen(new MiningSkillScreen());
                 }
 			}
@@ -209,6 +197,13 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 			CraftingSkillScreen.setCraftingExperience(payload.crafting());
 			SmithingSkillScreen.setSmithingExperience(payload.smithing());
 			});
+		
+		ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsTwoPayload.ID, (payload, context) -> {
+			FarmingSkillScreen.setFarmingLevel(payload.farming());
+		});
+		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperienceTwoPayload.ID, (payload, context) -> {
+			FarmingSkillScreen.setFarmingExperience(payload.farming());
+		});
 	}
 	
 	public MinecraftClient getClient() {

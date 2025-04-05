@@ -5,9 +5,11 @@
   "mixins": [
     "LivingEntityMixin",
     "ServerPlayerEntityMixin",
+    "ServerPlayerInteractionManagerMixin",
     "crafting.CraftingResultSlotMixin",
     "crafting.CraftingScreenHandlerMixin",
     "enchanting.EnchantItemMixin",
+    "mining.AbstractBlockStateMixin",
     "smithing.AnvilScreenHandlerMixin",
     "smithing.SmithingScreenHandlerMixin"
   ],

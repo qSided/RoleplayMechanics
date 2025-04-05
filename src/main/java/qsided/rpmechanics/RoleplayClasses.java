@@ -21,6 +21,8 @@ public class RoleplayClasses {
     public static final RoleplayClass PALADIN;
     public static final RoleplayClass RANGER;
     public static final RoleplayClass FIGHTER;
+    public static final RoleplayClass ARTISAN;
+    public static final RoleplayClass FARMER;
     
     public static void initialize() {
         RoleplayClassSelectedCallback.EVENT.register((player, state, rpClassId) -> {
@@ -102,6 +104,39 @@ public class RoleplayClasses {
                                 new StartingSkill("agility", 5)),
                         
                         List.of(new SkillModifier("combat", 10),
+                                new SkillModifier("agility", 5)));
+        ARTISAN =
+                new RoleplayClass(
+                        "Artisan",
+                        "#fcca03",
+                        "Skilled in forging weapons and tools.",
+                        List.of(new StartingEquipment(Items.IRON_BLOCK.toString(), 4),
+                                new StartingEquipment(Items.CRAFTING_TABLE.toString(), 1),
+                                new StartingEquipment(Items.WOODEN_PICKAXE.toString(), 1),
+                                new StartingEquipment(Items.COOKED_PORKCHOP.toString(), 12)),
+                        
+                        List.of(new StartingSkill("crafting", 10),
+                                new StartingSkill("smithing", 10)),
+                        
+                        List.of(new SkillModifier("combat", 10),
+                                new SkillModifier("smithing", 10)));
+        FARMER =
+                new RoleplayClass(
+                        "Farmer",
+                        "#a87147",
+                        "Farmers are no strangers to hard work. Years of tending to the land have taught them techniques to get the most out of a harvest.",
+                        List.of(new StartingEquipment(Items.WOODEN_HOE.toString(), 1),
+                                new StartingEquipment(Items.POTATO.toString(), 3),
+                                new StartingEquipment(Items.CARROT.toString(), 3),
+                                new StartingEquipment(Items.BEETROOT_SEEDS.toString(), 3),
+                                new StartingEquipment(Items.BUCKET.toString(), 1),
+                                new StartingEquipment(Items.LEATHER_HELMET.toString(), 1),
+                                new StartingEquipment(Items.COOKED_BEEF.toString(), 12)),
+                        
+                        List.of(new StartingSkill("farming", 10),
+                                new StartingSkill("agility", 5)),
+                        
+                        List.of(new SkillModifier("farming", 10),
                                 new SkillModifier("agility", 5)));
         
     }

@@ -176,6 +176,11 @@ public class AgilitySkillScreen extends BaseUIModelScreen<FlowLayout> {
                     client.setScreen(new WoodcuttingSkillScreen());
                 })
                 .divider()
+                .button(Text.translatable("skills.rpmechanics.farming"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("farming");
+                    client.setScreen(new FarmingSkillScreen());
+                })
+                .divider()
                 .button(Text.translatable("skills.rpmechanics.enchanting"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("enchanting");
                     client.setScreen(new EnchantingSkillScreen());
