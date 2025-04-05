@@ -109,7 +109,43 @@
   "text.config.rpmechanics.option.experienceOptions.woodcuttingOptions.multiplicativeOrAdditive": "Increase Type",
   "text.config.rpmechanics.option.experienceOptions.woodcuttingOptions.amount": "Amount to Add or Multiply By",
 
-  "text.config.rpmechanics.category.experienceOptions": "Experience Options",
+  "text.config.rpmechanics.category.experienceOptions.smithingOptions": [
+    { "text": "Smithing", "color": "#ffffff"}
+  ],
+  "text.config.rpmechanics.option.experienceOptions.smithingOptions.baseExperience": "Base Experience Value",
+  "text.config.rpmechanics.option.experienceOptions.smithingOptions.multiplicativeOrAdditive": "Increase Type",
+  "text.config.rpmechanics.option.experienceOptions.smithingOptions.amount": "Amount to Add or Multiply By",
+
+  "text.config.rpmechanics.category.experienceOptions.farmingOptions": [
+    { "text": "Farming", "color": "#6fc92a"}
+  ],
+  "text.config.rpmechanics.option.experienceOptions.farmingOptions.baseExperience": "Base Experience Value",
+  "text.config.rpmechanics.option.experienceOptions.farmingOptions.multiplicativeOrAdditive": "Increase Type",
+  "text.config.rpmechanics.option.experienceOptions.farmingOptions.amount": "Amount to Add or Multiply By",
+
+  "text.config.rpmechanics.category.skillOptions": [
+    { "text": "General Skill Options" }
+  ],
+  "text.config.rpmechanics.option.skillOptions.randomToggle": [
+    { "text": "This does nothing but needs to be here due to certain limitations." }
+  ],
+
+  "text.config.rpmechanics.category.skillOptions.farmingSettings": [
+    { "text": "Farming", "color": "#6fc92a"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.farmingSettings.levelForRightClickHarvest": "Level to Unlock Right-Click Harvest",
+
+  "text.config.rpmechanics.category.skillOptions.miningSettings": [
+    { "text": "Mining", "color": "dark_purple"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.miningSettings.levelForVeinMining": "Level to Unlock Vein Mining",
+
+  "text.config.rpmechanics.category.skillOptions.woodcuttingSettings": [
+    { "text": "Woodcutting", "color": "yellow"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.woodcuttingSettings.levelForTreeChopping": "Level to Unlock Tree Chopping",
+
+  "text.config.rpmechanics.category.experienceOptions": "Skill Experience Options",
   "text.config.rpmechanics.enum.choices.add": "Add",
   "text.config.rpmechanics.enum.choices.multiply": "Multiply",
   "text.config.rpmechanics.title": [
@@ -127,7 +163,7 @@
     { "text": "You are using ", "color": "#2e469e"},
     { "text": "Roleplay Mechanics", "color": "#2e6391"},
     { "text": " version ", "color": "#2e469e"},
-    { "text": "0.6.4-", "color": "#3533d4"},
+    { "text": "0.7.0-", "color": "#3533d4"},
     { "text": "alpha", "color": "#b633d4"},
     { "text": ".", "color": "#2e469e"},
     { "text": " Press ", "color": "#2e469e"},
@@ -304,6 +340,18 @@
     { "text": "↑", "color": "#8f8f96"}
   ],
 
+  "skills.rpmechanics.farming": [
+    { "text": "Farming", "color": "#6fc92a"}
+  ],
+  "skills.rpmechanics.farming.extra_harvest": [
+    { "text": "Extra Chance", "color": "#869970"},
+    { "text": ": ", "color": "#8ca66d"}
+  ],
+  "skills.level_up.rpmechanics.farming": [
+    { "text": "Farming ", "color": "#6fc92a"},
+    { "text": "↑", "color": "#8f8f96"}
+  ],
+
   "skills.rpmechanics.current_level": [
     { "text": "Level", "color": "#869970"},
     { "text": ": ", "color": "#8ca66d"}
@@ -320,7 +368,7 @@
     { "text": "efficiency", "color": "#9d65e6"},
     { "text": " when mining or digging and the ", "color": "#d1d0cd"},
     { "text": "degrade chance", "color": "#9d65e6"},
-    { "text": " of your pickaxes and shovels. Gained by breaking stones and ores.", "color": "#d1d0cd"}
+    { "text": " of your pickaxes and shovels. Experience is gained by breaking stones and ores.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.enchanting": [
     { "text": "Your ", "color": "#d1d0cd"},
@@ -329,7 +377,7 @@
     { "text": "cost of enchanting", "color": "#4646ca"},
     { "text": " and your ", "color": "#d1d0cd"},
     { "text": "enchanting power modifier", "color": "#4646ca"},
-    { "text": " when enchanting items. Gained by enchanting anything at an enchanting table.", "color": "#d1d0cd"}
+    { "text": " when enchanting items. Experience is gained by enchanting anything at an enchanting table.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.combat": [
     { "text": "Your ", "color": "#d1d0cd"},
@@ -338,7 +386,7 @@
     { "text": "damage done", "color": "#a0395a"},
     { "text": " to other creatures and your ", "color": "#d1d0cd"},
     { "text": "attack speed", "color": "#a0395a"},
-    { "text": " with swords and axes. Gained by defeating any mobs.", "color": "#d1d0cd"}
+    { "text": " with swords and axes. Experience is gained by defeating any mobs.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.woodcutting": [
     { "text": "Your ", "color": "#d1d0cd"},
@@ -347,14 +395,14 @@
     { "text": "efficiency", "color": "#cfaa46"},
     { "text": " with axes and the ", "color": "#d1d0cd"},
     { "text": "extra drop chance", "color": "#cfaa46"},
-    { "text": " when harvesting trees. Gained by harvesting trees.", "color": "#d1d0cd"}
+    { "text": " when harvesting trees. Experience is gained by harvesting trees.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.endurance": [
     { "text": "Your ", "color": "#d1d0cd"},
     { "text": "endurance", "color": "dark_red"},
     { "text": " skill determines your ", "color": "#d1d0cd"},
     { "text": "maximum health", "color": "#912e2e"},
-    { "text": ". Gained by taking (almost) any type of damage.", "color": "#d1d0cd"}
+    { "text": ". Experience is gained by taking (almost) any type of damage.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.agility": [
     { "text": "Your ", "color": "#d1d0cd"},
@@ -365,7 +413,7 @@
     { "text": "jump strength", "color": "dark_green"},
     { "text": ", and ", "color": "#d1d0cd"},
     { "text": "safe fall distance", "color": "dark_green"},
-    { "text": ". Gained by moving in any way (i.e. falling, jumping, etc.).", "color": "#d1d0cd"}
+    { "text": ". Experience is gained by moving in any way (i.e. falling, jumping, etc.).", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.crafting": [
     { "text": "Your ", "color": "#d1d0cd"},
@@ -380,6 +428,13 @@
     { "text": "chance of costing no experience", "color": "#5e5d5d"},
     { "text": " when using an anvil and the ", "color": "#d1d0cd"},
     { "text": "chance of saving materials", "color": "#5e5d5d"},
-    { "text": " when using an anvil or smithing table.", "color": "#d1d0cd"}
+    { "text": " when using an anvil or smithing table. Experience is gained by using an anvil or smithing table.", "color": "#d1d0cd"}
+  ],
+  "skills.descriptions.rpmechanics.farming": [
+    { "text": "Your ", "color": "#d1d0cd"},
+    { "text": "farming", "color": "#6fc92a"},
+    { "text": " skill determines your ", "color": "#d1d0cd"},
+    { "text": "chance for extra crops", "color": "#449e1e"},
+    { "text": " when harvesting any crop. Experience is gained by planting new crops or harvesting fully grown ones. Planting crops is worth 1/4 exp of harvesting.", "color": "#d1d0cd"}
   ]
 }

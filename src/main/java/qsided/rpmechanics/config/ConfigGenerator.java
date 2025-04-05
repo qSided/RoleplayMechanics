@@ -26,70 +26,70 @@ public class ConfigGenerator {
         List<ItemWithRequirements> items = new ArrayList<>();
         
         items.add(new ItemWithRequirements("minecraft:wooden_sword", new Requirements("combat", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:wooden_pickaxe", new Requirements("farming", -1, 1)));
+        items.add(new ItemWithRequirements("minecraft:wooden_pickaxe", new Requirements("mining", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:wooden_axe", new Requirements("woodcutting", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:wooden_shovel", new Requirements("farming", -1, 1)));
-        //items.add(new ItemWithRequirements("minecraft:wooden_hoe", new Requirements("agility", 1)));
+        items.add(new ItemWithRequirements("minecraft:wooden_shovel", new Requirements("mining", -1, 1)));
+        items.add(new ItemWithRequirements("minecraft:wooden_hoe", new Requirements("farming", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:leather_helmet", new Requirements("endurance", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:leather_chestplate", new Requirements("endurance", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:leather_leggings", new Requirements("endurance", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:leather_boots", new Requirements("endurance", -1, 1)));
         
         items.add(new ItemWithRequirements("minecraft:stone_sword", new Requirements("combat", -1, 4)));
-        items.add(new ItemWithRequirements("minecraft:stone_pickaxe", new Requirements("farming", -1, 4)));
+        items.add(new ItemWithRequirements("minecraft:stone_pickaxe", new Requirements("mining", -1, 4)));
         items.add(new ItemWithRequirements("minecraft:stone_axe", new Requirements("woodcutting", -1, 4)));
-        items.add(new ItemWithRequirements("minecraft:stone_shovel", new Requirements("farming", -1, 4)));
-        //items.add(new ItemWithRequirements("minecraft:stone_hoe", new Requirements("agility", 4)));
+        items.add(new ItemWithRequirements("minecraft:stone_shovel", new Requirements("mining", -1, 4)));
+        items.add(new ItemWithRequirements("minecraft:stone_hoe", new Requirements("farming", -1, 4)));
         items.add(new ItemWithRequirements("minecraft:chainmail_helmet", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:chainmail_chestplate", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:chainmail_leggings", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:chainmail_boots", new Requirements("endurance", -1, 10)));
         
         items.add(new ItemWithRequirements("minecraft:iron_sword", new Requirements("combat", -1, 12)));
-        items.add(new ItemWithRequirements("minecraft:iron_pickaxe", new Requirements("farming", -1, 12)));
+        items.add(new ItemWithRequirements("minecraft:iron_pickaxe", new Requirements("mining", -1, 12)));
         items.add(new ItemWithRequirements("minecraft:iron_axe", new Requirements("woodcutting", -1, 12)));
-        items.add(new ItemWithRequirements("minecraft:iron_shovel", new Requirements("farming", -1, 12)));
-        //items.add(new ItemWithRequirements("minecraft:iron_hoe", new Requirements("agility", 12)));
+        items.add(new ItemWithRequirements("minecraft:iron_shovel", new Requirements("mining", -1, 12)));
+        items.add(new ItemWithRequirements("minecraft:iron_hoe", new Requirements("farming", -1, 12)));
         items.add(new ItemWithRequirements("minecraft:iron_helmet", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:iron_chestplate", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:iron_leggings", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:iron_boots", new Requirements("endurance", -1, 10)));
         
         items.add(new ItemWithRequirements("minecraft:golden_sword", new Requirements("combat", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_pickaxe", new Requirements("farming", -1, 15)));
+        items.add(new ItemWithRequirements("minecraft:golden_pickaxe", new Requirements("mining", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_axe", new Requirements("woodcutting", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_shovel", new Requirements("farming", -1, 15)));
-        //items.add(new ItemWithRequirements("minecraft:gold_hoe", new Requirements("agility", 15)));
+        items.add(new ItemWithRequirements("minecraft:golden_shovel", new Requirements("mining", -1, 15)));
+        items.add(new ItemWithRequirements("minecraft:golden_hoe", new Requirements("farming", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_helmet", new Requirements("endurance", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_chestplate", new Requirements("endurance", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_leggings", new Requirements("endurance", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_boots", new Requirements("endurance", -1, 15)));
         
         items.add(new ItemWithRequirements("minecraft:diamond_sword", new Requirements("combat", -1, 25)));
-        items.add(new ItemWithRequirements("minecraft:diamond_pickaxe", new Requirements("farming", -1, 25)));
+        items.add(new ItemWithRequirements("minecraft:diamond_pickaxe", new Requirements("mining", -1, 25)));
         items.add(new ItemWithRequirements("minecraft:diamond_axe", new Requirements("woodcutting", -1, 25)));
-        items.add(new ItemWithRequirements("minecraft:diamond_shovel", new Requirements("farming", -1, 25)));
-        //items.add(new ItemWithRequirements("minecraft:diamond_hoe", new Requirements("agility", 25)));
+        items.add(new ItemWithRequirements("minecraft:diamond_shovel", new Requirements("mining", -1, 25)));
+        items.add(new ItemWithRequirements("minecraft:diamond_hoe", new Requirements("farming", -1, 25)));
         items.add(new ItemWithRequirements("minecraft:diamond_helmet", new Requirements("endurance", -1, 20)));
         items.add(new ItemWithRequirements("minecraft:diamond_chestplate", new Requirements("endurance", -1, 20)));
         items.add(new ItemWithRequirements("minecraft:diamond_leggings", new Requirements("endurance", -1, 20)));
         items.add(new ItemWithRequirements("minecraft:diamond_boots", new Requirements("endurance", -1, 20)));
         
         items.add(new ItemWithRequirements("minecraft:netherite_sword", new Requirements("combat", -1, 40)));
-        items.add(new ItemWithRequirements("minecraft:netherite_pickaxe", new Requirements("farming", -1, 40)));
+        items.add(new ItemWithRequirements("minecraft:netherite_pickaxe", new Requirements("mining", -1, 40)));
         items.add(new ItemWithRequirements("minecraft:netherite_axe", new Requirements("woodcutting", -1, 40)));
-        items.add(new ItemWithRequirements("minecraft:netherite_shovel", new Requirements("farming", -1, 40)));
-        //items.add(new ItemWithRequirements("minecraft:netherite_hoe", new Requirements("agility", 40)));
+        items.add(new ItemWithRequirements("minecraft:netherite_shovel", new Requirements("mining", -1, 40)));
+        items.add(new ItemWithRequirements("minecraft:netherite_hoe", new Requirements("farming", -1, 40)));
         items.add(new ItemWithRequirements("minecraft:netherite_helmet", new Requirements("endurance", -1, 30)));
         items.add(new ItemWithRequirements("minecraft:netherite_chestplate", new Requirements("endurance", -1, 30)));
         items.add(new ItemWithRequirements("minecraft:netherite_leggings", new Requirements("endurance", -1, 30)));
         items.add(new ItemWithRequirements("minecraft:netherite_boots", new Requirements("endurance", -1, 30)));
         
         items.add(new ItemWithRequirements("rpmechanics:mythril_sword", new Requirements("combat", -1, 50)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_pickaxe", new Requirements("farming", -1, 50)));
+        items.add(new ItemWithRequirements("rpmechanics:mythril_pickaxe", new Requirements("mining", -1, 50)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_axe", new Requirements("woodcutting", -1, 50)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_shovel", new Requirements("farming", -1, 50)));
-        //items.add(new ItemWithRequirements("rpmechanics:mythril_hoe", new Requirements("agility", 40)));
+        items.add(new ItemWithRequirements("rpmechanics:mythril_shovel", new Requirements("mining", -1, 50)));
+        items.add(new ItemWithRequirements("rpmechanics:mythril_hoe", new Requirements("farming", -1, 50)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_helmet", new Requirements("endurance", -1, 40)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_chestplate", new Requirements("endurance", -1, 40)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_leggings", new Requirements("endurance", -1, 40)));
@@ -100,7 +100,7 @@ public class ConfigGenerator {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
-        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/reqs.json");
+        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/item_use_reqs.json");
         if (!reqs.exists() && !reqs.isDirectory()) {
             try {
                 dir.mkdirs();
@@ -131,7 +131,7 @@ public class ConfigGenerator {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
-        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/woodcutting.json");
+        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/woodcutting_xp_values.json");
         if (!reqs.exists() && !reqs.isDirectory()) {
             try {
                 dir.mkdirs();
@@ -173,7 +173,7 @@ public class ConfigGenerator {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
-        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/mining.json");
+        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/mining_xp_values.json");
         if (!reqs.exists() && !reqs.isDirectory()) {
             try {
                 dir.mkdirs();
@@ -197,7 +197,7 @@ public class ConfigGenerator {
                     block.asItem().toString().contains("carrot") ||
                     block.asItem().toString().contains("cactus") ||
                     block.asItem().toString().contains("sugarcane") ||
-                    block.asItem().toString().contains("stem") &&
+                    block.asItem().toString().contains("mushroom") &&
                     !block.asItem().toString().contains("carved")) {
                 farming.add(new BlockExperience(block.asItem().toString(), Map.of("farming", 5F)));
             } else if (block.asItem().toString().contains("pumpkin") || block.asItem().toString().contains("melon")) {
@@ -210,7 +210,7 @@ public class ConfigGenerator {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
-        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/farming.json");
+        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/farming_xp_values.json");
         if (!reqs.exists() && !reqs.isDirectory()) {
             try {
                 dir.mkdirs();
@@ -228,6 +228,8 @@ public class ConfigGenerator {
         classes.put(0, RoleplayClasses.PALADIN);
         classes.put(1, RoleplayClasses.RANGER);
         classes.put(2, RoleplayClasses.FIGHTER);
+        classes.put(3, RoleplayClasses.ARTISAN);
+        classes.put(4, RoleplayClasses.FARMER);
         
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         
@@ -386,7 +388,7 @@ public class ConfigGenerator {
         
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
         File dir2 = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
-        File craftingReqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting.json");
+        File craftingReqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting_level_reqs.json");
         if (!craftingReqs.exists() && !craftingReqs.isDirectory()) {
             try {
                 dir.mkdirs();

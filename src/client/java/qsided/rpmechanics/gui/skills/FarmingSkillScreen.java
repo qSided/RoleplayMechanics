@@ -11,39 +11,39 @@ import io.wispforest.owo.ui.core.Positioning;
 import io.wispforest.owo.ui.core.Sizing;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.RoleplayMechanicsClient;
+import qsided.rpmechanics.RoleplayMechanicsCommon;
 
 import java.text.DecimalFormat;
 
-public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
-    public static Integer miningLevel = 1;
-    public static Float miningExperience = 0F;
-    public MiningSkillScreen() {
-        super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "mining")));
+public class FarmingSkillScreen extends BaseUIModelScreen<FlowLayout> {
+    public static Integer farmingLevel = 1;
+    public static Float farmingExperience = 0F;
+    
+    public FarmingSkillScreen() {
+        super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "farming")));
     }
     
-    public static void setMiningLevel(int level) {
-        MiningSkillScreen.miningLevel = level;
+    public static void setFarmingLevel(int level) {
+        FarmingSkillScreen.farmingLevel = level;
     }
-    public static void setMiningExperience(float experience) {
-        MiningSkillScreen.miningExperience = experience;
+    public static void setFarmingExperience(float experience) {
+        FarmingSkillScreen.farmingExperience = experience;
     }
     
     @Override
     protected void build(FlowLayout rootComponent) {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
-        rootComponent.childById(GridLayout.class, "mining")
+        rootComponent.childById(GridLayout.class, "farming")
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_level"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
-                                .sizing(Sizing.fill(50), Sizing.content())
-                        ,
+                                .sizing(Sizing.fill(50), Sizing.content()),
                 0,
                 0)
                 .child(
-                        Components.label(Text.of(String.valueOf(miningLevel)))
+                        Components.label(Text.of(String.valueOf(farmingLevel)))
                                 .color(Color.ofArgb(0xd1d0cd))
                                 .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                 .sizing(Sizing.fill(50), Sizing.content()),
@@ -52,68 +52,39 @@ public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_experience"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
-                                .sizing(Sizing.fill(50), Sizing.content())
-                        ,
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         1,
                         0)
                 .child(
-                        Components.label(Text.translatable("skills.rpmechanics.mining.efficiency"))
-                            .horizontalTextAlignment(HorizontalAlignment.LEFT)
-                                        .sizing(Sizing.fill(50), Sizing.content())
-                                .tooltip(Text.translatable("skills.rpmechanics.mining.efficiency.tooltip")),
+                        Components.label(Text.translatable("skills.rpmechanics.farming.extra_harvest"))
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
                         2,
                         0)
                 .child(
-                        Components.label(Text.translatable("skills.rpmechanics.mining.degrade_chance"))
-                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
-                                        .sizing(Sizing.fill(50), Sizing.content())
-                                .tooltip(Text.translatable("skills.rpmechanics.mining.degrade_chance.tooltip")),
-                        3,
-                        0)
-                .child(
-                        Components.label(Text.of("-" + miningLevel + "%"))
+                        Components.label(Text.of(farmingLevel + "%"))
                                 .color(Color.ofArgb(0xd1d0cd))
                                 .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                 .sizing(Sizing.fill(50), Sizing.content()),
-                        3,
+                        2,
                         1)
                 .sizing(Sizing.fill(34), Sizing.content());
         
-        if (miningLevel.equals(1)) {
-            rootComponent.childById(GridLayout.class, "mining")
-                    .child(
-                            Components.label(Text.of(String.valueOf(0)))
-                                    .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
-                                    .sizing(Sizing.fill(50), Sizing.content()),
-                            2,
-                            1);
-        } else {
-            rootComponent.childById(GridLayout.class, "mining")
-                    .child(
-                        Components.label(Text.of(String.valueOf(miningLevel * .5)))
-                                .color(Color.ofArgb(0xd1d0cd))
-                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
-                                    .sizing(Sizing.fill(50), Sizing.content()),
-                        2,
-                        1);
-        }
-        
-        if (miningLevel < 100) {
+        if (farmingLevel < 100) {
             
             if (!RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.useGlobal()) {
-                switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.multiplicativeOrAdditive()) {
-                    case ADD -> rootComponent.childById(GridLayout.class, "mining")
+                switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.multiplicativeOrAdditive()) {
+                    case ADD -> rootComponent.childById(GridLayout.class, "farming")
                             .child(
-                                    Components.label(Text.of(df.format(miningExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.baseExperience() + (miningLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.amount()))))
+                                    Components.label(Text.of(df.format(farmingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.baseExperience() + (farmingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
                                     1);
-                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "mining")
+                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "farming")
                             .child(
-                                    Components.label(Text.of(df.format(miningExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.baseExperience() * (miningLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.amount()))))
+                                    Components.label(Text.of(df.format(farmingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.baseExperience() * (farmingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.farmingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
@@ -122,17 +93,17 @@ public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
                 }
             } else {
                 switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.multiplicativeOrAdditive()) {
-                    case ADD -> rootComponent.childById(GridLayout.class, "mining")
+                    case ADD -> rootComponent.childById(GridLayout.class, "farming")
                             .child(
-                                    Components.label(Text.of(df.format(miningExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (miningLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
+                                    Components.label(Text.of(df.format(farmingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (farmingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
                                     1);
-                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "mining")
+                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "farming")
                             .child(
-                                    Components.label(Text.of(df.format(miningExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (miningLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
+                                    Components.label(Text.of(df.format(farmingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (farmingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
@@ -142,7 +113,7 @@ public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
             }
             
         } else {
-            rootComponent.childById(GridLayout.class, "mining")
+            rootComponent.childById(GridLayout.class, "farming")
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))

@@ -19,22 +19,30 @@ public class QuesConfigModel {
     @Nest
     public ExperienceOptions experienceOptions = new ExperienceOptions();
     
-    //@Nest
-    //public SkillOptions skillOptions = new SkillOptions();
-    //public static class SkillOptions {
-    //    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-    //    public boolean enableAgility = true;
-    //    @Nest
-    //    public AgilitySettings agilitySettings = new AgilitySettings();
-    //    public static class AgilitySettings {
-    //        @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-    //        public double jumpHeightIncrease = 0.0058;
-    //        @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-    //        public double safeFallDistanceIncrease = 0.1;
-    //        @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-    //        public double movementSpeedIncrease = 0.001;
-    //    }
-    //}
+    @Nest
+    public SkillOptions skillOptions = new SkillOptions();
+    public static class SkillOptions {
+        @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+        public boolean randomToggle = true;
+        @Nest
+        public FarmingSettings farmingSettings = new FarmingSettings();
+        public static class FarmingSettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public int levelForRightClickHarvest = 10;
+        }
+        @Nest
+        public MiningSettings miningSettings = new MiningSettings();
+        public static class MiningSettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public int levelForVeinMining = 10;
+        }
+        @Nest
+        public WoodcuttingSettings woodcuttingSettings = new WoodcuttingSettings();
+        public static class WoodcuttingSettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public int levelForTreeChopping = 10;
+        }
+    }
     
     public static class ExperienceOptions {
         @Sync(Option.SyncMode.OVERRIDE_CLIENT)
@@ -92,6 +100,16 @@ public class QuesConfigModel {
         @Nest
         public EnduranceOptions enduranceOptions = new EnduranceOptions();
         public static class EnduranceOptions {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public float baseExperience = 60;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public Choices multiplicativeOrAdditive = Choices.MULTIPLY;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double amount = 3.4;
+        }
+        @Nest
+        public FarmingOptions farmingOptions = new FarmingOptions();
+        public static class FarmingOptions {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
             public float baseExperience = 60;
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
