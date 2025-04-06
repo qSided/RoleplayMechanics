@@ -25,6 +25,41 @@ public class QuesConfigModel {
         @Sync(Option.SyncMode.OVERRIDE_CLIENT)
         public boolean randomToggle = true;
         @Nest
+        public AgilitySettings agilitySettings = new AgilitySettings();
+        public static class AgilitySettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double movementSpeed = 0.001;
+            public double safeFall = 0.05;
+            public double jumpStrength = 0.0052;
+        }
+        @Nest
+        public BowsSettings bowsSettings = new BowsSettings();
+        public static class BowsSettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double speed = 0.1;
+            public double accuracy = 0.01;
+        }
+        @Nest
+        public SwordsSettings swordsSettings = new SwordsSettings();
+        public static class SwordsSettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double damage = 0.18;
+            public double speed = 0.03;
+        }
+        @Nest
+        public AxesSettings axesSettings = new AxesSettings();
+        public static class AxesSettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double damage = 0.18;
+            public double speed = 0.03;
+        }
+        @Nest
+        public EnduranceSettings enduranceSettings = new EnduranceSettings();
+        public static class EnduranceSettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double health = 1;
+        }
+        @Nest
         public FarmingSettings farmingSettings = new FarmingSettings();
         public static class FarmingSettings {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
@@ -35,12 +70,16 @@ public class QuesConfigModel {
         public static class MiningSettings {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
             public int levelForVeinMining = 10;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double miningSpeed = 0.5;
         }
         @Nest
         public WoodcuttingSettings woodcuttingSettings = new WoodcuttingSettings();
         public static class WoodcuttingSettings {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
             public int levelForTreeChopping = 10;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double choppingSpeed = 0.5;
         }
     }
     
@@ -68,8 +107,28 @@ public class QuesConfigModel {
             public double amount = 3.4;
         }
         @Nest
-        public CombatOptions combatOptions = new CombatOptions();
-        public static class CombatOptions {
+        public BowsOptions bowsOptions = new BowsOptions();
+        public static class BowsOptions {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public float baseExperience = 60;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public Choices multiplicativeOrAdditive = Choices.MULTIPLY;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double amount = 3.4;
+        }
+        @Nest
+        public SwordsOptions swordsOptions = new SwordsOptions();
+        public static class SwordsOptions {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public float baseExperience = 60;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public Choices multiplicativeOrAdditive = Choices.MULTIPLY;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double amount = 3.4;
+        }
+        @Nest
+        public AxesOptions axesOptions = new AxesOptions();
+        public static class AxesOptions {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
             public float baseExperience = 60;
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)

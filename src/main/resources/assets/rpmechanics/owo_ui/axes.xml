@@ -13,7 +13,7 @@
                 <flow-layout direction="vertical">
                     <children>
                         <item>
-                            <stack>minecraft:netherite_sword</stack>
+                            <stack>minecraft:diamond_axe</stack>
                             <sizing>
                                 <horizontal method="fill">17</horizontal>
                                 <vertical method="fill">30</vertical>
@@ -21,12 +21,12 @@
                             <positioning type="relative">50,10</positioning>
                         </item>
                         <label>
-                            <text translate="true">skills.descriptions.rpmechanics.combat</text>
+                            <text translate="true">skills.descriptions.rpmechanics.axes</text>
                             <horizontal-text-alignment>center</horizontal-text-alignment>
                             <positioning type="relative">50,50</positioning>
                             <max-width>300</max-width>
                         </label>
-                        <grid-layout rows="4" columns="2" id="combat">
+                        <grid-layout rows="4" columns="2" id="axes">
                             <children/>
                             <positioning type="relative">50,78</positioning>
                             <surface>

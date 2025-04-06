@@ -32,6 +32,7 @@ import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qsided.rpmechanics.attributes.RoleplayMechanicsAttributes;
 import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.commands.SkillsCommand;
 import qsided.rpmechanics.config.ConfigGenerator;
@@ -45,6 +46,8 @@ import qsided.rpmechanics.items.QuesItems;
 import qsided.rpmechanics.items.materials.QuesArmorMaterials;
 import qsided.rpmechanics.networking.*;
 import qsided.rpmechanics.skills.*;
+import qsided.rpmechanics.skills.combat.ArcherySkill;
+import qsided.rpmechanics.skills.combat.SwordsAndAxesSkills;
 import qsided.rpmechanics.skills.leveling.ExperienceUp;
 import qsided.rpmechanics.skills.leveling.LevelUp;
 import qsided.rpmechanics.tags.blocks.QuesBlockTags;
@@ -117,6 +120,18 @@ public class RoleplayMechanicsCommon implements ModInitializer {
     
     @Override
 	public void onInitialize() {
+        PayloadTypeRegistry.playS2C().register(LevelUpPayload.ID, LevelUpPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(RequestSkillsPayload.ID, RequestSkillsPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendSkillsLevelsPayload.ID, SendSkillsLevelsPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendSkillsLevelsTwoPayload.ID, SendSkillsLevelsTwoPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendSkillsExperiencePayload.ID, SendSkillsExperiencePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendSkillsExperienceTwoPayload.ID, SendSkillsExperienceTwoPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(SendPlayerFallPayload.ID, SendPlayerFallPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(SendPlayerJumpPayload.ID, SendPlayerJumpPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(SendClassSelectedPayload.ID, SendClassSelectedPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(PlayerFirstJoinPayload.ID, PlayerFirstJoinPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendClassAndLevelPayload.ID, SendClassAndLevelPayload.CODEC);
+        
         QuesItems.initialize();
         QuesArmorMaterials.initialize();
         QuesBlockTags.initialize();
@@ -151,10 +166,12 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         }
         MiningSkill.register();
         EnchantingSkill.register();
-        CombatSkill.register();
         WoodcuttingSkill.register();
         EnduranceSkill.register();
         FarmingSkill.register();
+        AgilitySkill.register();
+        ArcherySkill.register();
+        SwordsAndAxesSkills.register();
         SkillCheckHandler.register();
         Harvesting.initialize();
         
@@ -163,35 +180,14 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         RoleplayClasses.initialize();
         
         SkillsCommand.register();
+        RoleplayMechanicsAttributes.initialize();
         
         BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), GenerationStep.Feature.UNDERGROUND_ORES, MYTHRIL_DEBRIS_FEATURE);
-        
-        PayloadTypeRegistry.playS2C().register(LevelUpPayload.ID, LevelUpPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(RequestSkillsPayload.ID, RequestSkillsPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(SendSkillsLevelsPayload.ID, SendSkillsLevelsPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(SendSkillsLevelsTwoPayload.ID, SendSkillsLevelsTwoPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(SendSkillsExperiencePayload.ID, SendSkillsExperiencePayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(SendSkillsExperienceTwoPayload.ID, SendSkillsExperienceTwoPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(SendPlayerFallPayload.ID, SendPlayerFallPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(SendPlayerJumpPayload.ID, SendPlayerJumpPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(SendClassSelectedPayload.ID, SendClassSelectedPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(PlayerFirstJoinPayload.ID, PlayerFirstJoinPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(SendClassAndLevelPayload.ID, SendClassAndLevelPayload.CODEC);
         
         ServerPlayNetworking.registerGlobalReceiver(RequestSkillsPayload.ID, (payload, context) -> {
             PlayerData playerState = StateManager.getPlayerState(context.player());
             
             sendSkillData(playerState, context.player());
-        });
-        
-        ServerPlayNetworking.registerGlobalReceiver(SendPlayerFallPayload.ID, (payload, context) -> {
-            PlayerData state = StateManager.getPlayerState(context.player());
-            IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(context.player(), state, "agility", (float) Math.min((payload.integer() / 100), 50));
-        });
-        
-        ServerPlayNetworking.registerGlobalReceiver(SendPlayerJumpPayload.ID, (payload, context) -> {
-            PlayerData state = StateManager.getPlayerState(context.player());
-            IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(context.player(), state, "agility", (float) (payload.integer()));
         });
         
         ServerPlayNetworking.registerGlobalReceiver(SendClassSelectedPayload.ID, (payload, context) -> {
@@ -230,11 +226,11 @@ public class RoleplayMechanicsCommon implements ModInitializer {
             
             Identifier combatModifier = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "combat_modifier");
             player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).overwritePersistentModifier(
-                    new EntityAttributeModifier(combatModifier, state.skillLevels.getOrDefault("combat", 1) * .18,
+                    new EntityAttributeModifier(combatModifier, state.skillLevels.getOrDefault("swords", 1) * .18,
                             EntityAttributeModifier.Operation.ADD_VALUE)
             );
             player.getAttributeInstance(EntityAttributes.ATTACK_SPEED).overwritePersistentModifier(
-                    new EntityAttributeModifier(combatModifier, state.skillLevels.getOrDefault("combat", 1) * .03,
+                    new EntityAttributeModifier(combatModifier, state.skillLevels.getOrDefault("swords", 1) * .03,
                             EntityAttributeModifier.Operation.ADD_VALUE)
             );
             
@@ -266,29 +262,33 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 	public static void sendSkillData(PlayerData playerState, ServerPlayerEntity player) {
 		Integer miningLevel = playerState.skillLevels.getOrDefault("mining", 1);
 		Integer enchantingLevel = playerState.skillLevels.getOrDefault("enchanting", 1);
-		Integer combatLevel = playerState.skillLevels.getOrDefault("combat", 1);
+		Integer combatLevel = playerState.skillLevels.getOrDefault("swords", 1);
 		Integer woodcuttingLevel = playerState.skillLevels.getOrDefault("woodcutting", 1);
 		Integer enduranceLevel = playerState.skillLevels.getOrDefault("endurance", 1);
         Integer agilityLevel = playerState.skillLevels.getOrDefault("agility", 1);
 		Integer craftingLevel = playerState.skillLevels.getOrDefault("crafting", 1);
 		Integer smithingLevel = playerState.skillLevels.getOrDefault("smithing", 1);
 		Integer farmingLevel = playerState.skillLevels.getOrDefault("farming", 1);
+		Integer axesLevel = playerState.skillLevels.getOrDefault("axes", 1);
+		Integer bowsLevel = playerState.skillLevels.getOrDefault("bows", 1);
 		
 		Float miningExp = playerState.skillExperience.getOrDefault("mining", 0F);
 		Float enchantingExp = playerState.skillExperience.getOrDefault("enchanting", 0F);
-		Float combatExp = playerState.skillExperience.getOrDefault("combat", 0F);
+		Float combatExp = playerState.skillExperience.getOrDefault("swords", 0F);
 		Float woodcuttingExp = playerState.skillExperience.getOrDefault("woodcutting", 0F);
 		Float enduranceExp = playerState.skillExperience.getOrDefault("endurance", 0F);
         Float agilityExp = playerState.skillExperience.getOrDefault("agility", 0F);
 		Float craftingExp = playerState.skillExperience.getOrDefault("crafting", 0F);
 		Float smithingExp = playerState.skillExperience.getOrDefault("smithing", 0F);
         Float farmingExp = playerState.skillExperience.getOrDefault("farming", 0F);
+        Float axesExp = playerState.skillExperience.getOrDefault("axes", 0F);
+        Float bowsExp = playerState.skillExperience.getOrDefault("bows", 0F);
         
         ServerPlayNetworking.send(player, new SendClassAndLevelPayload(playerState.rpClass, playerState.rpClassLevel, playerState.rpClassExp));
 		
 		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, combatLevel, woodcuttingLevel, enduranceLevel, agilityLevel, craftingLevel, smithingLevel));
-		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel));
+		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, axesLevel, bowsLevel));
 		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, combatExp, woodcuttingExp, enduranceExp, agilityExp, craftingExp, smithingExp));
-        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp));
+        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, axesExp, bowsExp));
 	}
 }

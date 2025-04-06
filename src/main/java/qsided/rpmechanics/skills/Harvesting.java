@@ -51,7 +51,7 @@ public class Harvesting {
         Identifier modifierId = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "tree_and_ore_harvesting");
         
         PlayerStartBreakingEvent.EVENT.register((world, pos, blockState, player) -> {
-            double amountToDecrease = getBlockAmount(world, pos) * (player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).getValue() * 0.017);
+            double amountToDecrease = Math.min(0.85, getBlockAmount(world, pos) * (player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).getValue() * 0.012));
             if (player instanceof ServerPlayerEntity) {
                 PlayerData state = StateManager.getPlayerState(player);
                 boolean meetsMining = state.skillLevels.getOrDefault("mining", 1) >= OWO_CONFIG.skillOptions.miningSettings.levelForVeinMining();
@@ -91,7 +91,7 @@ public class Harvesting {
             PlayerData state = StateManager.getPlayerState(player);
             boolean meetsMining = state.skillLevels.getOrDefault("mining", 1) >= OWO_CONFIG.skillOptions.miningSettings.levelForVeinMining();
             boolean meetsWoodcutting = state.skillLevels.getOrDefault("woodcutting", 1) >= OWO_CONFIG.skillOptions.woodcuttingSettings.levelForTreeChopping();
-            if (meetsMining || meetsWoodcutting && player.isSneaking()) {
+            if ((meetsMining || meetsWoodcutting) && player.isSneaking()) {
                 return isSneakingAtStart();
             }
             return true;

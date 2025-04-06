@@ -4,8 +4,11 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "LivingEntityMixin",
+    "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerMixin",
+    "bows.BowItemMixin",
+    "bows.CrossbowItemMixin",
     "crafting.CraftingResultSlotMixin",
     "crafting.CraftingScreenHandlerMixin",
     "enchanting.EnchantItemMixin",
