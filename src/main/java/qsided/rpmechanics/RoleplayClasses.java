@@ -76,7 +76,7 @@ public class RoleplayClasses {
                         List.of(new StartingSkill("endurance", 10)),
                         
                         List.of(new SkillModifier("endurance", 10),
-                                new SkillModifier("combat", 5)));
+                                new SkillModifier("swords", 5)));
         RANGER =
                 new RoleplayClass(
                         "Ranger",
@@ -100,10 +100,10 @@ public class RoleplayClasses {
                                 new StartingEquipment(Items.WOODEN_AXE.toString(), 1),
                                 new StartingEquipment(Items.COOKED_PORKCHOP.toString(), 12)),
                         
-                        List.of(new StartingSkill("combat", 10),
+                        List.of(new StartingSkill("swords", 10),
                                 new StartingSkill("agility", 5)),
                         
-                        List.of(new SkillModifier("combat", 10),
+                        List.of(new SkillModifier("swords", 10),
                                 new SkillModifier("agility", 5)));
         ARTISAN =
                 new RoleplayClass(
@@ -118,7 +118,7 @@ public class RoleplayClasses {
                         List.of(new StartingSkill("crafting", 10),
                                 new StartingSkill("smithing", 10)),
                         
-                        List.of(new SkillModifier("combat", 10),
+                        List.of(new SkillModifier("swords", 10),
                                 new SkillModifier("smithing", 10)));
         FARMER =
                 new RoleplayClass(

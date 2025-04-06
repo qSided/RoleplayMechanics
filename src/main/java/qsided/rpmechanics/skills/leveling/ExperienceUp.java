@@ -53,20 +53,20 @@ public class ExperienceUp {
                             }
                         }
                     }
-                    case "combat" -> {
-                        switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.multiplicativeOrAdditive()) {
-                            case ADD -> {
-                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.baseExperience() + (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.amount())) {
-                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
-                                }
-                            }
-                            case MULTIPLY -> {
-                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.amount())) {
-                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
-                                }
-                            }
-                        }
-                    }
+                    //case "swords" -> {
+                    //    switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.multiplicativeOrAdditive()) {
+                    //        case ADD -> {
+                    //            if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.baseExperience() + (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.amount())) {
+                    //                IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                    //            }
+                    //        }
+                    //        case MULTIPLY -> {
+                    //            if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.amount())) {
+                    //                IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     case "crafting" -> {
                         switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.craftingOptions.multiplicativeOrAdditive()) {
                             case ADD -> {

@@ -16,25 +16,25 @@ import qsided.rpmechanics.RoleplayMechanicsClient;
 
 import java.text.DecimalFormat;
 
-public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
-    public static Integer combatLevel = 1;
-    public static Float combatExperience = 0F;
-    public CombatSkillScreen() {
-        super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "combat")));
+public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
+    public static Integer swordsLevel = 1;
+    public static Float swordsExperience = 0F;
+    public SwordsSkillScreen() {
+        super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "swords")));
     }
     
-    public static void setCombatLevel(int level) {
-        CombatSkillScreen.combatLevel = level;
+    public static void setSwordsLevel(int level) {
+        SwordsSkillScreen.swordsLevel = level;
     }
-    public static void setCombatExperience(float experience) {
-        CombatSkillScreen.combatExperience = experience;
+    public static void setSwordsExperience(float experience) {
+        SwordsSkillScreen.swordsExperience = experience;
     }
     
     @Override
     protected void build(FlowLayout rootComponent) {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
-        rootComponent.childById(GridLayout.class, "combat")
+        rootComponent.childById(GridLayout.class, "swords")
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_level"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
@@ -42,7 +42,7 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                 0,
                 0)
                 .child(
-                        Components.label(Text.of(String.valueOf(combatLevel)))
+                        Components.label(Text.of(String.valueOf(swordsLevel)))
                                 .color(Color.ofArgb(0xd1d0cd))
                                 .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                 .sizing(Sizing.fill(50), Sizing.content()),
@@ -56,21 +56,21 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                         1,
                         0)
                 .child(
-                        Components.label(Text.translatable("skills.rpmechanics.combat.attack_damage"))
+                        Components.label(Text.translatable("skills.rpmechanics.swords.attack_damage"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
                                 .sizing(Sizing.fill(50), Sizing.content()),
                         2,
                         0)
                 .child(
-                        Components.label(Text.translatable("skills.rpmechanics.combat.attack_speed"))
+                        Components.label(Text.translatable("skills.rpmechanics.swords.attack_speed"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
                                 .sizing(Sizing.fill(50), Sizing.content()),
                         3,
                         0)
                 .sizing(Sizing.fill(34), Sizing.content());
         
-        if (combatLevel.equals(1)) {
-            rootComponent.childById(GridLayout.class, "combat")
+        if (swordsLevel.equals(1)) {
+            rootComponent.childById(GridLayout.class, "swords")
                     .child(
                             Components.label(Text.of(String.valueOf(0)))
                                     .color(Color.ofArgb(0xd1d0cd))
@@ -79,17 +79,17 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             2,
                             1);
         } else {
-            rootComponent.childById(GridLayout.class, "combat")
+            rootComponent.childById(GridLayout.class, "swords")
                     .child(
-                            Components.label(Text.of(String.valueOf(df.format(combatLevel * .18))))
+                            Components.label(Text.of(String.valueOf(df.format(swordsLevel * .18))))
                                     .color(Color.ofArgb(0xd1d0cd))
                                     .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                     .sizing(Sizing.fill(50), Sizing.content()),
                             2,
                             1);
         }
-        if (combatLevel.equals(1)) {
-            rootComponent.childById(GridLayout.class, "combat")
+        if (swordsLevel.equals(1)) {
+            rootComponent.childById(GridLayout.class, "swords")
                     .child(
                             Components.label(Text.of(String.valueOf(0)))
                                     .color(Color.ofArgb(0xd1d0cd))
@@ -98,9 +98,9 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             3,
                             1);
         } else {
-            rootComponent.childById(GridLayout.class, "combat")
+            rootComponent.childById(GridLayout.class, "swords")
                     .child(
-                            Components.label(Text.of(String.valueOf(df.format(combatLevel * .03))))
+                            Components.label(Text.of(String.valueOf(df.format(swordsLevel * .03))))
                                     .color(Color.ofArgb(0xd1d0cd))
                                     .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                     .sizing(Sizing.fill(50), Sizing.content()),
@@ -108,21 +108,21 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                             1);
         }
         
-        if (combatLevel < 100) {
+        if (swordsLevel < 100) {
             
             if (!RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.useGlobal()) {
-                switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.multiplicativeOrAdditive()) {
-                    case ADD -> rootComponent.childById(GridLayout.class, "combat")
+                switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.multiplicativeOrAdditive()) {
+                    case ADD -> rootComponent.childById(GridLayout.class, "swords")
                             .child(
-                                    Components.label(Text.of(df.format(combatExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.baseExperience() + (combatLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.amount()))))
+                                    Components.label(Text.of(df.format(swordsExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.baseExperience() + (swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
                                     1);
-                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "combat")
+                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "swords")
                             .child(
-                                    Components.label(Text.of(df.format(combatExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.baseExperience() * (combatLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.combatOptions.amount()))))
+                                    Components.label(Text.of(df.format(swordsExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.baseExperience() * (swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
@@ -131,17 +131,17 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                 }
             } else {
                 switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.multiplicativeOrAdditive()) {
-                    case ADD -> rootComponent.childById(GridLayout.class, "combat")
+                    case ADD -> rootComponent.childById(GridLayout.class, "swords")
                             .child(
-                                    Components.label(Text.of(df.format(combatExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (combatLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
+                                    Components.label(Text.of(df.format(swordsExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
                                     1);
-                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "combat")
+                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "swords")
                             .child(
-                                    Components.label(Text.of(df.format(combatExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (combatLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
+                                    Components.label(Text.of(df.format(swordsExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
@@ -151,7 +151,7 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
             }
             
         } else {
-            rootComponent.childById(GridLayout.class, "combat")
+            rootComponent.childById(GridLayout.class, "swords")
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))
@@ -194,9 +194,9 @@ public class CombatSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     client.setScreen(new SmithingSkillScreen());
                 })
                 .divider()
-                .button(Text.translatable("skills.rpmechanics.combat"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("combat");
-                    client.setScreen(new CombatSkillScreen());
+                .button(Text.translatable("skills.rpmechanics.swords"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("swords");
+                    client.setScreen(new SwordsSkillScreen());
                 })
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.endurance"), button -> {

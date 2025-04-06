@@ -6,6 +6,8 @@
     "LivingEntityMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerMixin",
+    "bows.BowItemMixin",
+    "bows.CrossbowItemMixin",
     "crafting.CraftingResultSlotMixin",
     "crafting.CraftingScreenHandlerMixin",
     "enchanting.EnchantItemMixin",

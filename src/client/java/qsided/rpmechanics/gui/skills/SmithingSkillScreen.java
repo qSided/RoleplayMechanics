@@ -169,9 +169,9 @@ public class SmithingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     client.setScreen(new SmithingSkillScreen());
                 })
                 .divider()
-                .button(Text.translatable("skills.rpmechanics.combat"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("combat");
-                    client.setScreen(new CombatSkillScreen());
+                .button(Text.translatable("skills.rpmechanics.swords"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("swords");
+                    client.setScreen(new SwordsSkillScreen());
                 })
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.endurance"), button -> {

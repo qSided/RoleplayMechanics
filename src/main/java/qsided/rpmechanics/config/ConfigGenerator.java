@@ -25,7 +25,7 @@ public class ConfigGenerator {
         ObjectMapper mapper = new ObjectMapper();
         List<ItemWithRequirements> items = new ArrayList<>();
         
-        items.add(new ItemWithRequirements("minecraft:wooden_sword", new Requirements("combat", -1, 1)));
+        items.add(new ItemWithRequirements("minecraft:wooden_sword", new Requirements("swords", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:wooden_pickaxe", new Requirements("mining", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:wooden_axe", new Requirements("woodcutting", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:wooden_shovel", new Requirements("mining", -1, 1)));
@@ -35,7 +35,7 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:leather_leggings", new Requirements("endurance", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:leather_boots", new Requirements("endurance", -1, 1)));
         
-        items.add(new ItemWithRequirements("minecraft:stone_sword", new Requirements("combat", -1, 4)));
+        items.add(new ItemWithRequirements("minecraft:stone_sword", new Requirements("swords", -1, 4)));
         items.add(new ItemWithRequirements("minecraft:stone_pickaxe", new Requirements("mining", -1, 4)));
         items.add(new ItemWithRequirements("minecraft:stone_axe", new Requirements("woodcutting", -1, 4)));
         items.add(new ItemWithRequirements("minecraft:stone_shovel", new Requirements("mining", -1, 4)));
@@ -45,7 +45,7 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:chainmail_leggings", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:chainmail_boots", new Requirements("endurance", -1, 10)));
         
-        items.add(new ItemWithRequirements("minecraft:iron_sword", new Requirements("combat", -1, 12)));
+        items.add(new ItemWithRequirements("minecraft:iron_sword", new Requirements("swords", -1, 12)));
         items.add(new ItemWithRequirements("minecraft:iron_pickaxe", new Requirements("mining", -1, 12)));
         items.add(new ItemWithRequirements("minecraft:iron_axe", new Requirements("woodcutting", -1, 12)));
         items.add(new ItemWithRequirements("minecraft:iron_shovel", new Requirements("mining", -1, 12)));
@@ -55,7 +55,7 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:iron_leggings", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:iron_boots", new Requirements("endurance", -1, 10)));
         
-        items.add(new ItemWithRequirements("minecraft:golden_sword", new Requirements("combat", -1, 15)));
+        items.add(new ItemWithRequirements("minecraft:golden_sword", new Requirements("swords", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_pickaxe", new Requirements("mining", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_axe", new Requirements("woodcutting", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_shovel", new Requirements("mining", -1, 15)));
@@ -65,7 +65,7 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:golden_leggings", new Requirements("endurance", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_boots", new Requirements("endurance", -1, 15)));
         
-        items.add(new ItemWithRequirements("minecraft:diamond_sword", new Requirements("combat", -1, 25)));
+        items.add(new ItemWithRequirements("minecraft:diamond_sword", new Requirements("swords", -1, 25)));
         items.add(new ItemWithRequirements("minecraft:diamond_pickaxe", new Requirements("mining", -1, 25)));
         items.add(new ItemWithRequirements("minecraft:diamond_axe", new Requirements("woodcutting", -1, 25)));
         items.add(new ItemWithRequirements("minecraft:diamond_shovel", new Requirements("mining", -1, 25)));
@@ -75,7 +75,7 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:diamond_leggings", new Requirements("endurance", -1, 20)));
         items.add(new ItemWithRequirements("minecraft:diamond_boots", new Requirements("endurance", -1, 20)));
         
-        items.add(new ItemWithRequirements("minecraft:netherite_sword", new Requirements("combat", -1, 40)));
+        items.add(new ItemWithRequirements("minecraft:netherite_sword", new Requirements("swords", -1, 40)));
         items.add(new ItemWithRequirements("minecraft:netherite_pickaxe", new Requirements("mining", -1, 40)));
         items.add(new ItemWithRequirements("minecraft:netherite_axe", new Requirements("woodcutting", -1, 40)));
         items.add(new ItemWithRequirements("minecraft:netherite_shovel", new Requirements("mining", -1, 40)));
@@ -85,7 +85,7 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:netherite_leggings", new Requirements("endurance", -1, 30)));
         items.add(new ItemWithRequirements("minecraft:netherite_boots", new Requirements("endurance", -1, 30)));
         
-        items.add(new ItemWithRequirements("rpmechanics:mythril_sword", new Requirements("combat", -1, 50)));
+        items.add(new ItemWithRequirements("rpmechanics:mythril_sword", new Requirements("swords", -1, 50)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_pickaxe", new Requirements("mining", -1, 50)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_axe", new Requirements("woodcutting", -1, 50)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_shovel", new Requirements("mining", -1, 50)));
