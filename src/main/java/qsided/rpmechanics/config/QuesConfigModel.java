@@ -28,15 +28,15 @@ public class QuesConfigModel {
         public AgilitySettings agilitySettings = new AgilitySettings();
         public static class AgilitySettings {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-            public double movementSpeed = 0.01;
-            public double safeFall = 0.1;
+            public double movementSpeed = 0.001;
+            public double safeFall = 0.05;
             public double jumpStrength = 0.0052;
         }
         @Nest
         public BowsSettings bowsSettings = new BowsSettings();
         public static class BowsSettings {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-            public double speed = 0.5;
+            public double speed = 0.1;
             public double accuracy = 0.01;
         }
         @Nest

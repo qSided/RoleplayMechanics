@@ -528,7 +528,7 @@
     { "text": "Your ", "color": "#d1d0cd"},
     { "text": "farming", "color": "#a87147"},
     { "text": " skill determines your ", "color": "#d1d0cd"},
-    { "text": "chance for extra crops", "color": "#449e1e"},
+    { "text": "chance for extra crops", "color": "#8c5a34"},
     { "text": " when harvesting any crop. Experience is gained by planting new crops or harvesting fully grown ones. Planting crops is worth 1/4 exp of harvesting.", "color": "#d1d0cd"}
   ]
 }
