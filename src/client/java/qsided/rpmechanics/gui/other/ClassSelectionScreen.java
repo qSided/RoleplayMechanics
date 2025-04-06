@@ -122,12 +122,13 @@ public class ClassSelectionScreen extends BaseOwoScreen<FlowLayout> {
         
         rootComponent.child(Components.dropdown(Sizing.content()).id("classes"));
         
-        rootComponent.child(Containers.verticalScroll(Sizing.content(), Sizing.fixed(60),
+        rootComponent.child(Containers.verticalFlow(Sizing.content(), Sizing.content())
+                .child(
                         rootComponent.childById(DropdownComponent.class, "classes")
                                 .surface(Surface.flat(Color.decode("#171717").getRGB()).and(Surface.outline(Color.decode("#121212").getRGB())))
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
-                                .horizontalSizing(Sizing.content()))
-                .positioning(Positioning.relative(0,54)));
+                                .horizontalSizing(Sizing.content())
+                ).positioning(Positioning.relative(0,54)));
         
         rootComponent.child(Containers.verticalFlow(Sizing.fill(64), Sizing.fill(60))
                 //Description box
@@ -198,44 +199,44 @@ public class ClassSelectionScreen extends BaseOwoScreen<FlowLayout> {
         });
         
         rootComponent.child(Components.button(Text.translatable("classes.rpmechanics.select").append(" ").append(getFormattedName(RoleplayMechanicsCommon.getRpClasses(), getRpClassId())), buttonComponent -> {
-            
-            rootComponent.clearChildren();
-            
-            rootComponent.child(Containers.overlay(
-                    Containers.horizontalFlow(Sizing.fill(), Sizing.fill())
-                            .child(
-                                    Components.label(Text.translatable("classes.rpmechanics.selected_one").append(getFormattedName(RoleplayMechanicsCommon.getRpClasses(), getRpClassId())).append(Text.translatable("classes.rpmechanics.selected_two")))
-                                            .maxWidth(130 + (40 * (client.options.getGuiScale().getValue())))
-                                            .horizontalTextAlignment(HorizontalAlignment.CENTER)
-                                            .shadow(true)
-                                            .positioning(Positioning.relative(50, 15))
-                            )
-                            .child(
-                                    Components.button(Text.translatable("classes.rpmechanics.yes"), onClick -> {
-                                        ClientPlayNetworking.send(new SendClassSelectedPayload(getRpClassId()));
-                                        MinecraftClient.getInstance().currentScreen.close();
-                                    })
-                                            .positioning(Positioning.relative(95, 95))
-                                            .sizing(Sizing.fill(16), Sizing.fixed(23))
-                            )
-                            .child(
-                                    Components.button(Text.translatable("classes.rpmechanics.no"), onClick -> {
-                                                rootComponent.childById(OverlayContainer.class, "confirmation").remove();
-                                                build(rootComponent);
-                                            })
-                                            .positioning(Positioning.relative(5, 95))
-                                            .sizing(Sizing.fill(16), Sizing.fixed(23))
-                            )
-                            )
-                    .closeOnClick(false)
-                    .surface(Surface.DARK_PANEL)
-                    .positioning(Positioning.relative(50, 50))
-                    .sizing(Sizing.fill(40), Sizing.fill(30))
-                    .id("confirmation")
-            );
-            
-            
-        })
+                    
+                    rootComponent.clearChildren();
+                    
+                    rootComponent.child(Containers.overlay(
+                                            Containers.horizontalFlow(Sizing.fill(), Sizing.fill())
+                                                    .child(
+                                                            Components.label(Text.translatable("classes.rpmechanics.selected_one").append(getFormattedName(RoleplayMechanicsCommon.getRpClasses(), getRpClassId())).append(Text.translatable("classes.rpmechanics.selected_two")))
+                                                                    .maxWidth(130 + (40 * (client.options.getGuiScale().getValue())))
+                                                                    .horizontalTextAlignment(HorizontalAlignment.CENTER)
+                                                                    .shadow(true)
+                                                                    .positioning(Positioning.relative(50, 15))
+                                                    )
+                                                    .child(
+                                                            Components.button(Text.translatable("classes.rpmechanics.yes"), onClick -> {
+                                                                        ClientPlayNetworking.send(new SendClassSelectedPayload(getRpClassId()));
+                                                                        MinecraftClient.getInstance().currentScreen.close();
+                                                                    })
+                                                                    .positioning(Positioning.relative(95, 95))
+                                                                    .sizing(Sizing.fill(16), Sizing.fixed(23))
+                                                    )
+                                                    .child(
+                                                            Components.button(Text.translatable("classes.rpmechanics.no"), onClick -> {
+                                                                        rootComponent.childById(OverlayContainer.class, "confirmation").remove();
+                                                                        build(rootComponent);
+                                                                    })
+                                                                    .positioning(Positioning.relative(5, 95))
+                                                                    .sizing(Sizing.fill(16), Sizing.fixed(23))
+                                                    )
+                                    )
+                                    .closeOnClick(false)
+                                    .surface(Surface.DARK_PANEL)
+                                    .positioning(Positioning.relative(50, 50))
+                                    .sizing(Sizing.fill(40), Sizing.fill(30))
+                                    .id("confirmation")
+                    );
+                    
+                    
+                })
                 .sizing(Sizing.content(3), Sizing.fixed(20))
                 .positioning(Positioning.relative(50, 10)));
         

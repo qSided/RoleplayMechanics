@@ -39,6 +39,7 @@ import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
 import qsided.rpmechanics.events.RoleplayClassSelectedCallback;
 import qsided.rpmechanics.networking.*;
 import qsided.rpmechanics.skills.*;
+import qsided.rpmechanics.skills.combat.ArcherySkill;
 import qsided.rpmechanics.skills.combat.SwordsAndAxesSkills;
 import qsided.rpmechanics.skills.leveling.ExperienceUp;
 import qsided.rpmechanics.skills.leveling.LevelUp;
@@ -123,8 +124,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(PlayerFirstJoinPayload.ID, PlayerFirstJoinPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendClassAndLevelPayload.ID, SendClassAndLevelPayload.CODEC);
         
-        RoleplayMechanicsAttributes.initialize();
-        MobScaling.initialize();
+        
         
         ObjectMapper mapper = new ObjectMapper();
         CollectionType miningRef = TypeFactory.defaultInstance().constructCollectionType(List.class, BlockExperience.class);
@@ -159,12 +159,16 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         EnduranceSkill.register();
         AgilitySkill.register();
         FarmingSkill.register();
+        ArcherySkill.register();
+        SwordsAndAxesSkills.register();
         SkillCheckHandler.register();
         Harvesting.initialize();
         
         LevelUp.onLevelUp();
         ExperienceUp.onExperienceUp();
         RoleplayClasses.initialize();
+        RoleplayMechanicsAttributes.initialize();
+        MobScaling.initialize();
         
         SkillsCommand.register();
         
