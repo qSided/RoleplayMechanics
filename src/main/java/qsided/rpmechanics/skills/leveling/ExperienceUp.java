@@ -28,11 +28,14 @@ public class ExperienceUp {
             if (state.rpClassLevel < 100) {
                 state.rpClassExp = state.rpClassExp + value;
                 
-                if (state.rpClassExp >= (360 * (state.rpClassLevel * 3.4))) {
+                if (state.rpClassExp >= (300 * (state.rpClassLevel * 3.4))) {
                     state.rpClassExp = (float) (state.rpClassExp - (300 * (state.rpClassLevel * 3.4)));
                     state.rpClassLevel = state.rpClassLevel + 1;
                 }
             }
+            
+            
+            //player.sendMessage(Text.translatable("skills.ques-mod." + skill).append(Text.of(" +" + df.format(value) + "XP")).formatted(Formatting.BOLD, Formatting.GRAY), true);
             
             if (!RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.useGlobal()) {
                 switch (skill) {
@@ -45,20 +48,6 @@ public class ExperienceUp {
                             }
                             case MULTIPLY -> {
                                 if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.agilityOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.agilityOptions.amount())) {
-                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
-                                }
-                            }
-                        }
-                    }
-                    case "bows" -> {
-                        switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.multiplicativeOrAdditive()) {
-                            case ADD -> {
-                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.baseExperience() + (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.amount())) {
-                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
-                                }
-                            }
-                            case MULTIPLY -> {
-                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.amount())) {
                                     IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
                                 }
                             }
@@ -87,6 +76,20 @@ public class ExperienceUp {
                             }
                             case MULTIPLY -> {
                                 if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.axesOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.axesOptions.amount())) {
+                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                                }
+                            }
+                        }
+                    }
+                    case "bows" -> {
+                        switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.multiplicativeOrAdditive()) {
+                            case ADD -> {
+                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.baseExperience() + (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.amount())) {
+                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                                }
+                            }
+                            case MULTIPLY -> {
+                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.bowsOptions.amount())) {
                                     IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
                                 }
                             }

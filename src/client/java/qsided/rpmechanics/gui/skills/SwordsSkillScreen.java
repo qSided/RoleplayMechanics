@@ -23,10 +23,10 @@ public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
         super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "swords")));
     }
     
-    public static void setswordsLevel(int level) {
+    public static void setSwordsLevel(int level) {
         SwordsSkillScreen.swordsLevel = level;
     }
-    public static void setswordsExperience(float experience) {
+    public static void setSwordsExperience(float experience) {
         SwordsSkillScreen.swordsExperience = experience;
     }
     
@@ -81,7 +81,7 @@ public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
         } else {
             rootComponent.childById(GridLayout.class, "swords")
                     .child(
-                            Components.label(Text.of(String.valueOf(df.format(swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.swordsSettings.damage()))))
+                            Components.label(Text.of(String.valueOf(df.format(swordsLevel * .18))))
                                     .color(Color.ofArgb(0xd1d0cd))
                                     .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                     .sizing(Sizing.fill(50), Sizing.content()),
@@ -100,7 +100,7 @@ public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
         } else {
             rootComponent.childById(GridLayout.class, "swords")
                     .child(
-                            Components.label(Text.of(String.valueOf(df.format(swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.swordsSettings.speed()))))
+                            Components.label(Text.of(String.valueOf(df.format(swordsLevel * .03))))
                                     .color(Color.ofArgb(0xd1d0cd))
                                     .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                     .sizing(Sizing.fill(50), Sizing.content()),
@@ -194,9 +194,19 @@ public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     client.setScreen(new SmithingSkillScreen());
                 })
                 .divider()
-                .button(Text.translatable("skills.rpmechanics.combat"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("combat");
+                .button(Text.translatable("skills.rpmechanics.swords"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("swords");
                     client.setScreen(new SwordsSkillScreen());
+                })
+                .divider()
+                .button(Text.translatable("skills.rpmechanics.axes"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("axes");
+                    client.setScreen(new AxesSkillScreen());
+                })
+                .divider()
+                .button(Text.translatable("skills.rpmechanics.bows"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("bows");
+                    client.setScreen(new BowsSkillScreen());
                 })
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.endurance"), button -> {

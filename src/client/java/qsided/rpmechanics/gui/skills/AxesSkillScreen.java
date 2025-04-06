@@ -23,10 +23,10 @@ public class AxesSkillScreen extends BaseUIModelScreen<FlowLayout> {
         super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "axes")));
     }
     
-    public static void setaxesLevel(int level) {
+    public static void setAxesLevel(int level) {
         AxesSkillScreen.axesLevel = level;
     }
-    public static void setaxesExperience(float experience) {
+    public static void setAxesExperience(float experience) {
         AxesSkillScreen.axesExperience = experience;
     }
     
@@ -81,7 +81,7 @@ public class AxesSkillScreen extends BaseUIModelScreen<FlowLayout> {
         } else {
             rootComponent.childById(GridLayout.class, "axes")
                     .child(
-                            Components.label(Text.of(String.valueOf(df.format(axesLevel * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.axesSettings.damage()))))
+                            Components.label(Text.of(String.valueOf(df.format(axesLevel * .18))))
                                     .color(Color.ofArgb(0xd1d0cd))
                                     .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                     .sizing(Sizing.fill(50), Sizing.content()),
@@ -100,7 +100,7 @@ public class AxesSkillScreen extends BaseUIModelScreen<FlowLayout> {
         } else {
             rootComponent.childById(GridLayout.class, "axes")
                     .child(
-                            Components.label(Text.of(String.valueOf(df.format(axesLevel * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.axesSettings.speed()))))
+                            Components.label(Text.of(String.valueOf(df.format(axesLevel * .03))))
                                     .color(Color.ofArgb(0xd1d0cd))
                                     .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                     .sizing(Sizing.fill(50), Sizing.content()),
@@ -194,9 +194,19 @@ public class AxesSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     client.setScreen(new SmithingSkillScreen());
                 })
                 .divider()
+                .button(Text.translatable("skills.rpmechanics.swords"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("swords");
+                    client.setScreen(new SwordsSkillScreen());
+                })
+                .divider()
                 .button(Text.translatable("skills.rpmechanics.axes"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("axes");
                     client.setScreen(new AxesSkillScreen());
+                })
+                .divider()
+                .button(Text.translatable("skills.rpmechanics.bows"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("bows");
+                    client.setScreen(new BowsSkillScreen());
                 })
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.endurance"), button -> {

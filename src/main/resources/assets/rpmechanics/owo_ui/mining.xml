@@ -13,7 +13,7 @@
                 <flow-layout direction="vertical">
                     <children>
                         <item>
-                            <stack>minecraft:wooden_pickaxe</stack>
+                            <stack>rpmechanics:mythril_pickaxe</stack>
                             <sizing>
                                 <horizontal method="fill">17</horizontal>
                                 <vertical method="fill">30</vertical>

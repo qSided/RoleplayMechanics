@@ -29,9 +29,9 @@ public class RoleplayClasses {
             
             if (state.rpClass.equals("")) {
                 player.sendMessage(Text.translatable("classes.rpmechanics.class_selected")
-                    .append(Text.literal(
-                            RoleplayMechanicsCommon.getRpClasses().get(rpClassId).getName()).getWithStyle(Style.EMPTY.withColor(Color.decode(RoleplayMechanicsCommon.getRpClasses().get(rpClassId).getColor()).getRGB())).getFirst()
-                    )
+                        .append(Text.literal(
+                                RoleplayMechanicsCommon.getRpClasses().get(rpClassId).getName()).getWithStyle(Style.EMPTY.withColor(Color.decode(RoleplayMechanicsCommon.getRpClasses().get(rpClassId).getColor()).getRGB())).getFirst()
+                        )
                 );
                 
                 RoleplayMechanicsCommon.getRpClasses().get(rpClassId).getStartingSkills().forEach(startingSkill -> IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, startingSkill.getSkill(), startingSkill.getLevel(), false));
@@ -73,10 +73,11 @@ public class RoleplayClasses {
                                 new StartingEquipment(Items.SHIELD.toString(), 1),
                                 new StartingEquipment(Items.COOKED_BEEF.toString(), 12)),
                         
-                        List.of(new StartingSkill("endurance", 10)),
+                        List.of(new StartingSkill("endurance", 10),
+                                new StartingSkill("swords", 5)),
                         
                         List.of(new SkillModifier("endurance", 10),
-                                new SkillModifier("combat", 5)));
+                                new SkillModifier("swords", 5)));
         RANGER =
                 new RoleplayClass(
                         "Ranger",
@@ -87,9 +88,11 @@ public class RoleplayClasses {
                                 new StartingEquipment(Items.ARROW.toString(), 64),
                                 new StartingEquipment(Items.PUMPKIN_PIE.toString(), 12)),
                         
-                        List.of(new StartingSkill("agility", 10)),
+                        List.of(new StartingSkill("agility", 10),
+                                new StartingSkill("bows", 5)),
                         
-                        List.of(new SkillModifier("agility", 15)));
+                        List.of(new SkillModifier("agility", 10),
+                                new SkillModifier("bows", 10)));
         FIGHTER =
                 new RoleplayClass(
                         "Fighter",
@@ -100,10 +103,10 @@ public class RoleplayClasses {
                                 new StartingEquipment(Items.WOODEN_AXE.toString(), 1),
                                 new StartingEquipment(Items.COOKED_PORKCHOP.toString(), 12)),
                         
-                        List.of(new StartingSkill("combat", 10),
+                        List.of(new StartingSkill("axes", 10),
                                 new StartingSkill("agility", 5)),
                         
-                        List.of(new SkillModifier("combat", 10),
+                        List.of(new SkillModifier("axes", 10),
                                 new SkillModifier("agility", 5)));
         ARTISAN =
                 new RoleplayClass(
@@ -118,7 +121,7 @@ public class RoleplayClasses {
                         List.of(new StartingSkill("crafting", 10),
                                 new StartingSkill("smithing", 10)),
                         
-                        List.of(new SkillModifier("combat", 10),
+                        List.of(new SkillModifier("crafting", 10),
                                 new SkillModifier("smithing", 10)));
         FARMER =
                 new RoleplayClass(
@@ -134,10 +137,10 @@ public class RoleplayClasses {
                                 new StartingEquipment(Items.COOKED_BEEF.toString(), 12)),
                         
                         List.of(new StartingSkill("farming", 10),
-                                new StartingSkill("agility", 5)),
+                                new StartingSkill("endurance", 5)),
                         
                         List.of(new SkillModifier("farming", 10),
-                                new SkillModifier("agility", 5)));
+                                new SkillModifier("endurance", 5)));
         
     }
 }
