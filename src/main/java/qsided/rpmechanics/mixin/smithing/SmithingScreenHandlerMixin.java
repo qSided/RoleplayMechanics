@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.SmithingScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import qsided.rpmechanics.PlayerData;
 import qsided.rpmechanics.StateManager;
@@ -18,14 +19,17 @@ import java.util.Random;
 @Mixin(SmithingScreenHandler.class)
 public class SmithingScreenHandlerMixin {
     
+    @Unique
     public PlayerEntity getUser() {
         return user;
     }
     
+    @Unique
     public void setUser(PlayerEntity user) {
         this.user = user;
     }
     
+    @Unique
     public PlayerEntity user;
     
     @WrapMethod(method = "onTakeOutput")

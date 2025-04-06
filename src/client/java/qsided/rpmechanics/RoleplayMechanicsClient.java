@@ -1,6 +1,5 @@
 package qsided.rpmechanics;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -29,7 +28,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class RoleplayMechanicsClient implements ClientModInitializer {
 	public static String lastScreenOpen = "";
@@ -86,7 +84,6 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		
 		MinecraftClient client = MinecraftClient.getInstance();
 		
-		
 		ObjectMapper mapper = new ObjectMapper();
 		CollectionType useRef = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemWithRequirements.class);
 		CollectionType craftingRef = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemCraftingRequirement.class);
@@ -109,7 +106,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 				
 				switch (getLastScreenOpen()) {
                     case "enchanting" -> client.setScreen(new EnchantingSkillScreen());
-					case "combat" -> client.setScreen(new CombatSkillScreen());
+					case "combat" -> client.setScreen(new SwordsSkillScreen());
 					case "woodcutting" -> client.setScreen(new WoodcuttingSkillScreen());
                     case "endurance" -> client.setScreen(new EnduranceSkillScreen());
 					case "agility" -> client.setScreen(new AgilitySkillScreen());
@@ -174,35 +171,36 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsPayload.ID, (payload, context) -> {
 			MiningSkillScreen.setMiningLevel(payload.mining());
 			EnchantingSkillScreen.setEnchantingLevel(payload.enchanting());
-			CombatSkillScreen.setCombatLevel(payload.combat());
 			WoodcuttingSkillScreen.setWoodcuttingLevel(payload.woodcutting());
 			EnduranceSkillScreen.setEnduranceLevel(payload.endurance());
 			EnduranceSkillScreen.setMaxHealth(context.player().getMaxHealth());
 			AgilitySkillScreen.setAgilityLevel(payload.agility());
-			AgilitySkillScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.JUMP_STRENGTH).getValue());
-			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE).getValue());
-			CraftingSkillScreen.setCraftingLevel(payload.crafting());
-			SmithingSkillScreen.setSmithingLevel(payload.smithing());
+			AgilitySkillScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH).getValue());
+			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
+			
 			});
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperiencePayload.ID, (payload, context) -> {
 			MiningSkillScreen.setMiningExperience(payload.mining());
 			EnchantingSkillScreen.setEnchantingExperience(payload.enchanting());
-			CombatSkillScreen.setCombatExperience(payload.combat());
+			
 			WoodcuttingSkillScreen.setWoodcuttingExperience(payload.woodcutting());
 			EnduranceSkillScreen.setEnduranceExperience(payload.endurance());
 			EnduranceSkillScreen.setMaxHealth(context.player().getMaxHealth());
 			AgilitySkillScreen.setAgilityExperience(payload.agility());
-			AgilitySkillScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.JUMP_STRENGTH).getValue());
-			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE).getValue());
-			CraftingSkillScreen.setCraftingExperience(payload.crafting());
-			SmithingSkillScreen.setSmithingExperience(payload.smithing());
+			AgilitySkillScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH).getValue());
+			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
 			});
 		
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsTwoPayload.ID, (payload, context) -> {
 			FarmingSkillScreen.setFarmingLevel(payload.farming());
+			CraftingSkillScreen.setCraftingLevel(payload.crafting());
+			SmithingSkillScreen.setSmithingLevel(payload.smithing());
 		});
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperienceTwoPayload.ID, (payload, context) -> {
 			FarmingSkillScreen.setFarmingExperience(payload.farming());
+			CraftingSkillScreen.setCraftingExperience(payload.crafting());
+			SmithingSkillScreen.setSmithingExperience(payload.smithing());
+			
 		});
 	}
 	

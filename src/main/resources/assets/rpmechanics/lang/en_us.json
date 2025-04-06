@@ -139,11 +139,31 @@
     { "text": "Mining", "color": "dark_purple"}
   ],
   "text.config.rpmechanics.option.skillOptions.miningSettings.levelForVeinMining": "Level to Unlock Vein Mining",
+  "text.config.rpmechanics.option.skillOptions.miningSettings.miningSpeed": "Mining Speed Increase Per Level",
 
   "text.config.rpmechanics.category.skillOptions.woodcuttingSettings": [
     { "text": "Woodcutting", "color": "yellow"}
   ],
   "text.config.rpmechanics.option.skillOptions.woodcuttingSettings.levelForTreeChopping": "Level to Unlock Tree Chopping",
+  "text.config.rpmechanics.option.skillOptions.woodcuttingSettings.choppingSpeed": "Chopping Speed Increase Per Level",
+
+  "text.config.rpmechanics.category.skillOptions.agilitySettings": [
+    { "text": "Agility", "color": "green"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.agilitySettings.movementSpeed": "Movement Speed Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.agilitySettings.safeFall": "Safe Fall Distance Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.agilitySettings.jumpStrength": "Jump Height Increase Per Level",
+
+  "text.config.rpmechanics.category.skillOptions.combatSettings": [
+    { "text": "Combat", "color": "red"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.combatSettings.speed": "Attack Speed Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.combatSettings.damage": "Damage Increase Per Level",
+
+  "text.config.rpmechanics.category.skillOptions.enduranceSettings": [
+    { "text": "Endurance", "color": "dark_red"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.enduranceSettings.health": "Health Increase Per Level",
 
   "text.config.rpmechanics.category.experienceOptions": "Skill Experience Options",
   "text.config.rpmechanics.enum.choices.add": "Add",

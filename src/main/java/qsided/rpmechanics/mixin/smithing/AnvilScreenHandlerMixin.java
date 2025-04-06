@@ -23,9 +23,6 @@ public class AnvilScreenHandlerMixin {
     
     @Shadow @Final private Property levelCost;
     
-    @Shadow private int repairItemUsage;
-    
-    @Shadow private boolean keepSecondSlot;
     
     public PlayerEntity getUser() {
         return user;

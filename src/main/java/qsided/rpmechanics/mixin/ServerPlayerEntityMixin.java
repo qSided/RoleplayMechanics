@@ -19,16 +19,8 @@ public class ServerPlayerEntityMixin {
     public void increaseStat(ServerPlayerEntity player, Identifier stat, int amount, Operation<Void> original) {
         PlayerData state = StateManager.getPlayerState(player);
         
-        //if (stat.equals(Stats.SWIM_ONE_CM) || stat.equals(Stats.WALK_UNDER_WATER_ONE_CM) || stat.equals(Stats.WALK_ON_WATER_ONE_CM)) {
-        //    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "swimming", (float) (amount / 24));
-        //}
         if (stat.equals(Stats.WALK_ONE_CM) || stat.equals(Stats.SPRINT_ONE_CM) || stat.equals(Stats.CROUCH_ONE_CM) || stat.equals(Stats.CLIMB_ONE_CM)) {
             IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "agility", 0.05F);
         }
-    }
-    
-    @WrapOperation(method = "jump", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;incrementStat(Lnet/minecraft/util/Identifier;)V"))
-    public void incrementStat(ServerPlayerEntity player, Identifier id, Operation<Void> original) {
-        PlayerJumpCallback.EVENT.invoker().jump(player, id);
     }
 }

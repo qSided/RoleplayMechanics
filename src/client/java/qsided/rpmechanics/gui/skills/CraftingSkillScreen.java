@@ -146,7 +146,7 @@ public class CraftingSkillScreen extends BaseUIModelScreen<FlowLayout> {
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.combat"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("combat");
-                    client.setScreen(new CombatSkillScreen());
+                    client.setScreen(new SwordsSkillScreen());
                 })
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.endurance"), button -> {

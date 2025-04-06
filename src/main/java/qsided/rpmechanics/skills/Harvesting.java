@@ -3,6 +3,7 @@ package qsided.rpmechanics.skills;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.AxeItem;
@@ -16,7 +17,7 @@ import qsided.rpmechanics.PlayerData;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.StateManager;
 import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
-import qsided.rpmechanics.events.PlayerCancelBreakingEvent;
+import qsided.rpmechanics.events.PlayerCancelBreakingCallback;
 import qsided.rpmechanics.events.PlayerStartBreakingEvent;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Harvesting {
         Identifier modifierId = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "tree_and_ore_harvesting");
         
         PlayerStartBreakingEvent.EVENT.register((world, pos, blockState, player) -> {
-            double amountToDecrease = getBlockAmount(world, pos) * (player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).getValue() * 0.017);
+            double amountToDecrease = Math.min(0.82, getBlockAmount(world, pos) * 0.012);
             if (player instanceof ServerPlayerEntity) {
                 PlayerData state = StateManager.getPlayerState(player);
                 boolean meetsMining = state.skillLevels.getOrDefault("mining", 1) >= OWO_CONFIG.skillOptions.miningSettings.levelForVeinMining();
@@ -60,9 +61,8 @@ public class Harvesting {
                     if (player.getMainHandStack().getItem() instanceof AxeItem && player.isSneaking()) {
                         setSneakingAtStart(true);
                         setOriginBlock(pos);
-                        if (!player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).hasModifier(modifierId)) {
-                            player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).addTemporaryModifier(new EntityAttributeModifier(modifierId, -amountToDecrease, EntityAttributeModifier.Operation.ADD_VALUE));
-                            System.out.println(player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).getValue());
+                        if (!player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).hasModifier(modifierId)) {
+                            player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).addTemporaryModifier(new EntityAttributeModifier(modifierId, -amountToDecrease, EntityAttributeModifier.Operation.ADD_VALUE));
                         }
                     }
                 }
@@ -70,9 +70,10 @@ public class Harvesting {
                     if (player.getMainHandStack().getItem() instanceof PickaxeItem && player.isSneaking()) {
                         setSneakingAtStart(true);
                         setOriginBlock(pos);
-                        if (!player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).hasModifier(modifierId)) {
-                            player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).addTemporaryModifier(new EntityAttributeModifier(modifierId, -amountToDecrease, EntityAttributeModifier.Operation.ADD_VALUE));
-                            System.out.println(player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).getValue());
+                        System.out.println(player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).getValue() + " - " + amountToDecrease);
+                        if (!player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).hasModifier(modifierId)) {
+                            player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).addTemporaryModifier(new EntityAttributeModifier(modifierId, -amountToDecrease, EntityAttributeModifier.Operation.ADD_VALUE));
+                            System.out.println(player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).getValue());
                         }
                     }
                 }
@@ -80,9 +81,10 @@ public class Harvesting {
             return ActionResult.PASS;
         });
         
-        PlayerCancelBreakingEvent.EVENT.register(((world, pos, blockState, player) -> {
-            if (player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).hasModifier(modifierId)) {
-                player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).removeModifier(modifierId);
+        PlayerCancelBreakingCallback.EVENT.register(((world, pos, blockState, player) -> {
+            if (player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).hasModifier(modifierId)) {
+                player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).removeModifier(modifierId);
+                LOGGER.info("Removed modifier from player: " + player.getName());
             }
             return ActionResult.PASS;
         }));
@@ -91,7 +93,7 @@ public class Harvesting {
             PlayerData state = StateManager.getPlayerState(player);
             boolean meetsMining = state.skillLevels.getOrDefault("mining", 1) >= OWO_CONFIG.skillOptions.miningSettings.levelForVeinMining();
             boolean meetsWoodcutting = state.skillLevels.getOrDefault("woodcutting", 1) >= OWO_CONFIG.skillOptions.woodcuttingSettings.levelForTreeChopping();
-            if (meetsMining || meetsWoodcutting && player.isSneaking()) {
+            if ((meetsMining || meetsWoodcutting) && player.isSneaking()) {
                 return isSneakingAtStart();
             }
             return true;
@@ -122,7 +124,7 @@ public class Harvesting {
                                 });
                                 world.breakBlock(blockPos, true, player);
                                 player.getHungerManager().addExhaustion(0.4F);
-                                player.getMainHandStack().damage(1, player);
+                                player.getMainHandStack().damage(1, player, EquipmentSlot.MAINHAND);
                             }
                         }
                     }
@@ -144,15 +146,15 @@ public class Harvesting {
                                 });
                                 world.breakBlock(blockPos, true, player);
                                 player.getHungerManager().addExhaustion(0.4F);
-                                player.getMainHandStack().damage(1, player);
+                                player.getMainHandStack().damage(1, player, EquipmentSlot.MAINHAND);
                             }
                         }
                     }
                 }
             }
             
-            if (player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).hasModifier(modifierId)) {
-                player.getAttributeInstance(EntityAttributes.BLOCK_BREAK_SPEED).removeModifier(modifierId);
+            if (player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).hasModifier(modifierId)) {
+                player.getAttributeInstance(EntityAttributes.PLAYER_BLOCK_BREAK_SPEED).removeModifier(modifierId);
             }
             
             setSneakingAtStart(false);

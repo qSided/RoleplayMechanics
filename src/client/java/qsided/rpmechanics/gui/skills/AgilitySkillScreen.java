@@ -3,12 +3,9 @@ package qsided.rpmechanics.gui.skills;
 import io.wispforest.owo.ui.base.BaseUIModelScreen;
 import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.component.DropdownComponent;
-import io.wispforest.owo.ui.component.EntityComponent;
-import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.container.GridLayout;
 import io.wispforest.owo.ui.core.*;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
@@ -198,7 +195,7 @@ public class AgilitySkillScreen extends BaseUIModelScreen<FlowLayout> {
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.combat"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("combat");
-                    client.setScreen(new CombatSkillScreen());
+                    client.setScreen(new SwordsSkillScreen());
                 })
                 .divider()
                 .button(Text.translatable("skills.rpmechanics.endurance"), button -> {

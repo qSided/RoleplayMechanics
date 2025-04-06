@@ -28,6 +28,7 @@ public class CraftingResultSlotMixin {
         if (!player.getWorld().isClient) {
             awardXp(RoleplayMechanicsCommon.getCraftingReqs(), stack.getItem().toString());
         }
+        original.call(stack);
     }
     
     @Unique
