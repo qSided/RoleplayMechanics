@@ -67,12 +67,26 @@
   "text.config.rpmechanics.option.experienceOptions.agilityOptions.multiplicativeOrAdditive": "Increase Type",
   "text.config.rpmechanics.option.experienceOptions.agilityOptions.amount": "Amount to Add or Multiply By",
 
-  "text.config.rpmechanics.category.experienceOptions.combatOptions": [
-    { "text": "Combat", "color": "red"}
+  "text.config.rpmechanics.category.experienceOptions.swordsOptions": [
+    { "text": "Swords", "color": "red"}
   ],
-  "text.config.rpmechanics.option.experienceOptions.combatOptions.baseExperience": "Base Experience Value",
-  "text.config.rpmechanics.option.experienceOptions.combatOptions.multiplicativeOrAdditive": "Increase Type",
-  "text.config.rpmechanics.option.experienceOptions.combatOptions.amount": "Amount to Add or Multiply By",
+  "text.config.rpmechanics.option.experienceOptions.swordsOptions.baseExperience": "Base Experience Value",
+  "text.config.rpmechanics.option.experienceOptions.swordsOptions.multiplicativeOrAdditive": "Increase Type",
+  "text.config.rpmechanics.option.experienceOptions.swordsOptions.amount": "Amount to Add or Multiply By",
+
+  "text.config.rpmechanics.category.experienceOptions.axesOptions": [
+    { "text": "Axes", "color": "#3dbcdb"}
+  ],
+  "text.config.rpmechanics.option.experienceOptions.axesOptions.baseExperience": "Base Experience Value",
+  "text.config.rpmechanics.option.experienceOptions.axesOptions.multiplicativeOrAdditive": "Increase Type",
+  "text.config.rpmechanics.option.experienceOptions.axesOptions.amount": "Amount to Add or Multiply By",
+
+  "text.config.rpmechanics.category.experienceOptions.bowsOptions": [
+    { "text": "Bows", "color": "#c934c7"}
+  ],
+  "text.config.rpmechanics.option.experienceOptions.bowsOptions.baseExperience": "Base Experience Value",
+  "text.config.rpmechanics.option.experienceOptions.bowsOptions.multiplicativeOrAdditive": "Increase Type",
+  "text.config.rpmechanics.option.experienceOptions.bowsOptions.amount": "Amount to Add or Multiply By",
 
   "text.config.rpmechanics.category.experienceOptions.craftingOptions": [
     { "text": "Crafting", "color": "gold"}
@@ -117,7 +131,7 @@
   "text.config.rpmechanics.option.experienceOptions.smithingOptions.amount": "Amount to Add or Multiply By",
 
   "text.config.rpmechanics.category.experienceOptions.farmingOptions": [
-    { "text": "Farming", "color": "#6fc92a"}
+    { "text": "Farming", "color": "#a87147"}
   ],
   "text.config.rpmechanics.option.experienceOptions.farmingOptions.baseExperience": "Base Experience Value",
   "text.config.rpmechanics.option.experienceOptions.farmingOptions.multiplicativeOrAdditive": "Increase Type",
@@ -139,11 +153,43 @@
     { "text": "Mining", "color": "dark_purple"}
   ],
   "text.config.rpmechanics.option.skillOptions.miningSettings.levelForVeinMining": "Level to Unlock Vein Mining",
+  "text.config.rpmechanics.option.skillOptions.miningSettings.miningSpeed": "Mining Speed Increase Per Level",
 
   "text.config.rpmechanics.category.skillOptions.woodcuttingSettings": [
     { "text": "Woodcutting", "color": "yellow"}
   ],
   "text.config.rpmechanics.option.skillOptions.woodcuttingSettings.levelForTreeChopping": "Level to Unlock Tree Chopping",
+  "text.config.rpmechanics.option.skillOptions.woodcuttingSettings.choppingSpeed": "Chopping Speed Increase Per Level",
+
+  "text.config.rpmechanics.category.skillOptions.agilitySettings": [
+    { "text": "Agility", "color": "green"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.agilitySettings.movementSpeed": "Movement Speed Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.agilitySettings.safeFall": "Safe Fall Distance Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.agilitySettings.jumpStrength": "Jump Height Increase Per Level",
+
+  "text.config.rpmechanics.category.skillOptions.swordsSettings": [
+    { "text": "Swords", "color": "red"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.swordsSettings.speed": "Attack Speed Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.swordsSettings.damage": "Damage Increase Per Level",
+
+  "text.config.rpmechanics.category.skillOptions.axesSettings": [
+    { "text": "Axes", "color": "#3dbcdb"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.axesSettings.speed": "Attack Speed Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.axesSettings.damage": "Damage Increase Per Level",
+
+  "text.config.rpmechanics.category.skillOptions.bowsSettings": [
+    { "text": "Bows", "color": "#c934c7"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.bowsSettings.speed": "Arrow Speed Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.bowsSettings.accuracy": "Accuracy Increase Per Level",
+
+  "text.config.rpmechanics.category.skillOptions.enduranceSettings": [
+    { "text": "Endurance", "color": "dark_red"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.enduranceSettings.health": "Health Increase Per Level",
 
   "text.config.rpmechanics.category.experienceOptions": "Skill Experience Options",
   "text.config.rpmechanics.enum.choices.add": "Add",
@@ -247,19 +293,49 @@
   ],
 
 
-  "skills.rpmechanics.combat": [
-    { "text": "Combat", "color": "red"}
+  "skills.rpmechanics.swords": [
+    { "text": "Swords", "color": "red"}
   ],
-  "skills.rpmechanics.combat.attack_damage": [
+  "skills.rpmechanics.swords.attack_damage": [
   { "text": "Damage", "color": "#869970"},
   { "text": ": ", "color": "#8ca66d"}
   ],
-  "skills.rpmechanics.combat.attack_speed": [
+  "skills.rpmechanics.swords.attack_speed": [
     { "text": "Speed", "color": "#869970"},
     { "text": ": ", "color": "#8ca66d"}
   ],
-  "skills.level_up.rpmechanics.combat": [
-    { "text": "Combat ", "color": "red"},
+  "skills.level_up.rpmechanics.swords": [
+    { "text": "Swords ", "color": "red"},
+    { "text": "↑", "color": "#8f8f96"}
+  ],
+  "skills.rpmechanics.axes": [
+    { "text": "Axes", "color": "#3dbcdb"}
+  ],
+  "skills.rpmechanics.axes.attack_damage": [
+  { "text": "Damage", "color": "#869970"},
+  { "text": ": ", "color": "#8ca66d"}
+  ],
+  "skills.rpmechanics.axes.attack_speed": [
+    { "text": "Speed", "color": "#869970"},
+    { "text": ": ", "color": "#8ca66d"}
+  ],
+  "skills.level_up.rpmechanics.axes": [
+    { "text": "Axes ", "color": "#3dbcdb"},
+    { "text": "↑", "color": "#8f8f96"}
+  ],
+  "skills.rpmechanics.bows": [
+    { "text": "Bows", "color": "#c934c7"}
+  ],
+  "skills.rpmechanics.bows.arrow_speed": [
+  { "text": "Arrow Speed", "color": "#869970"},
+  { "text": ": ", "color": "#8ca66d"}
+  ],
+  "skills.rpmechanics.bows.arrow_accuracy": [
+    { "text": "Accuracy", "color": "#869970"},
+    { "text": ": ", "color": "#8ca66d"}
+  ],
+  "skills.level_up.rpmechanics.bows": [
+    { "text": "Bows ", "color": "#c934c7"},
     { "text": "↑", "color": "#8f8f96"}
   ],
 
@@ -341,14 +417,14 @@
   ],
 
   "skills.rpmechanics.farming": [
-    { "text": "Farming", "color": "#6fc92a"}
+    { "text": "Farming", "color": "#a87147"}
   ],
   "skills.rpmechanics.farming.extra_harvest": [
     { "text": "Extra Chance", "color": "#869970"},
     { "text": ": ", "color": "#8ca66d"}
   ],
   "skills.level_up.rpmechanics.farming": [
-    { "text": "Farming ", "color": "#6fc92a"},
+    { "text": "Farming ", "color": "#a87147"},
     { "text": "↑", "color": "#8f8f96"}
   ],
 
@@ -379,14 +455,32 @@
     { "text": "enchanting power modifier", "color": "#4646ca"},
     { "text": " when enchanting items. Experience is gained by enchanting anything at an enchanting table.", "color": "#d1d0cd"}
   ],
-  "skills.descriptions.rpmechanics.combat": [
+  "skills.descriptions.rpmechanics.swords": [
     { "text": "Your ", "color": "#d1d0cd"},
-    { "text": "combat", "color": "red"},
+    { "text": "swords", "color": "red"},
     { "text": " skill determines the ", "color": "#d1d0cd"},
     { "text": "damage done", "color": "#a0395a"},
     { "text": " to other creatures and your ", "color": "#d1d0cd"},
     { "text": "attack speed", "color": "#a0395a"},
-    { "text": " with swords and axes. Experience is gained by defeating any mobs.", "color": "#d1d0cd"}
+    { "text": " with swords. Experience is gained by defeating any mobs with a sword.", "color": "#d1d0cd"}
+  ],
+  "skills.descriptions.rpmechanics.axes": [
+    { "text": "Your ", "color": "#d1d0cd"},
+    { "text": "axes", "color": "#3dbcdb"},
+    { "text": " skill determines the ", "color": "#d1d0cd"},
+    { "text": "damage done", "color": "#288da6"},
+    { "text": " to other creatures and your ", "color": "#d1d0cd"},
+    { "text": "attack speed", "color": "#288da6"},
+    { "text": " with axes. Experience is gained by defeating any mobs with a sword.", "color": "#d1d0cd"}
+  ],
+  "skills.descriptions.rpmechanics.bows": [
+    { "text": "Your ", "color": "#d1d0cd"},
+    { "text": "bows", "color": "#c934c7"},
+    { "text": " skill determines the ", "color": "#d1d0cd"},
+    { "text": "travel speed", "color": "#a324a1"},
+    { "text": " and the ", "color": "#d1d0cd"},
+    { "text": "accuracy", "color": "#a324a1"},
+    { "text": " of arrows when shooting with bows and crossbows. Experience is gained by defeating any mobs with a sword.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.woodcutting": [
     { "text": "Your ", "color": "#d1d0cd"},
@@ -432,7 +526,7 @@
   ],
   "skills.descriptions.rpmechanics.farming": [
     { "text": "Your ", "color": "#d1d0cd"},
-    { "text": "farming", "color": "#6fc92a"},
+    { "text": "farming", "color": "#a87147"},
     { "text": " skill determines your ", "color": "#d1d0cd"},
     { "text": "chance for extra crops", "color": "#449e1e"},
     { "text": " when harvesting any crop. Experience is gained by planting new crops or harvesting fully grown ones. Planting crops is worth 1/4 exp of harvesting.", "color": "#d1d0cd"}

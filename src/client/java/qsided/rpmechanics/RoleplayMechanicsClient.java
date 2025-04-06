@@ -108,6 +108,8 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 				switch (getLastScreenOpen()) {
                     case "enchanting" -> client.setScreen(new EnchantingSkillScreen());
 					case "swords" -> client.setScreen(new SwordsSkillScreen());
+					case "axes" -> client.setScreen(new AxesSkillScreen());
+					case "bows" -> client.setScreen(new BowsSkillScreen());
 					case "woodcutting" -> client.setScreen(new WoodcuttingSkillScreen());
                     case "endurance" -> client.setScreen(new EnduranceSkillScreen());
 					case "agility" -> client.setScreen(new AgilitySkillScreen());
@@ -198,9 +200,13 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsTwoPayload.ID, (payload, context) -> {
 			FarmingSkillScreen.setFarmingLevel(payload.farming());
+			AxesSkillScreen.setAxesLevel(payload.axes());
+			BowsSkillScreen.setBowsLevel(payload.bows());
 		});
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperienceTwoPayload.ID, (payload, context) -> {
 			FarmingSkillScreen.setFarmingExperience(payload.farming());
+			AxesSkillScreen.setAxesExperience(payload.axes());
+			BowsSkillScreen.setBowsExperience(payload.bows());
 		});
 	}
 	

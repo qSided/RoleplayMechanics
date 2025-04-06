@@ -190,6 +190,16 @@ public class MiningSkillScreen extends BaseUIModelScreen<FlowLayout> {
                     client.setScreen(new SwordsSkillScreen());
                 })
                 .divider()
+                .button(Text.translatable("skills.rpmechanics.axes"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("axes");
+                    client.setScreen(new AxesSkillScreen());
+                })
+                .divider()
+                .button(Text.translatable("skills.rpmechanics.bows"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("bows");
+                    client.setScreen(new BowsSkillScreen());
+                })
+                .divider()
                 .button(Text.translatable("skills.rpmechanics.endurance"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("endurance");
                     client.setScreen(new EnduranceSkillScreen());

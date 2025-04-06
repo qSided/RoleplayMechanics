@@ -32,6 +32,7 @@ import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qsided.rpmechanics.attributes.RoleplayMechanicsAttributes;
 import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.commands.SkillsCommand;
 import qsided.rpmechanics.config.ConfigGenerator;
@@ -45,6 +46,8 @@ import qsided.rpmechanics.items.QuesItems;
 import qsided.rpmechanics.items.materials.QuesArmorMaterials;
 import qsided.rpmechanics.networking.*;
 import qsided.rpmechanics.skills.*;
+import qsided.rpmechanics.skills.combat.ArcherySkill;
+import qsided.rpmechanics.skills.combat.SwordsAndAxesSkills;
 import qsided.rpmechanics.skills.leveling.ExperienceUp;
 import qsided.rpmechanics.skills.leveling.LevelUp;
 import qsided.rpmechanics.tags.blocks.QuesBlockTags;
@@ -167,6 +170,8 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         EnduranceSkill.register();
         FarmingSkill.register();
         AgilitySkill.register();
+        ArcherySkill.register();
+        SwordsAndAxesSkills.register();
         SkillCheckHandler.register();
         Harvesting.initialize();
         
@@ -175,6 +180,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         RoleplayClasses.initialize();
         
         SkillsCommand.register();
+        RoleplayMechanicsAttributes.initialize();
         
         BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), GenerationStep.Feature.UNDERGROUND_ORES, MYTHRIL_DEBRIS_FEATURE);
         
@@ -263,6 +269,8 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 		Integer craftingLevel = playerState.skillLevels.getOrDefault("crafting", 1);
 		Integer smithingLevel = playerState.skillLevels.getOrDefault("smithing", 1);
 		Integer farmingLevel = playerState.skillLevels.getOrDefault("farming", 1);
+		Integer axesLevel = playerState.skillLevels.getOrDefault("axes", 1);
+		Integer bowsLevel = playerState.skillLevels.getOrDefault("bows", 1);
 		
 		Float miningExp = playerState.skillExperience.getOrDefault("mining", 0F);
 		Float enchantingExp = playerState.skillExperience.getOrDefault("enchanting", 0F);
@@ -273,12 +281,14 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 		Float craftingExp = playerState.skillExperience.getOrDefault("crafting", 0F);
 		Float smithingExp = playerState.skillExperience.getOrDefault("smithing", 0F);
         Float farmingExp = playerState.skillExperience.getOrDefault("farming", 0F);
+        Float axesExp = playerState.skillExperience.getOrDefault("axes", 0F);
+        Float bowsExp = playerState.skillExperience.getOrDefault("bows", 0F);
         
         ServerPlayNetworking.send(player, new SendClassAndLevelPayload(playerState.rpClass, playerState.rpClassLevel, playerState.rpClassExp));
 		
 		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, combatLevel, woodcuttingLevel, enduranceLevel, agilityLevel, craftingLevel, smithingLevel));
-		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel));
+		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, axesLevel, bowsLevel));
 		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, combatExp, woodcuttingExp, enduranceExp, agilityExp, craftingExp, smithingExp));
-        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp));
+        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, axesExp, bowsExp));
 	}
 }

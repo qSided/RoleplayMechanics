@@ -122,12 +122,13 @@ public class ClassSelectionScreen extends BaseOwoScreen<FlowLayout> {
         
         rootComponent.child(Components.dropdown(Sizing.content()).id("classes"));
         
-        rootComponent.child(Containers.verticalScroll(Sizing.content(), Sizing.fixed(60),
+        rootComponent.child(Containers.verticalFlow(Sizing.content(), Sizing.content())
+                .child(
                         rootComponent.childById(DropdownComponent.class, "classes")
                                 .surface(Surface.flat(Color.decode("#171717").getRGB()).and(Surface.outline(Color.decode("#121212").getRGB())))
                                 .horizontalAlignment(HorizontalAlignment.CENTER)
-                                .horizontalSizing(Sizing.content()))
-                .positioning(Positioning.relative(0,54)));
+                                .horizontalSizing(Sizing.content())
+                ).positioning(Positioning.relative(0,54)));
         
         rootComponent.child(Containers.verticalFlow(Sizing.fill(64), Sizing.fill(60))
                 //Description box

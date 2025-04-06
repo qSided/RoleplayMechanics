@@ -36,8 +36,8 @@ public class QuesConfigModel {
         public BowsSettings bowsSettings = new BowsSettings();
         public static class BowsSettings {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
-            public double speed = 0.5;
-            public double accuracy = 0.01;
+            public double speed = 0.25;
+            public double accuracy = 0.005;
         }
         @Nest
         public SwordsSettings swordsSettings = new SwordsSettings();
