@@ -33,6 +33,7 @@ import net.minecraft.world.gen.feature.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qsided.rpmechanics.attributes.RoleplayMechanicsAttributes;
+import qsided.rpmechanics.blockentities.RoleplayMechanicsBlockEntityTypes;
 import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.commands.SkillsCommand;
 import qsided.rpmechanics.config.ConfigGenerator;
@@ -135,8 +136,10 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         QuesItems.initialize();
         QuesArmorMaterials.initialize();
         QuesBlockTags.initialize();
+        RoleplayMechanicsBlockEntityTypes.initialize();
         QuesBlocks.initialize();
         MobScaling.initialize();
+        OpenPACCompat.initialize();
         
         ObjectMapper mapper = new ObjectMapper();
         CollectionType miningRef = TypeFactory.defaultInstance().constructCollectionType(List.class, BlockExperience.class);

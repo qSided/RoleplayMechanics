@@ -17,6 +17,13 @@ repositories {
 		url = "https://maven.terraformersmc.com/"
 	}
 	maven { url "https://maven.shedaniel.me" }
+	maven {
+		url "https://cursemaven.com"
+	}
+	maven {
+		name = "Fuzs Mod Resources"
+		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+	}
 }
 
 loom {
@@ -50,6 +57,7 @@ dependencies {
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 	modRuntimeOnly "me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}"
 
+	//modImplementation "curse.maven:opac-636608:6242929"
 
 	modImplementation "io.wispforest:owo-lib:${project.owo_version}"
 	annotationProcessor "io.wispforest:owo-lib:${project.owo_version}"

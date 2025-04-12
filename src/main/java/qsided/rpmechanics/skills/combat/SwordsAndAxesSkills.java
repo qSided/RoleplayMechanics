@@ -1,7 +1,6 @@
 package qsided.rpmechanics.skills.combat;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -23,10 +22,12 @@ public class SwordsAndAxesSkills {
                 
                 PlayerData state = StateManager.getPlayerState(player);
                 
-                if (player.getMainHandStack().isIn(ItemTags.SWORDS) && state.skillLevels.getOrDefault("swords", 1) < 100) {
-                    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "swords", (12 + (killedEntity.getMaxHealth() / 4)));
-                } else if (player.getMainHandStack().isIn(ItemTags.AXES) && state.skillLevels.getOrDefault("axes", 1) < 100) {
-                    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "axes", (12 + (killedEntity.getMaxHealth() / 4)));
+                if (killedEntity.isDead()) {
+                    if (player.getMainHandStack().isIn(ItemTags.SWORDS) && state.skillLevels.getOrDefault("swords", 1) < 100) {
+                        IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "swords", (12 + (killedEntity.getMaxHealth() / 4)));
+                    } else if (player.getMainHandStack().isIn(ItemTags.AXES) && state.skillLevels.getOrDefault("axes", 1) < 100) {
+                        IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "axes", (12 + (killedEntity.getMaxHealth() / 4)));
+                    }
                 }
             }
         });
@@ -49,7 +50,7 @@ public class SwordsAndAxesSkills {
                     player.getAttributeInstance(EntityAttributes.ATTACK_SPEED).removeModifier(axeModifier);
                 }
                 
-                if (next.isIn(ItemTags.SWORDS)) {
+                if (next.isIn(ItemTags.SWORDS) && (!player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).hasModifier(axeModifier) && !player.getAttributeInstance(EntityAttributes.ATTACK_SPEED).hasModifier(axeModifier))) {
                     player.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE).addTemporaryModifier(
                             new EntityAttributeModifier(swordModifier, swordsLevel * OWO_CONFIG.skillOptions.swordsSettings.damage(), EntityAttributeModifier.Operation.ADD_VALUE));
                     player.getAttributeInstance(EntityAttributes.ATTACK_SPEED).addTemporaryModifier(
