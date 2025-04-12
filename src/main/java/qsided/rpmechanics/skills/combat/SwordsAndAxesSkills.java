@@ -22,10 +22,12 @@ public class SwordsAndAxesSkills {
                 
                 PlayerData state = StateManager.getPlayerState(player);
                 
-                if (player.getMainHandStack().isIn(ItemTags.SWORDS) && state.skillLevels.getOrDefault("swords", 1) < 100) {
-                    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "swords", (12 + (killedEntity.getMaxHealth() / 4)));
-                } else if (player.getMainHandStack().isIn(ItemTags.AXES) && state.skillLevels.getOrDefault("axes", 1) < 100) {
-                    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "axes", (12 + (killedEntity.getMaxHealth() / 4)));
+                if (killedEntity.isDead()) {
+                    if (player.getMainHandStack().isIn(ItemTags.SWORDS) && state.skillLevels.getOrDefault("swords", 1) < 100) {
+                        IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "swords", (12 + (killedEntity.getMaxHealth() / 4)));
+                    } else if (player.getMainHandStack().isIn(ItemTags.AXES) && state.skillLevels.getOrDefault("axes", 1) < 100) {
+                        IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "axes", (12 + (killedEntity.getMaxHealth() / 4)));
+                    }
                 }
             }
         });
