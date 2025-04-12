@@ -2,6 +2,7 @@ package qsided.rpmechanics.skills.combat;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import qsided.rpmechanics.PlayerData;
@@ -27,8 +28,10 @@ public class ArcherySkill {
         ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((serverWorld, attacker, killed) -> {
             if (attacker instanceof ServerPlayerEntity player) {
                 PlayerData state = StateManager.getPlayerState(player);
-                if (killed.getRecentDamageSource().isOf(DamageTypes.ARROW)) {
-                    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "bows", 12 + (killed.getMaxHealth() / 4));
+                if (killed.isDead()) {
+                    if (player.getMainHandStack().isIn(ItemTags.BOW_ENCHANTABLE) || player.getMainHandStack().isIn(ItemTags.CROSSBOW_ENCHANTABLE)) {
+                        IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "bows", 12 + (killed.getMaxHealth() / 4));
+                    }
                 }
             }
         });
