@@ -6,84 +6,46 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.*;
-import net.minecraft.recipe.book.RecipeBookType;
-import net.minecraft.recipe.input.SingleStackRecipeInput;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.recipe.RecipePropertySet;
 import net.minecraft.screen.*;
-import net.minecraft.screen.slot.FurnaceFuelSlot;
-import net.minecraft.screen.slot.FurnaceOutputSlot;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
+import qsided.rpmechanics.blocks.QuesBlocks;
+import qsided.rpmechanics.recipes.QuesRecipePropertySets;
 
-import java.util.List;
 
-public class OvenScreenHandler extends AbstractRecipeScreenHandler implements OwoScreenHandler {
-    
-    public static final int field_30738 = 0;
-    public static final int field_30739 = 1;
-    public static final int field_30740 = 2;
-    public static final int field_30741 = 3;
-    public static final int field_30742 = 4;
-    private static final int field_30743 = 3;
-    private static final int field_30744 = 30;
-    private static final int field_30745 = 30;
-    private static final int field_30746 = 39;
+public class OvenScreenHandler extends ScreenHandler implements OwoScreenHandler {
     final Inventory inventory;
     private final PropertyDelegate propertyDelegate;
     protected final World world;
-    private final RecipeType<? extends AbstractCookingRecipe> recipeType;
     private final RecipePropertySet recipePropertySet;
-    private final RecipeBookType category;
     
-    protected OvenScreenHandler(
-            ScreenHandlerType<?> type,
-            RecipeType<? extends AbstractCookingRecipe> recipeType,
-            RegistryKey<RecipePropertySet> recipePropertySetKey,
-            RecipeBookType category,
-            int syncId,
-            PlayerInventory playerInventory
-    ) {
-        this(type, recipeType, recipePropertySetKey, category, syncId, playerInventory, new SimpleInventory(3), new ArrayPropertyDelegate(4));
-    }
-    
-    protected OvenScreenHandler(
-            ScreenHandlerType<?> type,
-            RecipeType<? extends AbstractCookingRecipe> recipeType,
-            RegistryKey<RecipePropertySet> recipePropertySetKey,
-            RecipeBookType category,
+    public OvenScreenHandler(
             int syncId,
             PlayerInventory playerInventory,
             Inventory inventory,
             PropertyDelegate propertyDelegate
     ) {
-        super(type, syncId);
-        this.recipeType = recipeType;
-        this.category = category;
+        super(QuesBlocks.OVEN_SCREEN_HANDLER, syncId);
         checkSize(inventory, 3);
         checkDataCount(propertyDelegate, 4);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
         this.world = playerInventory.player.getWorld();
-        this.recipePropertySet = this.world.getRecipeManager().getPropertySet(recipePropertySetKey);
+        this.recipePropertySet = this.world.getRecipeManager().getPropertySet(QuesRecipePropertySets.OVEN_INPUT);
         this.addSlot(new Slot(inventory, 0, 56, 17));
-        this.addSlot(new FurnaceOutputSlot(playerInventory.player, inventory, 2, 116, 35));
+        this.addSlot(new OvenFuelSlot(this, inventory, 1, 56, 53));
+        this.addSlot(new OvenOutputSlot(playerInventory.player, inventory, 2, 116, 35));
         this.addPlayerSlots(playerInventory, 8, 84);
         this.addProperties(propertyDelegate);
     }
     
-    @Override
-    public void populateRecipeFinder(RecipeFinder finder) {
-        if (this.inventory instanceof RecipeInputProvider) {
-            ((RecipeInputProvider)this.inventory).provideRecipeInputs(finder);
-        }
-    }
-    
-    public Slot getOutputSlot() {
-        return this.slots.get(2);
+    public OvenScreenHandler(
+            int syncId,
+            PlayerInventory playerInventory
+    ) {
+        this(syncId, playerInventory, new SimpleInventory(3), new ArrayPropertyDelegate(4));
     }
     
     @Override
@@ -165,33 +127,5 @@ public class OvenScreenHandler extends AbstractRecipeScreenHandler implements Ow
     
     public boolean isBurning() {
         return this.propertyDelegate.get(0) > 0;
-    }
-    
-    @Override
-    public RecipeBookType getCategory() {
-        return this.category;
-    }
-    
-    @Override
-    public AbstractRecipeScreenHandler.PostFillAction fillInputSlots(
-            boolean craftAll, boolean creative, RecipeEntry<?> recipe, ServerWorld world, PlayerInventory inventory
-    ) {
-        final List<Slot> list = List.of(this.getSlot(0), this.getSlot(2));
-        return InputSlotFiller.fill(new InputSlotFiller.Handler<AbstractCookingRecipe>() {
-            @Override
-            public void populateRecipeFinder(RecipeFinder finder) {
-                OvenScreenHandler.this.populateRecipeFinder(finder);
-            }
-            
-            @Override
-            public void clear() {
-                list.forEach(slot -> slot.setStackNoCallbacks(ItemStack.EMPTY));
-            }
-            
-            @Override
-            public boolean matches(RecipeEntry<AbstractCookingRecipe> entry) {
-                return entry.value().matches(new SingleStackRecipeInput(OvenScreenHandler.this.inventory.getStack(0)), world);
-            }
-        }, 1, 1, List.of(this.getSlot(0)), list, inventory, (RecipeEntry<AbstractCookingRecipe>)recipe, craftAll, creative);
     }
 }
