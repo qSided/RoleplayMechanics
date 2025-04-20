@@ -37,5 +37,7 @@ public class QuesModelProvider extends FabricModelProvider {
         itemModelGenerator.registerArmor(QuesItems.MYTHRIL_CHESTPLATE, RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")), Identifier.of(RoleplayMechanicsCommon.MOD_ID, "mythril")), "chestplate", false);
         itemModelGenerator.registerArmor(QuesItems.MYTHRIL_LEGGINGS, RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")), Identifier.of(RoleplayMechanicsCommon.MOD_ID, "mythril")), "leggings", false);
         itemModelGenerator.registerArmor(QuesItems.MYTHRIL_BOOTS, RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")), Identifier.of(RoleplayMechanicsCommon.MOD_ID, "mythril")), "boots", false);
+        
+        
     }
 }

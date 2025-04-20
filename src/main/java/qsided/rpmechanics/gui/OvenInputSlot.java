@@ -1,5 +1,6 @@
 package qsided.rpmechanics.gui;
 
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -7,27 +8,18 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import qsided.rpmechanics.blockentities.OvenBlockEntity;
 
-public class OvenOutputSlot extends Slot {
+public class OvenInputSlot extends Slot {
     private final PlayerEntity player;
     private int amount;
     
-    public OvenOutputSlot(PlayerEntity player, Inventory inventory, int index, int x, int y) {
+    public OvenInputSlot(PlayerEntity player, Inventory inventory, int index, int x, int y) {
         super(inventory, index, x, y);
         this.player = player;
     }
     
     @Override
-    public boolean canInsert(ItemStack stack) {
-        return false;
-    }
-    
-    @Override
-    public ItemStack takeStack(int amount) {
-        if (this.hasStack()) {
-            this.amount = this.amount + Math.min(amount, this.getStack().getCount());
-        }
-        
-        return super.takeStack(amount);
+    public int getMaxItemCount() {
+        return 1;
     }
     
     @Override
@@ -45,9 +37,9 @@ public class OvenOutputSlot extends Slot {
     @Override
     protected void onCrafted(ItemStack stack) {
         stack.onCraftByPlayer(this.player.getWorld(), this.player, this.amount);
-        //if (this.player instanceof ServerPlayerEntity serverPlayerEntity && this.inventory instanceof OvenBlockEntity ovenBlockEntity) {
-        //    ovenBlockEntity.dropExperienceForRecipesUsed(serverPlayerEntity);
-        //}
+        if (this.player instanceof ServerPlayerEntity serverPlayerEntity && this.inventory instanceof OvenBlockEntity ovenBlockEntity) {
+            ovenBlockEntity.dropExperienceForRecipesUsed(serverPlayerEntity);
+        }
         
         this.amount = 0;
     }

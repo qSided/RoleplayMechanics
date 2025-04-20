@@ -24,6 +24,7 @@ public class QuesBlockTagProvider extends FabricTagProvider<Block> {
                 .setReplace(true);
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
                 .add(QuesBlocks.MYTHRIL_DEBRIS)
+                .add(QuesBlocks.OVEN)
                 .setReplace(false);
     }
 }

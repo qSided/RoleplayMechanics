@@ -109,6 +109,20 @@ public class ExperienceUp {
                             }
                         }
                     }
+                    case "cooking" -> {
+                        switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.multiplicativeOrAdditive()) {
+                            case ADD -> {
+                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.baseExperience() + (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.amount())) {
+                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                                }
+                            }
+                            case MULTIPLY -> {
+                                if (state.skillExperience.getOrDefault(skill, 0F) >= RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.amount())) {
+                                    IncreaseSkillLevelCallback.EVENT.invoker().increaseLevel(player, state, skill, 1, true);
+                                }
+                            }
+                        }
+                    }
                     case "enchanting" -> {
                         switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enchantingOptions.multiplicativeOrAdditive()) {
                             case ADD -> {

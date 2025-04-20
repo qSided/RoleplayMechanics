@@ -9,6 +9,7 @@ import net.minecraft.data.recipe.RecipeGenerator;
 import net.minecraft.data.recipe.SmithingTransformRecipeJsonBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Ingredient;
@@ -17,6 +18,7 @@ import net.minecraft.recipe.SmeltingRecipe;
 import net.minecraft.recipe.book.RecipeBookCategories;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.*;
+import net.minecraft.registry.tag.ItemTags;
 import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.items.QuesItems;
 import qsided.rpmechanics.recipes.OvenCookingRecipeJsonBuilder;
@@ -42,6 +44,18 @@ public class QuesRecipeProvider extends FabricRecipeProvider {
             @Override
             public void generate() {
                 RegistryWrapper.Impl<Item> itemLookup = registries.getOrThrow(RegistryKeys.ITEM);
+                
+                createShaped(RecipeCategory.REDSTONE, QuesBlocks.OVEN, 1)
+                        .pattern(" w ")
+                        .pattern("ghg")
+                        .pattern(" j ")
+                        .input('w', Items.REDSTONE)
+                        .input('g', ItemTags.LOGS)
+                        .input('h', Items.SMOKER)
+                        .input('j', Items.IRON_INGOT)
+                        .criterion(hasItem(Items.SMOKER), conditionsFromItem(QuesBlocks.OVEN))
+                        .offerTo(exporter);
+                
                 //Mythril Upgrade Smithing Template Recipe
                 createShaped(RecipeCategory.TOOLS, QuesItems.MYTHRIL_UPGRADE_TEMPLATE, 2)
                         .pattern("lwl")
@@ -82,6 +96,7 @@ public class QuesRecipeProvider extends FabricRecipeProvider {
                 offerOvenRecipe(List.of(Items.RABBIT), RecipeCategory.FOOD, Items.COOKED_RABBIT, 8, 120, "oven");
                 offerOvenRecipe(List.of(Items.MUTTON), RecipeCategory.FOOD, Items.COOKED_MUTTON, 8, 120, "oven");
                 offerOvenRecipe(List.of(Items.POTATO), RecipeCategory.FOOD, Items.BAKED_POTATO, 8, 120, "oven");
+                offerOvenRecipe(List.of(Items.SALMON), RecipeCategory.FOOD, Items.COOKED_SALMON, 8, 120, "oven");
             }
             
             public void offerMythrilUpgradeRecipe(Item input, RecipeCategory category, Item result) {

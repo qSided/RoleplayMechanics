@@ -162,61 +162,91 @@ public class AxesSkillScreen extends BaseUIModelScreen<FlowLayout> {
         }
         
         rootComponent.childById(DropdownComponent.class, "skill-selection")
+                
                 .text(Text.translatable("skills.rpmechanics.select_skill"))
+                
                 .divider()
-                .button(Text.translatable("skills.rpmechanics.mining"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("mining");
-                    client.setScreen(new MiningSkillScreen());
+                
+                .button(Text.translatable("skills.rpmechanics.agility"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("agility");
+                    client.setScreen(new AgilitySkillScreen());
                 })
+                
                 .divider()
-                .button(Text.translatable("skills.rpmechanics.woodcutting"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("woodcutting");
-                    client.setScreen(new WoodcuttingSkillScreen());
-                })
-                .divider()
-                .button(Text.translatable("skills.rpmechanics.farming"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("farming");
-                    client.setScreen(new FarmingSkillScreen());
-                })
-                .divider()
-                .button(Text.translatable("skills.rpmechanics.enchanting"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("enchanting");
-                    client.setScreen(new EnchantingSkillScreen());
-                })
-                .divider()
-                .button(Text.translatable("skills.rpmechanics.crafting"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("crafting");
-                    client.setScreen(new CraftingSkillScreen());
-                })
-                .divider()
-                .button(Text.translatable("skills.rpmechanics.smithing"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("smithing");
-                    client.setScreen(new SmithingSkillScreen());
-                })
-                .divider()
-                .button(Text.translatable("skills.rpmechanics.swords"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("swords");
-                    client.setScreen(new SwordsSkillScreen());
-                })
-                .divider()
+                
                 .button(Text.translatable("skills.rpmechanics.axes"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("axes");
                     client.setScreen(new AxesSkillScreen());
                 })
+                
                 .divider()
+                
                 .button(Text.translatable("skills.rpmechanics.bows"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("bows");
                     client.setScreen(new BowsSkillScreen());
                 })
+                
                 .divider()
+                
+                .button(Text.translatable("skills.rpmechanics.cooking"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("cooking");
+                    client.setScreen(new CookingSkillScreen());
+                })
+                
+                .divider()
+                
+                .button(Text.translatable("skills.rpmechanics.crafting"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("crafting");
+                    client.setScreen(new CraftingSkillScreen());
+                })
+                
+                .divider()
+                
+                .button(Text.translatable("skills.rpmechanics.enchanting"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("enchanting");
+                    client.setScreen(new EnchantingSkillScreen());
+                })
+                
+                .divider()
+                
                 .button(Text.translatable("skills.rpmechanics.endurance"), button -> {
                     RoleplayMechanicsClient.setLastScreenOpen("endurance");
                     client.setScreen(new EnduranceSkillScreen());
                 })
+                
                 .divider()
-                .button(Text.translatable("skills.rpmechanics.agility"), button -> {
-                    RoleplayMechanicsClient.setLastScreenOpen("agility");
-                    client.setScreen(new AgilitySkillScreen());
+                
+                .button(Text.translatable("skills.rpmechanics.farming"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("farming");
+                    client.setScreen(new FarmingSkillScreen());
+                })
+                
+                .divider()
+                
+                .button(Text.translatable("skills.rpmechanics.mining"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("mining");
+                    client.setScreen(new MiningSkillScreen());
+                })
+                
+                .divider()
+                
+                .button(Text.translatable("skills.rpmechanics.smithing"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("smithing");
+                    client.setScreen(new SmithingSkillScreen());
+                })
+                
+                .divider()
+                
+                .button(Text.translatable("skills.rpmechanics.swords"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("swords");
+                    client.setScreen(new SwordsSkillScreen());
+                })
+                
+                .divider()
+                
+                .button(Text.translatable("skills.rpmechanics.woodcutting"), button -> {
+                    RoleplayMechanicsClient.setLastScreenOpen("woodcutting");
+                    client.setScreen(new WoodcuttingSkillScreen());
                 })
                 .positioning(Positioning.absolute(0, 0));
     }

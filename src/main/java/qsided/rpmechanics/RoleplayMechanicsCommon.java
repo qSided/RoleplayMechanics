@@ -42,6 +42,7 @@ import qsided.rpmechanics.config.experience_values.BlockExperience;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
 import qsided.rpmechanics.events.RoleplayClassSelectedCallback;
+import qsided.rpmechanics.items.QuesComponents;
 import qsided.rpmechanics.items.QuesItems;
 import qsided.rpmechanics.items.materials.QuesArmorMaterials;
 import qsided.rpmechanics.networking.*;
@@ -137,6 +138,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(SendClassAndLevelPayload.ID, SendClassAndLevelPayload.CODEC);
         
         QuesItems.initialize();
+        QuesComponents.initialize();
         QuesArmorMaterials.initialize();
         QuesBlockTags.initialize();
         QuesRecipeTypes.initialize();
@@ -230,6 +232,8 @@ public class RoleplayMechanicsCommon implements ModInitializer {
             }
         });
         
+        
+        
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, player, alive) -> {
             PlayerData state = StateManager.getPlayerState(player);
             
@@ -280,6 +284,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 		Integer farmingLevel = playerState.skillLevels.getOrDefault("farming", 1);
 		Integer axesLevel = playerState.skillLevels.getOrDefault("axes", 1);
 		Integer bowsLevel = playerState.skillLevels.getOrDefault("bows", 1);
+		Integer cookingLevel = playerState.skillLevels.getOrDefault("cooking", 1);
 		
 		Float miningExp = playerState.skillExperience.getOrDefault("mining", 0F);
 		Float enchantingExp = playerState.skillExperience.getOrDefault("enchanting", 0F);
@@ -292,12 +297,13 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         Float farmingExp = playerState.skillExperience.getOrDefault("farming", 0F);
         Float axesExp = playerState.skillExperience.getOrDefault("axes", 0F);
         Float bowsExp = playerState.skillExperience.getOrDefault("bows", 0F);
+        Float cookingExp = playerState.skillExperience.getOrDefault("cooking", 0F);
         
         ServerPlayNetworking.send(player, new SendClassAndLevelPayload(playerState.rpClass, playerState.rpClassLevel, playerState.rpClassExp));
 		
 		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, combatLevel, woodcuttingLevel, enduranceLevel, agilityLevel, craftingLevel, smithingLevel));
-		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, axesLevel, bowsLevel));
+		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, axesLevel, bowsLevel, cookingLevel));
 		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, combatExp, woodcuttingExp, enduranceExp, agilityExp, craftingExp, smithingExp));
-        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, axesExp, bowsExp));
+        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, axesExp, bowsExp, cookingExp));
 	}
 }

@@ -1,0 +1,11 @@
+{
+  "type": "rpmechanics:oven",
+  "category": "food",
+  "cookingtime": 120,
+  "experience": 8.0,
+  "group": "oven",
+  "ingredient": "minecraft:salmon",
+  "result": {
+    "id": "minecraft:cooked_salmon"
+  }
+}

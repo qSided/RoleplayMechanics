@@ -11,30 +11,30 @@ import io.wispforest.owo.ui.core.Positioning;
 import io.wispforest.owo.ui.core.Sizing;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.RoleplayMechanicsClient;
+import qsided.rpmechanics.RoleplayMechanicsCommon;
 
 import java.text.DecimalFormat;
 
-public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
-    public static Integer swordsLevel = 1;
-    public static Float swordsExperience = 0F;
-    public SwordsSkillScreen() {
-        super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "swords")));
+public class CookingSkillScreen extends BaseUIModelScreen<FlowLayout> {
+    public static Integer cookingLevel = 1;
+    public static Float cookingExperience = 0F;
+    public CookingSkillScreen() {
+        super(FlowLayout.class, DataSource.asset(Identifier.of(RoleplayMechanicsCommon.MOD_ID, "cooking")));
     }
     
-    public static void setSwordsLevel(int level) {
-        SwordsSkillScreen.swordsLevel = level;
+    public static void setCookingLevel(int level) {
+        CookingSkillScreen.cookingLevel = level;
     }
-    public static void setSwordsExperience(float experience) {
-        SwordsSkillScreen.swordsExperience = experience;
+    public static void setCookingExperience(float experience) {
+        CookingSkillScreen.cookingExperience = experience;
     }
     
     @Override
     protected void build(FlowLayout rootComponent) {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
-        rootComponent.childById(GridLayout.class, "swords")
+        rootComponent.childById(GridLayout.class, "cooking")
                 .child(
                         Components.label(Text.translatable("skills.rpmechanics.current_level"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
@@ -42,7 +42,7 @@ public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
                 0,
                 0)
                 .child(
-                        Components.label(Text.of(String.valueOf(swordsLevel)))
+                        Components.label(Text.of(String.valueOf(cookingLevel)))
                                 .color(Color.ofArgb(0xd1d0cd))
                                 .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                 .sizing(Sizing.fill(50), Sizing.content()),
@@ -56,73 +56,80 @@ public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
                         1,
                         0)
                 .child(
-                        Components.label(Text.translatable("skills.rpmechanics.swords.attack_damage"))
+                        Components.label(Text.translatable("skills.rpmechanics.cooking.speed"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
                                 .sizing(Sizing.fill(50), Sizing.content()),
                         2,
                         0)
                 .child(
-                        Components.label(Text.translatable("skills.rpmechanics.swords.attack_speed"))
+                        Components.label(Text.translatable("skills.rpmechanics.cooking.perfect"))
                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
                                 .sizing(Sizing.fill(50), Sizing.content()),
                         3,
                         0)
+                .child(
+                        Components.label(Text.translatable("skills.rpmechanics.cooking.burnt"))
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
+                        4,
+                        0)
+                .child(
+                        Components.label(Text.translatable("skills.rpmechanics.cooking.average"))
+                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
+                        5,
+                        0)
                 .sizing(Sizing.fill(34), Sizing.content());
         
-        if (swordsLevel.equals(1)) {
-            rootComponent.childById(GridLayout.class, "swords")
-                    .child(
-                            Components.label(Text.of(String.valueOf(0)))
-                                    .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
-                                    .sizing(Sizing.fill(50), Sizing.content()),
-                            2,
-                            1);
-        } else {
-            rootComponent.childById(GridLayout.class, "swords")
-                    .child(
-                            Components.label(Text.of(String.valueOf(df.format(swordsLevel * .18))))
-                                    .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
-                                    .sizing(Sizing.fill(50), Sizing.content()),
-                            2,
-                            1);
-        }
-        if (swordsLevel.equals(1)) {
-            rootComponent.childById(GridLayout.class, "swords")
-                    .child(
-                            Components.label(Text.of(String.valueOf(0)))
-                                    .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
-                                    .sizing(Sizing.fill(50), Sizing.content()),
-                            3,
-                            1);
-        } else {
-            rootComponent.childById(GridLayout.class, "swords")
-                    .child(
-                            Components.label(Text.of(String.valueOf(df.format(swordsLevel * .03))))
-                                    .color(Color.ofArgb(0xd1d0cd))
-                                    .horizontalTextAlignment(HorizontalAlignment.RIGHT)
-                                    .sizing(Sizing.fill(50), Sizing.content()),
-                            3,
-                            1);
-        }
+        rootComponent.childById(GridLayout.class, "cooking")
+                .child(
+                        Components.label(Text.of("+" + (df.format((cookingLevel * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.cookingSettings.speed()) * 100) + "%")))
+                                .color(Color.ofArgb(0xd1d0cd))
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
+                        2,
+                        1);
+        rootComponent.childById(GridLayout.class, "cooking")
+                .child(
+                        Components.label(Text.of(df.format((cookingLevel * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.cookingSettings.perfectChanceIncrease()) * 100) + "%"))
+                                .color(Color.ofArgb(0xd1d0cd))
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
+                        3,
+                        1);
+        rootComponent.childById(GridLayout.class, "cooking")
+                .child(
+                        Components.label(Text.of(df.format(Math.max(0, (RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.cookingSettings.baseBurnChance() * 100) - (cookingLevel * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.cookingSettings.burnChanceDecrease()) * 100)) + "%"))
+                                .color(Color.ofArgb(0xd1d0cd))
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
+                        4,
+                        1);
+        rootComponent.childById(GridLayout.class, "cooking")
+                .child(
+                        Components.label(Text.of(df.format(100 - (Math.max(0, ((RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.cookingSettings.baseBurnChance() * 100) - cookingLevel * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.cookingSettings.burnChanceDecrease() * 100)) + (cookingLevel * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.cookingSettings.perfectChanceIncrease() * 100)))+ "%"))
+                                .color(Color.ofArgb(0xd1d0cd))
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .sizing(Sizing.fill(50), Sizing.content()),
+                        5,
+                        1);
         
-        if (swordsLevel < 100) {
+        
+        if (cookingLevel < 100) {
             
             if (!RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.useGlobal()) {
-                switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.multiplicativeOrAdditive()) {
-                    case ADD -> rootComponent.childById(GridLayout.class, "swords")
+                switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.multiplicativeOrAdditive()) {
+                    case ADD -> rootComponent.childById(GridLayout.class, "cooking")
                             .child(
-                                    Components.label(Text.of(df.format(swordsExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.baseExperience() + (swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.amount()))))
+                                    Components.label(Text.of(df.format(cookingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.baseExperience() + (cookingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
                                     1);
-                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "swords")
+                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "cooking")
                             .child(
-                                    Components.label(Text.of(df.format(swordsExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.baseExperience() * (swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.swordsOptions.amount()))))
+                                    Components.label(Text.of(df.format(cookingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.baseExperience() * (cookingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
@@ -131,17 +138,17 @@ public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
                 }
             } else {
                 switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.multiplicativeOrAdditive()) {
-                    case ADD -> rootComponent.childById(GridLayout.class, "swords")
+                    case ADD -> rootComponent.childById(GridLayout.class, "cooking")
                             .child(
-                                    Components.label(Text.of(df.format(swordsExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
+                                    Components.label(Text.of(df.format(cookingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() + (cookingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
                                     1,
                                     1);
-                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "swords")
+                    case MULTIPLY -> rootComponent.childById(GridLayout.class, "cooking")
                             .child(
-                                    Components.label(Text.of(df.format(swordsExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (swordsLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
+                                    Components.label(Text.of(df.format(cookingExperience) + "/" + df.format(RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.baseExperience() * (cookingLevel * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.globalOptions.amount()))))
                                             .color(Color.ofArgb(0xd1d0cd))
                                             .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                             .sizing(Sizing.fill(50), Sizing.content()),
@@ -151,7 +158,7 @@ public class SwordsSkillScreen extends BaseUIModelScreen<FlowLayout> {
             }
             
         } else {
-            rootComponent.childById(GridLayout.class, "swords")
+            rootComponent.childById(GridLayout.class, "cooking")
                     .child(
                             Components.label(Text.translatable("skills.rpmechanics.max_level"))
                                     .color(Color.ofArgb(0xd1d0cd))

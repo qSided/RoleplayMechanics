@@ -11,6 +11,8 @@
   "item.rpmechanics.mythril_leggings": "Mythril Leggings",
   "item.rpmechanics.mythril_boots": "Mythril Boots",
   "block.rpmechanics.mythril_debris": "Mythril Debris",
+  "block.rpmechanics.oven": "Oven",
+  "item.rpmechanics.oven": "Oven",
   "item.rpmechanics.mythril_template_apply": "Netherite Equipment",
   "item.rpmechanics.mythril_template_ingredient": "Mythril Ingot",
   "item.rpmechanics.mythril_template_base_description": "Add netherite armor, weapon, or tool",
@@ -137,6 +139,13 @@
   "text.config.rpmechanics.option.experienceOptions.farmingOptions.multiplicativeOrAdditive": "Increase Type",
   "text.config.rpmechanics.option.experienceOptions.farmingOptions.amount": "Amount to Add or Multiply By",
 
+  "text.config.rpmechanics.category.experienceOptions.cookingOptions": [
+    { "text": "Cooking", "color": "#1f5c14"}
+  ],
+  "text.config.rpmechanics.option.experienceOptions.cookingOptions.baseExperience": "Base Experience Value",
+  "text.config.rpmechanics.option.experienceOptions.cookingOptions.multiplicativeOrAdditive": "Increase Type",
+  "text.config.rpmechanics.option.experienceOptions.cookingOptions.amount": "Amount to Add or Multiply By",
+
   "text.config.rpmechanics.category.skillOptions": [
     { "text": "General Skill Options" }
   ],
@@ -167,6 +176,14 @@
   "text.config.rpmechanics.option.skillOptions.agilitySettings.movementSpeed": "Movement Speed Increase Per Level",
   "text.config.rpmechanics.option.skillOptions.agilitySettings.safeFall": "Safe Fall Distance Increase Per Level",
   "text.config.rpmechanics.option.skillOptions.agilitySettings.jumpStrength": "Jump Height Increase Per Level",
+
+  "text.config.rpmechanics.category.skillOptions.cookingSettings": [
+    { "text": "Cooking", "color": "#1f5c14"}
+  ],
+  "text.config.rpmechanics.option.skillOptions.cookingSettings.speed": "Cooking Speed Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.cookingSettings.baseBurnChance": "Base Burn Chance",
+  "text.config.rpmechanics.option.skillOptions.cookingSettings.perfectChanceIncrease": "Perfect Quality Chance Increase Per Level",
+  "text.config.rpmechanics.option.skillOptions.cookingSettings.burnChanceDecrease": "Burnt Quality Chance Decrease Per Level",
 
   "text.config.rpmechanics.category.skillOptions.swordsSettings": [
     { "text": "Swords", "color": "red"}
@@ -217,6 +234,15 @@
     { "text": " (default) to open the skills screen", "color": "#2e469e"}
   ],
 
+  "tooltip.rpmechanics.perfect_quality": [
+    {"text": "Perfect", "color": "green"}
+  ],
+  "tooltip.rpmechanics.burnt_quality": [
+    {"text": "Burnt", "color": "red"}
+  ],
+  "tooltip.rpmechanics.average_quality": [
+    {"text": "Average", "color": "yellow"}
+  ],
 
   "tooltip.rpmechanics.requirements": [
     { "text": "Requires ", "color": "gray"}
@@ -416,6 +442,32 @@
     { "text": "↑", "color": "#8f8f96"}
   ],
 
+  "skills.rpmechanics.cooking": [
+    { "text": "Cooking", "color": "#1f5c14"}
+  ],
+  "skills.level_up.rpmechanics.cooking": [
+    { "text": "Cooking ", "color": "#1f5c14"},
+    { "text": "↑", "color": "#8f8f96"}
+  ],
+  "skills.rpmechanics.cooking.speed": [
+    { "text": "Speed", "color": "#869970"},
+    { "text": ": ", "color": "#8ca66d"}
+  ],
+  "skills.rpmechanics.cooking.perfect": [
+    { "text": "Perfect Chance", "color": "#869970"},
+    { "text": ": ", "color": "#8ca66d"}
+  ],
+
+  "skills.rpmechanics.cooking.burnt": [
+    { "text": "Burnt Chance", "color": "#869970"},
+    { "text": ": ", "color": "#8ca66d"}
+  ],
+
+  "skills.rpmechanics.cooking.average": [
+    { "text": "Average Chance", "color": "#869970"},
+    { "text": ": ", "color": "#8ca66d"}
+  ],
+
   "skills.rpmechanics.farming": [
     { "text": "Farming", "color": "#a87147"}
   ],
@@ -523,6 +575,15 @@
     { "text": " when using an anvil and the ", "color": "#d1d0cd"},
     { "text": "chance of saving materials", "color": "#5e5d5d"},
     { "text": " when using an anvil or smithing table. Experience is gained by using an anvil or smithing table.", "color": "#d1d0cd"}
+  ],
+  "skills.descriptions.rpmechanics.cooking": [
+    { "text": "Your ", "color": "#d1d0cd"},
+    { "text": "cooking", "color": "#1f5c14"},
+    { "text": " skill determines the ", "color": "#d1d0cd"},
+    { "text": "cooking speed", "color": "#1b4a12"},
+    { "text": " of food and ", "color": "#d1d0cd"},
+    { "text": "how often food is burnt, average, or perfectly cooked", "color": "#1b4a12"},
+    { "text": " when cooking using an Oven. Experience is gained by cooking any food in an Oven.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.farming": [
     { "text": "Your ", "color": "#d1d0cd"},

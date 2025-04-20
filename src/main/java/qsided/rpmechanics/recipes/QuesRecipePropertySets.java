@@ -1,7 +1,6 @@
 package qsided.rpmechanics.recipes;
 
 import net.minecraft.recipe.RecipePropertySet;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;

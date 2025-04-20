@@ -50,6 +50,12 @@ public class LevelUp {
                             case MULTIPLY -> state.skillExperience.put(skill, (float) Math.max((state.skillExperience.getOrDefault(skill, 0F) - (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.craftingOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.craftingOptions.amount()))), 0));
                         }
                     }
+                    case "cooking" -> {
+                        switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.multiplicativeOrAdditive()) {
+                            case ADD -> state.skillExperience.put(skill, (float) Math.max((state.skillExperience.getOrDefault(skill, 0F) - (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.baseExperience() + (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.amount()))), 0));
+                            case MULTIPLY -> state.skillExperience.put(skill, (float) Math.max((state.skillExperience.getOrDefault(skill, 0F) - (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.baseExperience() * (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.cookingOptions.amount()))), 0));
+                        }
+                    }
                     case "enchanting" -> {
                         switch (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enchantingOptions.multiplicativeOrAdditive()) {
                             case ADD -> state.skillExperience.put(skill, (float) Math.max((state.skillExperience.getOrDefault(skill, 0F) - (RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enchantingOptions.baseExperience() + (state.skillLevels.getOrDefault(skill, 1) * RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.enchantingOptions.amount()))), 0));

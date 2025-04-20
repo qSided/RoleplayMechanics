@@ -26,6 +26,7 @@ import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
 import qsided.rpmechanics.gui.other.ClassSelectionScreen;
 import qsided.rpmechanics.gui.other.OvenHandledScreen;
 import qsided.rpmechanics.gui.skills.*;
+import qsided.rpmechanics.items.QuesComponents;
 import qsided.rpmechanics.networking.*;
 
 import java.awt.*;
@@ -121,6 +122,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 					case "crafting" -> client.setScreen(new CraftingSkillScreen());
 					case "smithing" -> client.setScreen(new SmithingSkillScreen());
 					case "farming" -> client.setScreen(new FarmingSkillScreen());
+                    case "cooking" -> client.setScreen(new CookingSkillScreen());
                     default -> client.setScreen(new MiningSkillScreen());
                 }
 			}
@@ -148,6 +150,14 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		});
 		
 		ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, lines) -> {
+			
+			if (stack.getComponents().contains(QuesComponents.COOK_QUALITY)) {
+				switch (stack.getOrDefault(QuesComponents.COOK_QUALITY, "average")) {
+					case "perfect" -> lines.add(Text.translatable("tooltip.rpmechanics.perfect_quality"));
+					case "burnt" -> lines.add(Text.translatable("tooltip.rpmechanics.burnt_quality"));
+					case "average" -> lines.add(Text.translatable("tooltip.rpmechanics.average_quality"));
+				}
+			}
 			
 			if (RoleplayMechanicsCommon.OWO_CONFIG.enableRequirements()) {
 				getItemCraftingReqs().forEach(item -> {
@@ -207,11 +217,13 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 			FarmingSkillScreen.setFarmingLevel(payload.farming());
 			AxesSkillScreen.setAxesLevel(payload.axes());
 			BowsSkillScreen.setBowsLevel(payload.bows());
+			CookingSkillScreen.setCookingLevel(payload.cooking());
 		});
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperienceTwoPayload.ID, (payload, context) -> {
 			FarmingSkillScreen.setFarmingExperience(payload.farming());
 			AxesSkillScreen.setAxesExperience(payload.axes());
 			BowsSkillScreen.setBowsExperience(payload.bows());
+			CookingSkillScreen.setCookingExperience(payload.cooking());
 		});
 	}
 	

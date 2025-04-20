@@ -1,10 +1,16 @@
 package qsided.rpmechanics.blockentities;
 
+import com.google.common.collect.Lists;
 import io.wispforest.owo.util.ImplementedInventory;
+import it.unimi.dsi.fastutil.objects.Reference2IntMap;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
+import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -17,36 +23,49 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.recipe.AbstractCookingRecipe;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.ServerRecipeManager;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import qsided.rpmechanics.blocks.OvenBlock;
+import qsided.rpmechanics.PlayerData;
+import qsided.rpmechanics.RoleplayMechanicsCommon;
+import qsided.rpmechanics.StateManager;
+import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 import qsided.rpmechanics.gui.OvenScreenHandler;
+import qsided.rpmechanics.items.QuesComponents;
 import qsided.rpmechanics.recipes.QuesRecipeTypes;
+
+import java.util.*;
+
+import static qsided.rpmechanics.RoleplayMechanicsCommon.OWO_CONFIG;
 
 public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, ImplementedInventory {
     
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(7, ItemStack.EMPTY);
     private static final int FUEL = 0;
-    private static final int RECIPE = 1;
-    private static final int OUTPUT = 2;
     protected final PropertyDelegate propertyDelegate;
-    private static int litTimeRemaining;
-    private static int litTimeTotal;
-    private static int cookingTimeSpent;
-    private static int cookingTimeTotal;
+    int litTimeRemaining;
+    int litTimeTotal;
+    int cookingTimeSpent;
+    int cookingTimeTotal;
+    UUID chefUUID;
+    private final Reference2IntOpenHashMap<RegistryKey<Recipe<?>>> recipesUsed = new Reference2IntOpenHashMap<>();
     private final ServerRecipeManager.MatchGetter<SingleStackRecipeInput, ? extends AbstractCookingRecipe> matchGetter;
     
     public OvenBlockEntity(BlockPos pos, BlockState state) {
@@ -85,61 +104,84 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
         return litTimeRemaining > 0;
     }
     
+    private boolean hasAtLeastOneIngredient(List<ItemStack> stacks) {
+        return stacks.stream().filter(stack -> !stack.isEmpty()).count() > 0 && stacks.stream().allMatch(stack -> !stack.getComponents().contains(QuesComponents.COOK_QUALITY));
+    }
+    
     public static void tick(World world, BlockPos pos, BlockState blockState, OvenBlockEntity blockEntity) {
         if (!world.isClient()) {
             boolean shouldBeLit = blockEntity.isBurning();
             boolean isDone = false;
             if (blockEntity.isBurning()) {
-                litTimeRemaining--;
+                blockEntity.litTimeRemaining--;
             }
-            ItemStack ingredient = blockEntity.inventory.get(RECIPE);
+            List<ItemStack> ingredients = new ArrayList<>();
+            ingredients.add(blockEntity.inventory.get(1));
+            ingredients.add(blockEntity.inventory.get(2));
+            ingredients.add(blockEntity.inventory.get(3));
+            ingredients.add(blockEntity.inventory.get(4));
+            ingredients.add(blockEntity.inventory.get(5));
+            ingredients.add(blockEntity.inventory.get(6));
             ItemStack fuel = blockEntity.inventory.get(FUEL);
             boolean hasFuel = !fuel.isEmpty();
-            boolean hasIngredient = !ingredient.isEmpty();
-            if (blockEntity.isBurning() || hasIngredient && hasFuel) {
-                SingleStackRecipeInput singleStackRecipeInput = new SingleStackRecipeInput(fuel);
-                RecipeEntry<? extends AbstractCookingRecipe> recipeEntry;
-                if (hasFuel) {
-                    recipeEntry = blockEntity.matchGetter.getFirstMatch(singleStackRecipeInput, (ServerWorld) world).orElse(null);
-                } else {
-                    recipeEntry = null;
-                }
-                
+            if (blockEntity.isBurning() || (blockEntity.hasAtLeastOneIngredient(ingredients) && hasFuel)) {
                 int i = blockEntity.getMaxCountPerStack();
-                if (!blockEntity.isBurning() && canAcceptRecipeOutput(world.getRegistryManager(), recipeEntry, singleStackRecipeInput, blockEntity.inventory, i)) {
-                    litTimeRemaining = blockEntity.getFuelTime(world.getFuelRegistry(), ingredient);
-                    litTimeTotal = litTimeRemaining;
-                    if (blockEntity.isBurning()) {
+                if (!blockEntity.isBurning() && ingredients.stream().anyMatch(stack -> !stack.getComponents().contains(QuesComponents.COOK_QUALITY))) {
+                    blockEntity.litTimeRemaining = blockEntity.getFuelTime(world.getFuelRegistry(), fuel);
+                    blockEntity.litTimeTotal = blockEntity.getFuelTime(world.getFuelRegistry(), fuel);
+                    if (blockEntity.isBurning() && ingredients.stream().allMatch(stack -> !stack.isEmpty() && !stack.getComponents().contains(QuesComponents.COOK_QUALITY))) {
                         isDone = true;
-                        if (hasIngredient) {
-                            Item item = ingredient.getItem();
-                            ingredient.decrement(1);
-                            if (ingredient.isEmpty()) {
-                                blockEntity.inventory.set(1, item.getRecipeRemainder());
+                        if (hasFuel) {
+                            Item item = fuel.getItem();
+                            fuel.decrement(1);
+                            if (fuel.isEmpty()) {
+                                blockEntity.inventory.set(0, item.getRecipeRemainder());
                             }
                         }
                     }
                 }
                 
-                if (blockEntity.isBurning() && canAcceptRecipeOutput(world.getRegistryManager(), recipeEntry, singleStackRecipeInput, blockEntity.inventory, i)) {
-                    cookingTimeSpent++;
-                    if (cookingTimeSpent == cookingTimeTotal) {
-                        cookingTimeSpent = 0;
-                        cookingTimeTotal = getCookTime((ServerWorld) world, blockEntity);
-                        craftRecipe(world.getRegistryManager(), recipeEntry, singleStackRecipeInput, blockEntity.inventory, i);
+                if (blockEntity.isBurning() &&
+                        ingredients.stream().anyMatch(stack -> !stack.getComponents().contains(QuesComponents.COOK_QUALITY) && !stack.isEmpty())) {
+                    if (world.getPlayerByUuid(blockEntity.getChefUUID()) != null) {
+                        PlayerData state = StateManager.getPlayerState(Objects.requireNonNull(world.getPlayerByUuid(blockEntity.getChefUUID())));
+                        blockEntity.cookingTimeSpent = (int) Math.min(blockEntity.cookingTimeSpent + 1 + ((state.skillLevels.getOrDefault("cooking", 1) * OWO_CONFIG.skillOptions.cookingSettings.speed())), 720);
+                    } else {
+                        blockEntity.cookingTimeSpent++;
+                    }
+                    if (blockEntity.cookingTimeSpent >= blockEntity.cookingTimeTotal) {
+                        blockEntity.cookingTimeSpent = 0;
+                        blockEntity.cookingTimeTotal = getCookTime((ServerWorld) world, blockEntity);
+                        ingredients.forEach(stack -> {
+                            SingleStackRecipeInput singleStackRecipeInput = new SingleStackRecipeInput(stack);
+                            RecipeEntry<? extends AbstractCookingRecipe> recipeEntry;
+                            if (!stack.isEmpty()) {
+                                recipeEntry = blockEntity.matchGetter.getFirstMatch(singleStackRecipeInput, (ServerWorld) world).orElse(null);
+                            } else {
+                                recipeEntry = null;
+                            }
+                            
+                            craftRecipe(world, blockEntity.getChefUUID() ,world.getRegistryManager(), recipeEntry, singleStackRecipeInput, ingredients.indexOf(stack)+1, blockEntity.inventory, i);
+                            
+                            if (recipeEntry != null) {
+                                blockEntity.recipesUsed.addTo(recipeEntry.id(), 1);
+                            }
+                            
+                        });
+                        
                         
                         isDone = true;
                     }
                 } else {
-                    cookingTimeSpent = 0;
+                    blockEntity.cookingTimeSpent = 0;
                 }
-            } else if (!blockEntity.isBurning() && cookingTimeSpent > 0) {
-                cookingTimeSpent = MathHelper.clamp(cookingTimeSpent - 2, 0, cookingTimeTotal);
+            } else if (!blockEntity.isBurning() && blockEntity.cookingTimeSpent > 0) {
+                blockEntity.cookingTimeSpent = MathHelper.clamp(blockEntity.cookingTimeSpent - 2, 0, blockEntity.cookingTimeTotal);
             }
             
             if (shouldBeLit != blockEntity.isBurning()) {
                 isDone = true;
-                blockState = blockState.with(OvenBlock.LIT, Boolean.valueOf(blockEntity.isBurning()));
+                blockState = blockState.with(Properties.LIT, blockEntity.isBurning());
                 world.setBlockState(pos, blockState, Block.NOTIFY_ALL);
             }
             
@@ -149,54 +191,96 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
         }
     }
     
-    private static boolean canAcceptRecipeOutput(
-            DynamicRegistryManager dynamicRegistryManager,
-            @Nullable RecipeEntry<? extends AbstractCookingRecipe> recipe,
-            SingleStackRecipeInput input,
-            DefaultedList<ItemStack> inventory,
-            int maxCount
-    ) {
-        if (!inventory.get(FUEL).isEmpty() && recipe != null) {
-            ItemStack itemStack = recipe.value().craft(input, dynamicRegistryManager);
-            if (itemStack.isEmpty()) {
-                return false;
-            } else {
-                ItemStack itemStack2 = inventory.get(OUTPUT);
-                if (itemStack2.isEmpty()) {
-                    return true;
-                } else if (!ItemStack.areItemsAndComponentsEqual(itemStack2, itemStack)) {
-                    return false;
-                } else {
-                    return itemStack2.getCount() < maxCount && itemStack2.getCount() < itemStack2.getMaxCount() ? true : itemStack2.getCount() < itemStack.getMaxCount();
-                }
-            }
+    public static String getQuality(double chanceForPerfect, double chanceForBurnt, String perfect, String burnt, String average) {
+        if (chanceForPerfect + chanceForBurnt > 1 || chanceForPerfect < 0 || chanceForBurnt < 0) {
+            throw new IllegalArgumentException("Probabilities must be non-negative and sum up to at most 1");
+        }
+        
+        Random random = new Random();
+        double randomNumber = random.nextDouble();
+        
+        if (randomNumber < chanceForPerfect) {
+            return perfect;
+        } else if (randomNumber < chanceForPerfect + chanceForBurnt) {
+            return burnt;
         } else {
-            return false;
+            return average;
         }
     }
     
+    public void dropExperienceForRecipesUsed(ServerPlayerEntity player) {
+        List<RecipeEntry<?>> list = this.getRecipesUsedAndDropExperience(player.getServerWorld(), player.getPos());
+        player.unlockRecipes(list);
+        
+        for (RecipeEntry<?> recipeEntry : list) {
+            if (recipeEntry != null) {
+                player.onRecipeCrafted(recipeEntry, this.inventory);
+            }
+        }
+        
+        this.recipesUsed.clear();
+    }
+    
+    public List<RecipeEntry<?>> getRecipesUsedAndDropExperience(ServerWorld world, Vec3d pos) {
+        List<RecipeEntry<?>> list = Lists.newArrayList();
+        
+        for (Reference2IntMap.Entry<RegistryKey<Recipe<?>>> entry : this.recipesUsed.reference2IntEntrySet()) {
+            world.getRecipeManager().get(entry.getKey()).ifPresent(recipe -> {
+                list.add(recipe);
+                dropExperience(world, pos, entry.getIntValue(), ((AbstractCookingRecipe)recipe.value()).getExperience());
+            });
+        }
+        
+        return list;
+    }
+    
+    private static void dropExperience(ServerWorld world, Vec3d pos, int multiplier, float experience) {
+        int i = MathHelper.floor((float)multiplier * experience);
+        float f = MathHelper.fractionalPart((float)multiplier * experience);
+        if (f != 0.0F && Math.random() < (double)f) {
+            i++;
+        }
+        
+        ExperienceOrbEntity.spawn(world, pos, i);
+    }
+    
     private static void craftRecipe(
+            World world,
+            UUID chefUUID,
             DynamicRegistryManager dynamicRegistryManager,
             @Nullable RecipeEntry<? extends AbstractCookingRecipe> recipe,
             SingleStackRecipeInput input,
+            int slotId,
             DefaultedList<ItemStack> inventory,
             int maxCount
     ) {
-        if (recipe != null && canAcceptRecipeOutput(dynamicRegistryManager, recipe, input, inventory, maxCount)) {
-            ItemStack itemStack = inventory.get(FUEL);
-            ItemStack itemStack2 = recipe.value().craft(input, dynamicRegistryManager);
-            ItemStack itemStack3 = inventory.get(OUTPUT);
-            if (itemStack3.isEmpty()) {
-                inventory.set(OUTPUT, itemStack2.copy());
-            } else if (ItemStack.areItemsAndComponentsEqual(itemStack3, itemStack2)) {
-                itemStack3.increment(1);
+        if (recipe != null) {
+            ItemStack itemToCraft = recipe.value().craft(input, dynamicRegistryManager);
+            PlayerData state = StateManager.getPlayerState(Objects.requireNonNull(world.getPlayerByUuid(chefUUID)));
+            double chanceForPerfect = 0 + (state.skillLevels.getOrDefault("cooking", 1) * OWO_CONFIG.skillOptions.cookingSettings.perfectChanceIncrease());
+            double chanceForBurnt = Math.max(0, OWO_CONFIG.skillOptions.cookingSettings.baseBurnChance() - (state.skillLevels.getOrDefault("cooking", 1) * OWO_CONFIG.skillOptions.cookingSettings.burnChanceDecrease()));
+            
+            String quality = getQuality(chanceForPerfect, chanceForBurnt, "perfect", "burnt", "average");
+            
+            switch (quality) {
+                case "perfect" -> {
+                    itemToCraft.set(QuesComponents.COOK_QUALITY, quality);
+                    itemToCraft.set(DataComponentTypes.FOOD, new FoodComponent(6, 0.6f, true));
+                    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp((ServerPlayerEntity) world.getPlayerByUuid(chefUUID), state, "cooking", 16F);
+                }
+                case "burnt" -> {
+                    itemToCraft.set(QuesComponents.COOK_QUALITY, quality);
+                    itemToCraft.set(DataComponentTypes.FOOD, new FoodComponent(2, 0.1f, true));
+                    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp((ServerPlayerEntity) world.getPlayerByUuid(chefUUID), state, "cooking", 8F);
+                }
+                case "average" -> {
+                    itemToCraft.set(QuesComponents.COOK_QUALITY, quality);
+                    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp((ServerPlayerEntity) world.getPlayerByUuid(chefUUID), state, "cooking", 8F);
+                }
+                
             }
             
-            if (itemStack.isOf(Blocks.WET_SPONGE.asItem()) && !inventory.get(RECIPE).isEmpty() && inventory.get(RECIPE).isOf(Items.BUCKET)) {
-                inventory.set(RECIPE, new ItemStack(Items.WATER_BUCKET));
-            }
-            
-            itemStack.decrement(1);
+            inventory.set(slotId, itemToCraft);
         }
     }
     
@@ -205,11 +289,18 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
     }
     
     private static int getCookTime(ServerWorld world, OvenBlockEntity furnace) {
-        SingleStackRecipeInput singleStackRecipeInput = new SingleStackRecipeInput(furnace.getStack(RECIPE));
-        return furnace.matchGetter
-                .getFirstMatch(singleStackRecipeInput, world)
-                .map(recipe -> (recipe.value()).getCookingTime())
-                .orElse(120);
+        //SingleStackRecipeInput singleStackRecipeInput = new SingleStackRecipeInput(furnace.getStack(RECIPE));
+        //List<ItemStack> ingredients = new ArrayList<>();
+        //ingredients.add(furnace.inventory.get(1));
+        //ingredients.add(furnace.inventory.get(2));
+        //ingredients.add(furnace.inventory.get(3));
+        //ingredients.add(furnace.inventory.get(4));
+        //ingredients.add(furnace.inventory.get(5));
+        //ingredients.add(furnace.inventory.get(6));
+        //PlayerData state = StateManager.getPlayerState(Objects.requireNonNull(world.getPlayerByUuid(furnace.getChefUUID())));
+        //int speedTimesAmount = Math.max(120, (int) (120 * ingredients.stream().filter(stack -> !stack.isEmpty()).count()));
+        return 200;
+        //return Math.max(120, (int) (speedTimesAmount - (speedTimesAmount * (state.skillLevels.getOrDefault("cooking", 1) * 0.1))));
     }
     
     @Override
@@ -222,7 +313,7 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
         ItemStack itemStack = this.inventory.get(slot);
         boolean bl = !stack.isEmpty() && ItemStack.areItemsAndComponentsEqual(itemStack, stack);
         this.inventory.set(slot, stack);
-        stack.capCount(this.getMaxCount(stack));
+        stack.capCount(64);
         if (slot == 0 && !bl && this.world instanceof ServerWorld serverWorld) {
             cookingTimeTotal = getCookTime(serverWorld, this);
             cookingTimeSpent = 0;
@@ -232,12 +323,10 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
     
     @Override
     public boolean isValid(int slot, ItemStack stack) {
-        if (slot == 2) {
+        if (slot != 0) {
             return false;
-        } else if (slot != 1) {
-            return true;
         } else {
-            ItemStack itemStack = this.inventory.get(1);
+            ItemStack itemStack = this.inventory.get(0);
             return this.world.getFuelRegistry().isFuel(stack) || stack.isOf(Items.BUCKET) && !itemStack.isOf(Items.BUCKET);
         }
     }
@@ -250,11 +339,12 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
         super.readNbt(nbt, registries);
-        //Inventories.readNbt(nbt, inventory, registries);
+        Inventories.readNbt(nbt, inventory, registries);
         litTimeRemaining = nbt.getInt("oven.lit_time_remaining");
         litTimeTotal = nbt.getInt("oven.lit_time_total");
         cookingTimeSpent = nbt.getInt("oven.cooking_time_spent");
         cookingTimeTotal = nbt.getInt("oven.cooking_time_total");
+        chefUUID = nbt.getUuid("oven.chef");
     }
     
     @Override
@@ -263,7 +353,8 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
         nbt.putInt("oven.lit_time_total", litTimeTotal);
         nbt.putInt("oven.cooking_time_spent", cookingTimeSpent);
         nbt.putInt("oven.cooking_time_total", cookingTimeTotal);
-        //Inventories.writeNbt(nbt, inventory, registries);
+        nbt.putUuid("oven.chef", chefUUID);
+        Inventories.writeNbt(nbt, inventory, registries);
         super.writeNbt(nbt, registries);
     }
     
@@ -285,5 +376,13 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
         return createNbt(registries);
+    }
+    
+    public UUID getChefUUID() {
+        return chefUUID;
+    }
+    
+    public void setChefUUID(UUID chefUUID) {
+        this.chefUUID = chefUUID;
     }
 }
