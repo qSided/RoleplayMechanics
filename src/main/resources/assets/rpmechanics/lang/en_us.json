@@ -260,16 +260,27 @@
     { "text":  "Max Level", "color": "#b58259"}
   ],
   "skills.rpmechanics.select_skill": [
-    { "text":  "Select Skill:", "color": "#b58259"}
+    { "text":  "Skills", "color": "gray"}
   ],
-
+  "skills.rpmechanics.select_tooltip": [
+    {
+      "text": "Scroll while over the skills to see the rest.",
+      "color": "dark_gray"
+    }
+  ],
+  "skills.rpmechanics.milestones": [
+    {
+      "text": "Milestones",
+      "color": "gray"
+    }
+  ],
 
   "skills.rpmechanics.mining": [
     { "text": "Mining", "color": "dark_purple"}
   ],
   "skills.rpmechanics.mining.efficiency": [
-    { "text": "Efficiency", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Efficiency", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.mining.efficiency.tooltip": [
     { "text": "Efficiency", "color": "#9d65e6"},
@@ -279,8 +290,8 @@
     { "text": "increase in mining speed.", "color": "#d1d0cd"}
   ],
   "skills.rpmechanics.mining.degrade_chance": [
-    { "text": "Degrade Chance", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Degrade Chance", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.mining.degrade_chance.tooltip": [
     { "text": "Every level is -1% ", "color": "#d1d0cd"},
@@ -297,16 +308,16 @@
     { "text": "Enchanting", "color": "blue"}
   ],
   "skills.rpmechanics.enchanting.cost": [
-    { "text": "Enchanting Cost", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Enchanting Cost", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.enchanting.cost.tooltip": [
     { "text": "Enchanting cost", "color": "#4646ca"},
     { "text": " decreases twice. Once at level 33\nand again at level 66. Minimum cost is always one.", "color": "#d1d0cd"}
   ],
   "skills.rpmechanics.enchanting.modifier": [
-    { "text": "Power Modifier", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Power Modifier", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.enchanting.modifier.tooltip": [
     { "text": "Every time you enchant something there's a chance for the\nlevel of the enchant(s) to be increased. Your ", "color": "#d1d0cd"},
@@ -323,12 +334,12 @@
     { "text": "Swords", "color": "red"}
   ],
   "skills.rpmechanics.swords.attack_damage": [
-  { "text": "Damage", "color": "#869970"},
-  { "text": ": ", "color": "#8ca66d"}
+  { "text": "Damage", "color": "white"},
+  { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.swords.attack_speed": [
-    { "text": "Speed", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Speed", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.level_up.rpmechanics.swords": [
     { "text": "Swords ", "color": "red"},
@@ -338,12 +349,12 @@
     { "text": "Axes", "color": "#3dbcdb"}
   ],
   "skills.rpmechanics.axes.attack_damage": [
-  { "text": "Damage", "color": "#869970"},
-  { "text": ": ", "color": "#8ca66d"}
+  { "text": "Damage", "color": "white"},
+  { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.axes.attack_speed": [
-    { "text": "Speed", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Speed", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.level_up.rpmechanics.axes": [
     { "text": "Axes ", "color": "#3dbcdb"},
@@ -353,12 +364,12 @@
     { "text": "Bows", "color": "#c934c7"}
   ],
   "skills.rpmechanics.bows.arrow_speed": [
-  { "text": "Arrow Speed", "color": "#869970"},
-  { "text": ": ", "color": "#8ca66d"}
+  { "text": "Arrow Speed", "color": "white"},
+  { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.bows.arrow_accuracy": [
-    { "text": "Accuracy", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Accuracy", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.level_up.rpmechanics.bows": [
     { "text": "Bows ", "color": "#c934c7"},
@@ -374,12 +385,12 @@
     { "text": "Woodcutting", "color": "#cccf46"}
   ],
   "skills.rpmechanics.woodcutting.efficiency": [
-    { "text": "Efficiency", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Efficiency", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.woodcutting.extra_chance": [
-    { "text": "Extra Chance", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Extra Chance", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.level_up.rpmechanics.woodcutting": [
     { "text": "Woodcutting ", "color": "#cccf46"},
@@ -390,8 +401,8 @@
     { "text": "Endurance", "color": "dark_red"}
   ],
   "skills.rpmechanics.endurance.max_health": [
-    { "text": "Max Health", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Max Health", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.level_up.rpmechanics.endurance": [
     { "text": "Endurance ", "color": "dark_red"},
@@ -402,16 +413,16 @@
     { "text": "Agility", "color": "green"}
   ],
   "skills.rpmechanics.agility.movement_speed": [
-    { "text": "Movement Speed", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Movement Speed", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.agility.jump_strength": [
-    { "text": "Jump Strength", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Jump Strength", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.agility.safe_distance": [
-    { "text": "Safe Distance", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Safe Distance", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.level_up.rpmechanics.agility": [
     { "text": "Agility ", "color": "green"},
@@ -422,12 +433,12 @@
     { "text": "Smithing", "color": "#ffffff"}
   ],
   "skills.rpmechanics.smithing.material_save": [
-    { "text": "Material Save", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Material Save", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.smithing.exp_save": [
-    { "text": "Experience Save", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Experience Save", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.level_up.rpmechanics.smithing": [
     { "text": "Smithing ", "color": "#ffffff"},
@@ -450,30 +461,30 @@
     { "text": "↑", "color": "#8f8f96"}
   ],
   "skills.rpmechanics.cooking.speed": [
-    { "text": "Speed", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Speed", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.cooking.perfect": [
-    { "text": "Perfect Chance", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Perfect Chance", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
 
   "skills.rpmechanics.cooking.burnt": [
-    { "text": "Burnt Chance", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Burnt Chance", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
 
   "skills.rpmechanics.cooking.average": [
-    { "text": "Average Chance", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Average Chance", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
 
   "skills.rpmechanics.farming": [
     { "text": "Farming", "color": "#a87147"}
   ],
   "skills.rpmechanics.farming.extra_harvest": [
-    { "text": "Extra Chance", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Extra Chance", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.level_up.rpmechanics.farming": [
     { "text": "Farming ", "color": "#a87147"},
@@ -481,12 +492,12 @@
   ],
 
   "skills.rpmechanics.current_level": [
-    { "text": "Level", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Level", "color": "white"},
+    { "text": ": ", "color": "gray"}
   ],
   "skills.rpmechanics.current_experience": [
-    { "text": "Experience", "color": "#869970"},
-    { "text": ": ", "color": "#8ca66d"}
+    { "text": "Experience", "color": "white"},
+    { "text": ": ", "color": "gray"}
     ],
 
   "skills.descriptions.rpmechanics.mining": [

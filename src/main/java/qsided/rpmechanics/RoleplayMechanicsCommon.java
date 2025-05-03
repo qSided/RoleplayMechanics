@@ -136,6 +136,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         PayloadTypeRegistry.playC2S().register(SendClassSelectedPayload.ID, SendClassSelectedPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(PlayerFirstJoinPayload.ID, PlayerFirstJoinPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendClassAndLevelPayload.ID, SendClassAndLevelPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ExperienceUpPayload.ID, ExperienceUpPayload.CODEC);
         
         QuesItems.initialize();
         QuesComponents.initialize();

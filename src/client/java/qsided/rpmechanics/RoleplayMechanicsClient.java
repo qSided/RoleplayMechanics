@@ -8,16 +8,22 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
@@ -105,6 +111,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
         }
         
         KeyBinding openSkills = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.rpmechanics.open_skills", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_ALT, "key.category.rpmechanics"));
+		KeyBinding openSkillsTest = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.rpmechanics.open_skills_test", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_C, "key.category.rpmechanics"));
 		KeyBinding openClassSelection = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.rpmechanics.open_class_selection", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_M, "key.category.rpmechanics"));
 		
 		ClientTickEvents.END_CLIENT_TICK.register(client1 -> {
@@ -114,11 +121,11 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 				switch (getLastScreenOpen()) {
                     case "enchanting" -> client.setScreen(new EnchantingSkillScreen());
 					case "swords" -> client.setScreen(new SwordsSkillScreen());
-					case "axes" -> client.setScreen(new AxesSkillScreen());
+					case "axes" -> client.setScreen(new AxesScreen());
 					case "bows" -> client.setScreen(new BowsSkillScreen());
 					case "woodcutting" -> client.setScreen(new WoodcuttingSkillScreen());
                     case "endurance" -> client.setScreen(new EnduranceSkillScreen());
-					case "agility" -> client.setScreen(new AgilitySkillScreen());
+					case "agility" -> client.setScreen(new AgilityScreen());
 					case "crafting" -> client.setScreen(new CraftingSkillScreen());
 					case "smithing" -> client.setScreen(new SmithingSkillScreen());
 					case "farming" -> client.setScreen(new FarmingSkillScreen());
@@ -128,6 +135,9 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 			}
 			while (openClassSelection.wasPressed()) {
 				client.setScreen(new ClassSelectionScreen());
+			}
+			while (openSkillsTest.wasPressed()) {
+				client.setScreen(new AgilityScreen());
 			}
 		});
 		
@@ -198,6 +208,11 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE).getValue());
 			CraftingSkillScreen.setCraftingLevel(payload.crafting());
 			SmithingSkillScreen.setSmithingLevel(payload.smithing());
+			
+			AgilityScreen.setLevel(payload.agility());
+			AgilityScreen.setMovementSpeed((double) context.player().getMovementSpeed());
+			AgilityScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.JUMP_STRENGTH).getValue());
+			AgilityScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE).getValue());
 			});
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperiencePayload.ID, (payload, context) -> {
 			MiningSkillScreen.setMiningExperience(payload.mining());
@@ -211,17 +226,22 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE).getValue());
 			CraftingSkillScreen.setCraftingExperience(payload.crafting());
 			SmithingSkillScreen.setSmithingExperience(payload.smithing());
+			
+			AgilityScreen.setExp(payload.agility());
+			AgilityScreen.setMovementSpeed((double) context.player().getMovementSpeed());
+			AgilityScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.JUMP_STRENGTH).getValue());
+			AgilityScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.SAFE_FALL_DISTANCE).getValue());
 			});
 		
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsTwoPayload.ID, (payload, context) -> {
 			FarmingSkillScreen.setFarmingLevel(payload.farming());
-			AxesSkillScreen.setAxesLevel(payload.axes());
+			AxesScreen.setLevel(payload.axes());
 			BowsSkillScreen.setBowsLevel(payload.bows());
 			CookingSkillScreen.setCookingLevel(payload.cooking());
 		});
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperienceTwoPayload.ID, (payload, context) -> {
 			FarmingSkillScreen.setFarmingExperience(payload.farming());
-			AxesSkillScreen.setAxesExperience(payload.axes());
+			AxesScreen.setExp(payload.axes());
 			BowsSkillScreen.setBowsExperience(payload.bows());
 			CookingSkillScreen.setCookingExperience(payload.cooking());
 		});

@@ -1,10 +1,12 @@
 package qsided.rpmechanics.skills.leveling;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 import qsided.rpmechanics.events.IncreaseSkillLevelCallback;
+import qsided.rpmechanics.networking.ExperienceUpPayload;
 
 import java.text.DecimalFormat;
 
@@ -22,7 +24,7 @@ public class ExperienceUp {
                         state.skillExperience.put(skill, state.skillExperience.getOrDefault(skill, 0F) + (value * (modifier.get(skill) / 100)));
                     }
                 });
-                
+                player.sendMessage(Text.literal("Gained ").append(String.valueOf(value)).append(skill).append(" experience!"), true);
             }
             
             if (state.rpClassLevel < 100) {
