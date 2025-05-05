@@ -16,5 +16,6 @@ public class QuesBlockLootTableProvider extends FabricBlockLootTableProvider {
     @Override
     public void generate() {
         addDrop(QuesBlocks.MYTHRIL_DEBRIS);
+        addDrop(QuesBlocks.OVEN);
     }
 }

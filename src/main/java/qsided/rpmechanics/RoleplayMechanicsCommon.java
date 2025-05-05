@@ -33,6 +33,7 @@ import net.minecraft.world.gen.feature.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qsided.rpmechanics.attributes.RoleplayMechanicsAttributes;
+import qsided.rpmechanics.blockentities.QuesBlockEntityTypes;
 import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.commands.SkillsCommand;
 import qsided.rpmechanics.config.ConfigGenerator;
@@ -40,11 +41,15 @@ import qsided.rpmechanics.config.RpMechanicsConfig;
 import qsided.rpmechanics.config.experience_values.BlockExperience;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
-import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 import qsided.rpmechanics.events.RoleplayClassSelectedCallback;
+import qsided.rpmechanics.items.QuesComponents;
 import qsided.rpmechanics.items.QuesItems;
 import qsided.rpmechanics.items.materials.QuesArmorMaterials;
 import qsided.rpmechanics.networking.*;
+import qsided.rpmechanics.recipes.OvenRecipe;
+import qsided.rpmechanics.recipes.QuesRecipePropertySets;
+import qsided.rpmechanics.recipes.QuesRecipeSerializers;
+import qsided.rpmechanics.recipes.QuesRecipeTypes;
 import qsided.rpmechanics.skills.*;
 import qsided.rpmechanics.skills.combat.ArcherySkill;
 import qsided.rpmechanics.skills.combat.SwordsAndAxesSkills;
@@ -131,12 +136,19 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         PayloadTypeRegistry.playC2S().register(SendClassSelectedPayload.ID, SendClassSelectedPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(PlayerFirstJoinPayload.ID, PlayerFirstJoinPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendClassAndLevelPayload.ID, SendClassAndLevelPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ExperienceUpPayload.ID, ExperienceUpPayload.CODEC);
         
         QuesItems.initialize();
+        QuesComponents.initialize();
         QuesArmorMaterials.initialize();
         QuesBlockTags.initialize();
+        QuesRecipeTypes.initialize();
+        QuesRecipePropertySets.initialize();
+        QuesRecipeSerializers.initialize();
+        QuesBlockEntityTypes.initialize();
         QuesBlocks.initialize();
         MobScaling.initialize();
+        OpenPACCompat.initialize();
         
         ObjectMapper mapper = new ObjectMapper();
         CollectionType miningRef = TypeFactory.defaultInstance().constructCollectionType(List.class, BlockExperience.class);
@@ -221,6 +233,8 @@ public class RoleplayMechanicsCommon implements ModInitializer {
             }
         });
         
+        
+        
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, player, alive) -> {
             PlayerData state = StateManager.getPlayerState(player);
             
@@ -271,6 +285,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 		Integer farmingLevel = playerState.skillLevels.getOrDefault("farming", 1);
 		Integer axesLevel = playerState.skillLevels.getOrDefault("axes", 1);
 		Integer bowsLevel = playerState.skillLevels.getOrDefault("bows", 1);
+		Integer cookingLevel = playerState.skillLevels.getOrDefault("cooking", 1);
 		
 		Float miningExp = playerState.skillExperience.getOrDefault("mining", 0F);
 		Float enchantingExp = playerState.skillExperience.getOrDefault("enchanting", 0F);
@@ -283,12 +298,13 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         Float farmingExp = playerState.skillExperience.getOrDefault("farming", 0F);
         Float axesExp = playerState.skillExperience.getOrDefault("axes", 0F);
         Float bowsExp = playerState.skillExperience.getOrDefault("bows", 0F);
+        Float cookingExp = playerState.skillExperience.getOrDefault("cooking", 0F);
         
         ServerPlayNetworking.send(player, new SendClassAndLevelPayload(playerState.rpClass, playerState.rpClassLevel, playerState.rpClassExp));
 		
 		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, combatLevel, woodcuttingLevel, enduranceLevel, agilityLevel, craftingLevel, smithingLevel));
-		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, axesLevel, bowsLevel));
+		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, axesLevel, bowsLevel, cookingLevel));
 		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, combatExp, woodcuttingExp, enduranceExp, agilityExp, craftingExp, smithingExp));
-        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, axesExp, bowsExp));
+        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, axesExp, bowsExp, cookingExp));
 	}
 }

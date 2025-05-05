@@ -24,6 +24,9 @@ public class QuesModelProvider extends FabricModelProvider {
     
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+        itemModelGenerator.register(QuesItems.X, Models.GENERATED);
+        itemModelGenerator.register(QuesItems.CHECKMARK, Models.GENERATED);
+        
         itemModelGenerator.register(QuesItems.MYTHRIL_FRAGMENT, Models.GENERATED);
         itemModelGenerator.register(QuesItems.MYTHRIL_INGOT, Models.GENERATED);
         itemModelGenerator.register(QuesItems.MYTHRIL_UPGRADE_TEMPLATE, Models.GENERATED);
@@ -37,5 +40,7 @@ public class QuesModelProvider extends FabricModelProvider {
         itemModelGenerator.registerArmor(QuesItems.MYTHRIL_CHESTPLATE, RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")), Identifier.of(RoleplayMechanicsCommon.MOD_ID, "mythril")), "chestplate", false);
         itemModelGenerator.registerArmor(QuesItems.MYTHRIL_LEGGINGS, RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")), Identifier.of(RoleplayMechanicsCommon.MOD_ID, "mythril")), "leggings", false);
         itemModelGenerator.registerArmor(QuesItems.MYTHRIL_BOOTS, RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")), Identifier.of(RoleplayMechanicsCommon.MOD_ID, "mythril")), "boots", false);
+        
+        
     }
 }

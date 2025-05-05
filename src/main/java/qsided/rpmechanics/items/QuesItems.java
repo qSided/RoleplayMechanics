@@ -41,6 +41,8 @@ public class QuesItems {
     //        .displayName(Text.translatable("itemGroup.ques_items"))
     //        .build();
     
+    public static final Item X = registerItem("x", settings -> new Item(settings.maxCount(1).fireproof()));
+    public static final Item CHECKMARK = registerItem("checkmark", settings -> new Item(settings.maxCount(1).fireproof()));
     public static final Item MYTHRIL_DEBRIS = registerBlockItem(QuesBlocks.MYTHRIL_DEBRIS, new Item.Settings().fireproof().rarity(Rarity.UNCOMMON));
     public static final Item MYTHRIL_FRAGMENT = registerItem("mythril_fragment", settings -> new Item(settings.maxCount(64).fireproof()));
     public static final Item MYTHRIL_INGOT = registerItem("mythril_ingot", settings -> new Item(settings.fireproof().maxCount(64)));

@@ -57,10 +57,10 @@ public class SkillCheckHandler {
                     Identifier efficiencyModifier = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "efficiency_modifier");
                     if (currentStack.isIn(ItemTags.PICKAXES) || currentStack.isIn(ItemTags.SHOVELS) && equipmentSlot.equals(EquipmentSlot.MAINHAND)) {
                         player.getAttributeInstance(EntityAttributes.MINING_EFFICIENCY).overwritePersistentModifier(
-                                new EntityAttributeModifier(efficiencyModifier, state.skillLevels.getOrDefault("mining", 1) * .5, EntityAttributeModifier.Operation.ADD_VALUE));
+                                new EntityAttributeModifier(efficiencyModifier, (state.skillLevels.getOrDefault("mining", 1)-1) * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.miningSettings.miningSpeed(), EntityAttributeModifier.Operation.ADD_VALUE));
                     } else if (currentStack.isIn(ItemTags.AXES) && equipmentSlot.equals(EquipmentSlot.MAINHAND)) {
                         player.getAttributeInstance(EntityAttributes.MINING_EFFICIENCY).overwritePersistentModifier(
-                                new EntityAttributeModifier(efficiencyModifier, state.skillLevels.getOrDefault("woodcutting", 1) * .5, EntityAttributeModifier.Operation.ADD_VALUE)
+                                new EntityAttributeModifier(efficiencyModifier, (state.skillLevels.getOrDefault("woodcutting", 1)-1) * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.woodcuttingSettings.choppingSpeed(), EntityAttributeModifier.Operation.ADD_VALUE)
                         );
                     } else {
                         player.getAttributeInstance(EntityAttributes.MINING_EFFICIENCY).removeModifier(efficiencyModifier);
