@@ -1,18 +1,18 @@
 package qsided.rpmechanics.gui.skills;
 
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.config.QuesConfigModel;
+import qsided.rpmechanics.items.QuesItems;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AxesScreen extends SkillScreen {
+public class MiningScreen extends SkillScreen {
     
     public static Integer level;
     public static Float exp;
@@ -22,7 +22,7 @@ public class AxesScreen extends SkillScreen {
     }
     
     public static void setExp(Float exp) {
-        AxesScreen.exp = exp;
+        MiningScreen.exp = exp;
     }
     
     public static Integer getLevel() {
@@ -30,12 +30,12 @@ public class AxesScreen extends SkillScreen {
     }
     
     public static void setLevel(Integer level) {
-        AxesScreen.level = level;
+        MiningScreen.level = level;
     }
     
     @Override
     protected MutableText skillDescription() {
-        return Text.translatable("skills.descriptions.rpmechanics.axes");
+        return Text.translatable("skills.descriptions.rpmechanics.mining");
     }
     
     @Override
@@ -45,7 +45,7 @@ public class AxesScreen extends SkillScreen {
     
     @Override
     protected ItemStack skillIcon() {
-        return Items.DIAMOND_AXE.getDefaultStack();
+        return QuesItems.MYTHRIL_PICKAXE.getDefaultStack();
     }
     
     @Override
@@ -69,12 +69,12 @@ public class AxesScreen extends SkillScreen {
         df.setMaximumFractionDigits(2);
         List<SkillStatistic> stats = new ArrayList<>();
         stats.add(new SkillStatistic(
-                Text.translatable("skills.rpmechanics.axes.attack_damage"),
-                Text.literal("+" + (df.format(calculatePercentageDifference(2.0 + ((skillLevel()-1) * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.axesSettings.damage()), 2.0))) + "%")
+                Text.translatable("skills.rpmechanics.mining.efficiency"),
+                Text.literal("+" + df.format((skillLevel()-1) * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.miningSettings.miningSpeed()) + "%")
         ));
         stats.add(new SkillStatistic(
-                Text.translatable("skills.rpmechanics.axes.attack_speed"),
-                Text.literal("+" + df.format(calculatePercentageDifference(4.0 + ((skillLevel()-1) * RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.axesSettings.speed()), 4.0)) + "%")
+                Text.translatable("skills.rpmechanics.mining.degrade_chance"),
+                Text.literal("-" + (skillLevel()-1) + "%")
         ));
         return stats;
     }
@@ -86,22 +86,26 @@ public class AxesScreen extends SkillScreen {
     
     @Override
     protected List<Milestone> milestones() {
-        return List.of();
+        List<Milestone> milestones = new ArrayList<>();
+        
+        milestones.add(new Milestone(RoleplayMechanicsCommon.OWO_CONFIG.skillOptions.miningSettings.levelForVeinMining(), Text.translatable("skills.rpmechanics.milestones.vein_mining")));
+        
+        return milestones;
     }
     
     @Override
     protected Float baseExpReq() {
-        return RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.axesOptions.baseExperience();
+        return RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.baseExperience();
     }
     
     @Override
     protected Enum<QuesConfigModel.Choices> increaseMethod() {
-        return RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.axesOptions.multiplicativeOrAdditive();
+        return RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.multiplicativeOrAdditive();
     }
     
     @Override
     protected Double amountToIncrease() {
-        return RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.axesOptions.amount();
+        return RoleplayMechanicsCommon.OWO_CONFIG.experienceOptions.miningOptions.amount();
     }
     
     

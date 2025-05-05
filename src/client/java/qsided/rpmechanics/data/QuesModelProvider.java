@@ -24,6 +24,9 @@ public class QuesModelProvider extends FabricModelProvider {
     
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+        itemModelGenerator.register(QuesItems.X, Models.GENERATED);
+        itemModelGenerator.register(QuesItems.CHECKMARK, Models.GENERATED);
+        
         itemModelGenerator.register(QuesItems.MYTHRIL_FRAGMENT, Models.GENERATED);
         itemModelGenerator.register(QuesItems.MYTHRIL_INGOT, Models.GENERATED);
         itemModelGenerator.register(QuesItems.MYTHRIL_UPGRADE_TEMPLATE, Models.GENERATED);

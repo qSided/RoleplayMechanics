@@ -6,6 +6,7 @@ import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.container.GridLayout;
 import io.wispforest.owo.ui.core.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import qsided.rpmechanics.RoleplayMechanicsClient;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.config.QuesConfigModel;
-import qsided.rpmechanics.gui.skills.components.QuesCheckboxComponent;
+import qsided.rpmechanics.items.QuesItems;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -22,6 +23,7 @@ import static qsided.rpmechanics.config.QuesConfigModel.Choices.ADD;
 import static qsided.rpmechanics.config.QuesConfigModel.Choices.MULTIPLY;
 
 public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
+    
     @Override
     protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
         return OwoUIAdapter.create(this, Containers::verticalFlow);
@@ -32,20 +34,20 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
         root.surface(Surface.VANILLA_TRANSLUCENT);
         
         root.child(
-                Containers.horizontalFlow(Sizing.fixed(540), Sizing.fixed(320))
+                Containers.horizontalFlow(Sizing.fixed(570), Sizing.fixed(320))
                         .child(
-                                Containers.verticalFlow(Sizing.fixed(110), Sizing.fixed(120))
+                                Containers.verticalFlow(Sizing.fixed(160), Sizing.fixed(184))
                                         .verticalAlignment(VerticalAlignment.BOTTOM)
                                         .surface(Surface.DARK_PANEL)
-                                        .padding(Insets.of(6, 6, 6, 14))
-                                        .positioning(Positioning.absolute(36, 70))
+                                        .padding(Insets.of(6, 6, 6, 27))
+                                        .positioning(Positioning.absolute(0, 70))
                                         .id("skill-selection"))
                         .child(
-                                Containers.verticalFlow(Sizing.fixed(110), Sizing.fixed(120))
+                                Containers.verticalFlow(Sizing.fixed(160), Sizing.fixed(184))
                                         .verticalAlignment(VerticalAlignment.BOTTOM)
                                         .surface(Surface.DARK_PANEL)
                                         .padding(Insets.of(6, 6, 14, 6))
-                                        .positioning(Positioning.absolute(396, 70))
+                                        .positioning(Positioning.absolute(410, 70))
                                         .id("milestones"))
                         .child(
                                 Containers.horizontalFlow(Sizing.fill(50), Sizing.fill(70))
@@ -79,7 +81,7 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
                         Components.label(skillDescription())
                                 .horizontalTextAlignment(HorizontalAlignment.CENTER)
                                 .maxWidth(214)
-                                .positioning(Positioning.relative(50,50))
+                                .positioning(Positioning.relative(50,50 + skillDescriptionOffset()))
                 );
     }
     
@@ -159,23 +161,43 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
                 )
                 .child(
                         Containers.verticalScroll(Sizing.fill(), Sizing.fill(92),
-                                Containers.grid(Sizing.fill(), Sizing.fill(), milestoneRowCount(), 3)
-                                        .id("milestone")
-                                )
+                                Containers.verticalFlow(Sizing.fill(), Sizing.fill())
+                                        .id("milestone"))
+                                .padding(Insets.of(3))
                                 .surface(Surface.flat(java.awt.Color.decode("#0b0b0b").getRGB()).and(Surface.outline(java.awt.Color.decode("#141313").getRGB())))
                                 .positioning(Positioning.relative(100, 100))
                 );
         
         if (!milestones().isEmpty()) {
             
-            for (int j = 0; j < milestoneRowCount(); j++) {
-                root.childById(GridLayout.class, "skill-stats")
-                        .child(new QuesCheckboxComponent(Text.empty()).checked(hasMetMilestone(milestones().get(j).getRequiredLevel()))
-                                .sizing(Sizing.fill(12), Sizing.content()), 0, 0)
-                        .child(Components.label(milestones().get(j).getTranslationKey())
-                                .sizing(Sizing.fill(76), Sizing.content()), j, 1)
-                        .child(Components.label(Text.literal(String.valueOf(milestones().get(j).getRequiredLevel())))
-                                .sizing(Sizing.fill(12), Sizing.content()), j, 2);
+            for (int j = 0; j < milestoneCount(); j++) {
+                if (hasMetMilestone(milestones().get(j).getRequiredLevel())) {
+                    root.childById(FlowLayout.class, "milestone")
+                            .child(
+                                    Components.item(QuesItems.CHECKMARK.getDefaultStack())
+                                            .sizing(Sizing.fixed(9), Sizing.fixed(9))
+                                            .positioning(Positioning.absolute(0, (j)*10))
+                            );
+                } else {
+                    root.childById(FlowLayout.class, "milestone")
+                            .child(
+                                    Components.item(QuesItems.X.getDefaultStack())
+                                            .sizing(Sizing.fixed(9), Sizing.fixed(9))
+                                            .positioning(Positioning.absolute(0, (j)*10))
+                            );
+                }
+                root.childById(FlowLayout.class, "milestone")
+                        .child(
+                                Containers.horizontalScroll(Sizing.fill(60), Sizing.content(),
+                                        Components.label(milestones().get(j).getTranslationKey())
+                                                .horizontalTextAlignment(HorizontalAlignment.LEFT)
+                                ).positioning(Positioning.absolute(11, (j)*10))
+                        )
+                        .child(Components.label(Text.literal("Lv." + (milestones().get(j).getRequiredLevel())))
+                                .horizontalTextAlignment(HorizontalAlignment.RIGHT)
+                                .positioning(Positioning.absolute(79, (j)*10))
+                                .sizing(Sizing.fill(40), Sizing.content())
+                        );
             }
             
         }
@@ -200,70 +222,70 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
                         
                         .button(Text.translatable("skills.rpmechanics.bows"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("bows");
-                            client.setScreen(new BowsSkillScreen());
+                            client.setScreen(new BowsScreen());
                         })
                         
                         .divider()
                         
                         .button(Text.translatable("skills.rpmechanics.cooking"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("cooking");
-                            client.setScreen(new CookingSkillScreen());
+                            client.setScreen(new CookingScreen());
                         })
                         
                         .divider()
                         
                         .button(Text.translatable("skills.rpmechanics.crafting"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("crafting");
-                            client.setScreen(new CraftingSkillScreen());
+                            client.setScreen(new CraftingScreen());
                         })
                         
                         .divider()
                         
                         .button(Text.translatable("skills.rpmechanics.enchanting"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("enchanting");
-                            client.setScreen(new EnchantingSkillScreen());
+                            client.setScreen(new EnchantingScreen());
                         })
                         
                         .divider()
                         
                         .button(Text.translatable("skills.rpmechanics.endurance"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("endurance");
-                            client.setScreen(new EnduranceSkillScreen());
+                            client.setScreen(new EnduranceScreen());
                         })
                         
                         .divider()
                         
                         .button(Text.translatable("skills.rpmechanics.farming"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("farming");
-                            client.setScreen(new FarmingSkillScreen());
+                            client.setScreen(new FarmingScreen());
                         })
                         
                         .divider()
                         
                         .button(Text.translatable("skills.rpmechanics.mining"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("mining");
-                            client.setScreen(new MiningSkillScreen());
+                            client.setScreen(new MiningScreen());
                         })
                         
                         .divider()
                         
                         .button(Text.translatable("skills.rpmechanics.smithing"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("smithing");
-                            client.setScreen(new SmithingSkillScreen());
+                            client.setScreen(new SmithingScreen());
                         })
                         
                         .divider()
                         
                         .button(Text.translatable("skills.rpmechanics.swords"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("swords");
-                            client.setScreen(new SwordsSkillScreen());
+                            client.setScreen(new SwordsScreen());
                         })
                         
                         .divider()
                         
                         .button(Text.translatable("skills.rpmechanics.woodcutting"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("woodcutting");
-                            client.setScreen(new WoodcuttingSkillScreen());
+                            client.setScreen(new WoodcuttingScreen());
                         });
     }
     
@@ -301,7 +323,13 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
         return ((newValue - originalValue) / originalValue) * 100;
     }
     
+    protected boolean hasMetMilestone(Integer reqLevel) {
+        return skillLevel() >= reqLevel;
+    }
+    
     protected abstract MutableText skillDescription();
+    
+    protected abstract int skillDescriptionOffset();
     
     protected abstract ItemStack skillIcon();
     
@@ -313,11 +341,11 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
     
     protected abstract List<SkillStatistic> information();
     
-    protected abstract int milestoneRowCount();
+    protected abstract int milestoneCount();
     
     protected abstract List<Milestone> milestones();
     
-    protected abstract boolean hasMetMilestone(Integer reqLevel);
+    
     
     protected abstract Float baseExpReq();
     

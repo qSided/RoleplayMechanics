@@ -226,7 +226,7 @@
     { "text": "You are using ", "color": "#2e469e"},
     { "text": "Roleplay Mechanics", "color": "#2e6391"},
     { "text": " version ", "color": "#2e469e"},
-    { "text": "0.9.0-", "color": "#3533d4"},
+    { "text": "0.9.1-", "color": "#3533d4"},
     { "text": "alpha", "color": "#b633d4"},
     { "text": ".", "color": "#2e469e"},
     { "text": " Press ", "color": "#2e469e"},
@@ -281,6 +281,9 @@
   "skills.rpmechanics.mining.efficiency": [
     { "text": "Efficiency", "color": "white"},
     { "text": ": ", "color": "gray"}
+  ],
+  "skills.rpmechanics.milestones.vein_mining": [
+    { "text": "Vein Mining", "color": "white"}
   ],
   "skills.rpmechanics.mining.efficiency.tooltip": [
     { "text": "Efficiency", "color": "#9d65e6"},
@@ -384,6 +387,9 @@
   "skills.rpmechanics.woodcutting": [
     { "text": "Woodcutting", "color": "#cccf46"}
   ],
+  "skills.rpmechanics.milestones.treechopping": [
+    { "text": "Treechopping", "color": "white"}
+  ],
   "skills.rpmechanics.woodcutting.efficiency": [
     { "text": "Efficiency", "color": "white"},
     { "text": ": ", "color": "gray"}
@@ -482,6 +488,9 @@
   "skills.rpmechanics.farming": [
     { "text": "Farming", "color": "#a87147"}
   ],
+  "skills.rpmechanics.milestones.rclick_harvest": [
+    { "text": "Right-Click Harvesting", "color": "white"}
+  ],
   "skills.rpmechanics.farming.extra_harvest": [
     { "text": "Extra Chance", "color": "white"},
     { "text": ": ", "color": "gray"}
@@ -543,7 +552,7 @@
     { "text": "travel speed", "color": "#a324a1"},
     { "text": " and the ", "color": "#d1d0cd"},
     { "text": "accuracy", "color": "#a324a1"},
-    { "text": " of arrows when shooting with bows and crossbows. Experience is gained by defeating any mobs with a sword.", "color": "#d1d0cd"}
+    { "text": " of arrows when shooting with bows and crossbows. Experience is gained by defeating any mobs with a bow or crossbow.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.woodcutting": [
     { "text": "Your ", "color": "#d1d0cd"},

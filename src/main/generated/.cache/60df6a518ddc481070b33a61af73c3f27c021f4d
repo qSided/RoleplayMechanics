@@ -1,5 +1,6 @@
 // 1.21.4	-999999999-01-01T00:00:00	Roleplay Mechanics/Model Definitions
 ad1cdd377601b0e04618d82e110a2f878f079626 assets/rpmechanics/blockstates/mythril_debris.json
+6bab82d50f2aab5435e34c7135c8fb4bbac19271 assets/rpmechanics/items/checkmark.json
 d8e9cc861222f73a9a233d13483e8ee08ac2a79d assets/rpmechanics/items/mythril_axe.json
 c28b2051e0eeab87e596c478fa50c2bc02165255 assets/rpmechanics/items/mythril_boots.json
 714cb84e33ea2135ffc98bd0893a86dd11557d76 assets/rpmechanics/items/mythril_chestplate.json
@@ -14,7 +15,9 @@ bbee614f0480fbfcc954bfdfd1e5518453271588 assets/rpmechanics/items/mythril_pickax
 b81283d2a0bc722d6faee882400c5c5cd617bde7 assets/rpmechanics/items/mythril_sword.json
 3b2058741a565f58f37eac4f99b810b66146c6f6 assets/rpmechanics/items/mythril_upgrade_template.json
 12ccf74305d57fcbb49f8f17c0700a64d2a6b165 assets/rpmechanics/items/oven.json
+31294d099d9c984ad9e182a8a3164b1f1b836845 assets/rpmechanics/items/x.json
 d187fd9a31cec655813e1e5aef0bb8fdbb8f0dbb assets/rpmechanics/models/block/mythril_debris.json
+cfc472a1afa943b2311f2fc872b348c5879cb679 assets/rpmechanics/models/item/checkmark.json
 60696dd29e334d32b0c04625bffd1d3722348f0f assets/rpmechanics/models/item/mythril_axe.json
 ea34f54ec72f08c50ade31b94ad3b785e3f7102f assets/rpmechanics/models/item/mythril_boots.json
 f3bf07e0f7e47433abd6066feb3172f93f6ee7dc assets/rpmechanics/models/item/mythril_boots_amethyst_trim.json
@@ -71,3 +74,4 @@ aaa8ccc155202eb23f9965a2c169280b0647e8cb assets/rpmechanics/models/item/mythril_
 89944eb68469a81b0cfad33a436c864473d7187a assets/rpmechanics/models/item/mythril_shovel.json
 10eff5cd9b9223124845fb84ba2c6a50b6a87a37 assets/rpmechanics/models/item/mythril_sword.json
 f3debf196a76397f00148f45b49912b0c8a384c9 assets/rpmechanics/models/item/mythril_upgrade_template.json
+23ff0187e233d817ba33a3012c2188030ddd634c assets/rpmechanics/models/item/x.json

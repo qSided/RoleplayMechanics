@@ -18,17 +18,7 @@ public class AgilityScreen extends SkillScreen {
     
     public static Integer level;
     public static Float exp;
-    public static Double jumpStrength;
     public static Double safeDistance;
-    public static Double movementSpeed;
-    
-    public static Double getMovementSpeed() {
-        return movementSpeed;
-    }
-    
-    public static void setMovementSpeed(Double movementSpeed) {
-        AgilityScreen.movementSpeed = movementSpeed;
-    }
     
     public static Double getSafeDistance() {
         return safeDistance;
@@ -36,14 +26,6 @@ public class AgilityScreen extends SkillScreen {
     
     public static void setSafeDistance(Double safeDistance) {
         AgilityScreen.safeDistance = safeDistance;
-    }
-    
-    public static Double getJumpStrength() {
-        return jumpStrength;
-    }
-    
-    public static void setJumpStrength(Double jumpStrength) {
-        AgilityScreen.jumpStrength = jumpStrength;
     }
     
     public static Float getExp() {
@@ -65,6 +47,11 @@ public class AgilityScreen extends SkillScreen {
     @Override
     protected MutableText skillDescription() {
         return Text.translatable("skills.descriptions.rpmechanics.agility");
+    }
+    
+    @Override
+    protected int skillDescriptionOffset() {
+        return 0;
     }
     
     @Override
@@ -105,18 +92,13 @@ public class AgilityScreen extends SkillScreen {
     }
     
     @Override
-    protected int milestoneRowCount() {
+    protected int milestoneCount() {
         return 1;
     }
     
     @Override
     protected List<Milestone> milestones() {
         return List.of();
-    }
-    
-    @Override
-    protected boolean hasMetMilestone(Integer reqLevel) {
-        return false;
     }
     
     @Override

@@ -143,7 +143,7 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
                         ingredients.stream().anyMatch(stack -> !stack.getComponents().contains(QuesComponents.COOK_QUALITY) && !stack.isEmpty())) {
                     if (world.getPlayerByUuid(blockEntity.getChefUUID()) != null) {
                         PlayerData state = StateManager.getPlayerState(Objects.requireNonNull(world.getPlayerByUuid(blockEntity.getChefUUID())));
-                        blockEntity.cookingTimeSpent = (int) Math.min(blockEntity.cookingTimeSpent + 1 + ((state.skillLevels.getOrDefault("cooking", 1) * OWO_CONFIG.skillOptions.cookingSettings.speed())), 720);
+                        blockEntity.cookingTimeSpent = (int) Math.min(blockEntity.cookingTimeSpent + 1 + (((state.skillLevels.getOrDefault("cooking", 1) - 1) * OWO_CONFIG.skillOptions.cookingSettings.speed())), 720);
                     } else {
                         blockEntity.cookingTimeSpent++;
                     }
