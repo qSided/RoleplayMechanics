@@ -7,20 +7,12 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTables;
-import net.minecraft.loot.condition.RandomChanceLootCondition;
-import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.function.SetCountLootFunction;
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -252,29 +244,35 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 	public static void sendSkillData(PlayerData playerState, ServerPlayerEntity player) {
 		Integer miningLevel = playerState.skillLevels.getOrDefault("mining", 1);
 		Integer enchantingLevel = playerState.skillLevels.getOrDefault("enchanting", 1);
-		Integer combatLevel = playerState.skillLevels.getOrDefault("combat", 1);
+		Integer swordsLevel = playerState.skillLevels.getOrDefault("swords", 1);
+		Integer axesLevel = playerState.skillLevels.getOrDefault("axes", 1);
+		Integer bowsLevel = playerState.skillLevels.getOrDefault("bows", 1);
 		Integer woodcuttingLevel = playerState.skillLevels.getOrDefault("woodcutting", 1);
 		Integer enduranceLevel = playerState.skillLevels.getOrDefault("endurance", 1);
         Integer agilityLevel = playerState.skillLevels.getOrDefault("agility", 1);
 		Integer craftingLevel = playerState.skillLevels.getOrDefault("crafting", 1);
 		Integer smithingLevel = playerState.skillLevels.getOrDefault("smithing", 1);
 		Integer farmingLevel = playerState.skillLevels.getOrDefault("farming", 1);
+		Integer cookingLevel = playerState.skillLevels.getOrDefault("cooking", 1);
 		
 		Float miningExp = playerState.skillExperience.getOrDefault("mining", 0F);
 		Float enchantingExp = playerState.skillExperience.getOrDefault("enchanting", 0F);
-		Float combatExp = playerState.skillExperience.getOrDefault("combat", 0F);
+		Float swordsExp = playerState.skillExperience.getOrDefault("swords", 0F);
+		Float axesExp = playerState.skillExperience.getOrDefault("axes", 0F);
+		Float bowsExp = playerState.skillExperience.getOrDefault("bows", 0F);
 		Float woodcuttingExp = playerState.skillExperience.getOrDefault("woodcutting", 0F);
 		Float enduranceExp = playerState.skillExperience.getOrDefault("endurance", 0F);
         Float agilityExp = playerState.skillExperience.getOrDefault("agility", 0F);
 		Float craftingExp = playerState.skillExperience.getOrDefault("crafting", 0F);
 		Float smithingExp = playerState.skillExperience.getOrDefault("smithing", 0F);
         Float farmingExp = playerState.skillExperience.getOrDefault("farming", 0F);
+        Float cookingExp = playerState.skillExperience.getOrDefault("cooking", 0F);
         
         ServerPlayNetworking.send(player, new SendClassAndLevelPayload(playerState.rpClass, playerState.rpClassLevel, playerState.rpClassExp));
 		
-		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, combatLevel, woodcuttingLevel, enduranceLevel, agilityLevel));
-		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, smithingLevel, craftingLevel));
-		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, combatExp, woodcuttingExp, enduranceExp, agilityExp));
-        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, smithingExp, craftingExp));
+		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, swordsLevel, woodcuttingLevel, enduranceLevel, agilityLevel));
+		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, smithingLevel, craftingLevel, axesLevel, bowsLevel, cookingLevel));
+		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, swordsExp, woodcuttingExp, enduranceExp, agilityExp));
+        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, smithingExp, craftingExp, axesExp, bowsExp, cookingExp));
 	}
 }

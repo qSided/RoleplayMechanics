@@ -5,13 +5,16 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 
-public record SendSkillsLevelsTwoPayload(Integer farming, Integer smithing, Integer crafting) implements CustomPayload {
+public record SendSkillsLevelsTwoPayload(Integer farming, Integer smithing, Integer crafting, Integer axes, Integer bows, Integer cooking) implements CustomPayload {
     
     public static final Id<SendSkillsLevelsTwoPayload> ID = new Id<>(QuesNetworkingConstants.SEND_SKILLS_LEVELS_TWO);
     public static final PacketCodec<RegistryByteBuf, SendSkillsLevelsTwoPayload> CODEC = PacketCodec.tuple(
             PacketCodecs.INTEGER, SendSkillsLevelsTwoPayload::farming,
             PacketCodecs.INTEGER, SendSkillsLevelsTwoPayload::smithing,
             PacketCodecs.INTEGER, SendSkillsLevelsTwoPayload::crafting,
+            PacketCodecs.INTEGER, SendSkillsLevelsTwoPayload::axes,
+            PacketCodecs.INTEGER, SendSkillsLevelsTwoPayload::bows,
+            PacketCodecs.INTEGER, SendSkillsLevelsTwoPayload::cooking,
             SendSkillsLevelsTwoPayload::new);
     
     @Override

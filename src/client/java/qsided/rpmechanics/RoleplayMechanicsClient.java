@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -17,11 +18,14 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
+import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.requirements.ItemWithRequirements;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
 import qsided.rpmechanics.gui.other.ClassSelectionScreen;
+import qsided.rpmechanics.gui.other.OvenHandledScreen;
 import qsided.rpmechanics.gui.skills.*;
+import qsided.rpmechanics.items.QuesComponents;
 import qsided.rpmechanics.networking.*;
 
 import java.awt.*;
@@ -84,6 +88,8 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		
 		MinecraftClient client = MinecraftClient.getInstance();
 		
+		HandledScreens.register(QuesBlocks.OVEN_SCREEN_HANDLER, OvenHandledScreen::new);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		CollectionType useRef = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemWithRequirements.class);
 		CollectionType craftingRef = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemCraftingRequirement.class);
@@ -105,15 +111,18 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 				ClientPlayNetworking.send(new RequestSkillsPayload(client.player.getUuid().toString()));
 				
 				switch (getLastScreenOpen()) {
-                    case "enchanting" -> client.setScreen(new EnchantingSkillScreen());
-					case "combat" -> client.setScreen(new SwordsSkillScreen());
-					case "woodcutting" -> client.setScreen(new WoodcuttingSkillScreen());
-                    case "endurance" -> client.setScreen(new EnduranceSkillScreen());
-					case "agility" -> client.setScreen(new AgilitySkillScreen());
-					case "crafting" -> client.setScreen(new CraftingSkillScreen());
-					case "smithing" -> client.setScreen(new SmithingSkillScreen());
-					case "farming" -> client.setScreen(new FarmingSkillScreen());
-                    default -> client.setScreen(new MiningSkillScreen());
+                    case "enchanting" -> client.setScreen(new EnchantingScreen());
+					case "swords" -> client.setScreen(new SwordsScreen());
+					case "axes" -> client.setScreen(new AxesScreen());
+					case "bows" -> client.setScreen(new BowsScreen());
+					case "woodcutting" -> client.setScreen(new WoodcuttingScreen());
+                    case "endurance" -> client.setScreen(new EnduranceScreen());
+					case "agility" -> client.setScreen(new MiningScreen());
+					case "crafting" -> client.setScreen(new CraftingScreen());
+					case "smithing" -> client.setScreen(new SmithingScreen());
+					case "farming" -> client.setScreen(new FarmingScreen());
+                    case "cooking" -> client.setScreen(new CookingScreen());
+                    default -> client.setScreen(new AgilityScreen());
                 }
 			}
 			while (openClassSelection.wasPressed()) {
@@ -140,6 +149,14 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		});
 		
 		ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, lines) -> {
+			
+			if (stack.getComponents().contains(QuesComponents.COOK_QUALITY)) {
+				switch (stack.getOrDefault(QuesComponents.COOK_QUALITY, "average")) {
+					case "perfect" -> lines.add(Text.translatable("tooltip.rpmechanics.perfect_quality"));
+					case "burnt" -> lines.add(Text.translatable("tooltip.rpmechanics.burnt_quality"));
+					case "average" -> lines.add(Text.translatable("tooltip.rpmechanics.average_quality"));
+				}
+			}
 			
 			if (RoleplayMechanicsCommon.OWO_CONFIG.enableRequirements()) {
 				getItemCraftingReqs().forEach(item -> {
@@ -169,38 +186,43 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
         });
 		
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsPayload.ID, (payload, context) -> {
-			MiningSkillScreen.setMiningLevel(payload.mining());
-			EnchantingSkillScreen.setEnchantingLevel(payload.enchanting());
-			WoodcuttingSkillScreen.setWoodcuttingLevel(payload.woodcutting());
-			EnduranceSkillScreen.setEnduranceLevel(payload.endurance());
-			EnduranceSkillScreen.setMaxHealth(context.player().getMaxHealth());
-			AgilitySkillScreen.setAgilityLevel(payload.agility());
-			AgilitySkillScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH).getValue());
-			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
+			MiningScreen.setLevel(payload.mining());
+			EnchantingScreen.setLevel(payload.enchanting());
+			SwordsScreen.setLevel(payload.swords());
+			WoodcuttingScreen.setLevel(payload.woodcutting());
+			EnduranceScreen.setLevel(payload.endurance());
 			
+			
+			AgilityScreen.setLevel(payload.agility());
+			AgilityScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
 			});
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperiencePayload.ID, (payload, context) -> {
-			MiningSkillScreen.setMiningExperience(payload.mining());
-			EnchantingSkillScreen.setEnchantingExperience(payload.enchanting());
+			MiningScreen.setExp(payload.mining());
+			EnchantingScreen.setExp(payload.enchanting());
+			SwordsScreen.setExp(payload.swords());
+			WoodcuttingScreen.setExp(payload.woodcutting());
+			EnduranceScreen.setExp(payload.endurance());
 			
-			WoodcuttingSkillScreen.setWoodcuttingExperience(payload.woodcutting());
-			EnduranceSkillScreen.setEnduranceExperience(payload.endurance());
-			EnduranceSkillScreen.setMaxHealth(context.player().getMaxHealth());
-			AgilitySkillScreen.setAgilityExperience(payload.agility());
-			AgilitySkillScreen.setJumpStrength(context.player().getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH).getValue());
-			AgilitySkillScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
+			
+			AgilityScreen.setExp(payload.agility());
+			AgilityScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
 			});
 		
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsTwoPayload.ID, (payload, context) -> {
-			FarmingSkillScreen.setFarmingLevel(payload.farming());
-			CraftingSkillScreen.setCraftingLevel(payload.crafting());
-			SmithingSkillScreen.setSmithingLevel(payload.smithing());
+			FarmingScreen.setLevel(payload.farming());
+			AxesScreen.setLevel(payload.axes());
+			BowsScreen.setLevel(payload.bows());
+			CookingScreen.setLevel(payload.cooking());
+			CraftingScreen.setLevel(payload.crafting());
+			SmithingScreen.setLevel(payload.smithing());
 		});
 		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperienceTwoPayload.ID, (payload, context) -> {
-			FarmingSkillScreen.setFarmingExperience(payload.farming());
-			CraftingSkillScreen.setCraftingExperience(payload.crafting());
-			SmithingSkillScreen.setSmithingExperience(payload.smithing());
-			
+			FarmingScreen.setExp(payload.farming());
+			AxesScreen.setExp(payload.axes());
+			BowsScreen.setExp(payload.bows());
+			CookingScreen.setExp(payload.cooking());
+			CraftingScreen.setExp(payload.crafting());
+			SmithingScreen.setExp(payload.smithing());
 		});
 	}
 	
