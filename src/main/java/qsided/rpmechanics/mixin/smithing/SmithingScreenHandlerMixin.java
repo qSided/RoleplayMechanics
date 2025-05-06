@@ -48,7 +48,7 @@ public class SmithingScreenHandlerMixin {
         int randomInt = r.nextInt(100) + 1;
         if (getUser() instanceof ServerPlayerEntity player) {
             PlayerData state = StateManager.getPlayerState(player);
-            if (state.skillLevels.getOrDefault("smithing", 1) >= randomInt) {
+            if ((state.skillLevels.getOrDefault("smithing", 1)-1) >= randomInt) {
                 if (slot != 2) {
                     original.call(instance, slot);
                 }

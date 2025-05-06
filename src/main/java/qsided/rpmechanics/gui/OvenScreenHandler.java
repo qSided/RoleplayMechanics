@@ -1,19 +1,18 @@
 package qsided.rpmechanics.gui;
 
 import io.wispforest.owo.client.screens.OwoScreenHandler;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipePropertySet;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import qsided.rpmechanics.blocks.QuesBlocks;
-import qsided.rpmechanics.recipes.QuesRecipePropertySets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +51,29 @@ public class OvenScreenHandler extends ScreenHandler implements OwoScreenHandler
             PlayerInventory playerInventory
     ) {
         this(syncId, playerInventory, new SimpleInventory(7), new ArrayPropertyDelegate(4));
+    }
+    
+    protected void addPlayerHotbarSlots(Inventory playerInventory, int left, int y) {
+        for(int i = 0; i < 9; ++i) {
+            this.addSlot(new Slot(playerInventory, i, left + i * 18, y));
+        }
+        
+    }
+    
+    protected void addPlayerInventorySlots(Inventory playerInventory, int left, int top) {
+        for(int i = 0; i < 3; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(playerInventory, j + (i + 1) * 9, left + j * 18, top + i * 18));
+            }
+        }
+        
+    }
+    
+    protected void addPlayerSlots(Inventory playerInventory, int left, int top) {
+        this.addPlayerInventorySlots(playerInventory, left, top);
+        int i = 4;
+        int j = 58;
+        this.addPlayerHotbarSlots(playerInventory, left, top + 58);
     }
     
     @Override
@@ -122,7 +144,7 @@ public class OvenScreenHandler extends ScreenHandler implements OwoScreenHandler
     }
     
     protected boolean isFuel(ItemStack item) {
-        return this.world.getFuelRegistry().isFuel(item);
+        return AbstractFurnaceBlockEntity.canUseAsFuel(item);
     }
     
     public float getCookProgress() {

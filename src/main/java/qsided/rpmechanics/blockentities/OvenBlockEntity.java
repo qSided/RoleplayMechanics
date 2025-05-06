@@ -2,10 +2,10 @@ package qsided.rpmechanics.blockentities;
 
 import com.google.common.collect.Lists;
 import io.wispforest.owo.util.ImplementedInventory;
-import it.unimi.dsi.fastutil.objects.Reference2IntMap;
-import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
@@ -13,7 +13,6 @@ import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.item.FuelRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -22,12 +21,11 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.recipe.AbstractCookingRecipe;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.ServerRecipeManager;
+import net.minecraft.recipe.RecipeManager;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.input.SingleStackRecipeInput;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
@@ -36,6 +34,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -47,7 +46,6 @@ import qsided.rpmechanics.StateManager;
 import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 import qsided.rpmechanics.gui.OvenScreenHandler;
 import qsided.rpmechanics.items.QuesComponents;
-import qsided.rpmechanics.recipes.QuesRecipeTypes;
 
 import java.util.*;
 
@@ -63,8 +61,8 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
     int cookingTimeSpent;
     int cookingTimeTotal;
     UUID chefUUID;
-    private final Reference2IntOpenHashMap<RegistryKey<Recipe<?>>> recipesUsed = new Reference2IntOpenHashMap<>();
-    private final ServerRecipeManager.MatchGetter<SingleStackRecipeInput, ? extends AbstractCookingRecipe> matchGetter;
+    private final Object2IntOpenHashMap<Identifier> recipesUsed = new Object2IntOpenHashMap<>();
+    private final RecipeManager.MatchGetter<SingleStackRecipeInput, ? extends AbstractCookingRecipe> matchGetter;
     
     public OvenBlockEntity(BlockPos pos, BlockState state) {
         super(QuesBlockEntityTypes.OVEN_BLOCK, pos, state);
@@ -95,7 +93,7 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
                 return 4;
             }
         };
-        this.matchGetter = ServerRecipeManager.createCachedMatchGetter(QuesRecipeTypes.OVEN_RECIPE_TYPE);
+        this.matchGetter = RecipeManager.createCachedMatchGetter(RecipeType.SMOKING);
     }
     
     private boolean isBurning() {
@@ -125,15 +123,15 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
             if (blockEntity.isBurning() || (blockEntity.hasAtLeastOneIngredient(ingredients) && hasFuel)) {
                 int i = blockEntity.getMaxCountPerStack();
                 if (!blockEntity.isBurning() && ingredients.stream().anyMatch(stack -> !stack.getComponents().contains(QuesComponents.COOK_QUALITY))) {
-                    blockEntity.litTimeRemaining = blockEntity.getFuelTime(world.getFuelRegistry(), fuel);
-                    blockEntity.litTimeTotal = blockEntity.getFuelTime(world.getFuelRegistry(), fuel);
+                    blockEntity.litTimeRemaining = blockEntity.getFuelTime(fuel);
+                    blockEntity.litTimeTotal = blockEntity.getFuelTime(fuel);
                     if (blockEntity.isBurning() && ingredients.stream().allMatch(stack -> !stack.isEmpty() && !stack.getComponents().contains(QuesComponents.COOK_QUALITY))) {
                         isDone = true;
                         if (hasFuel) {
                             Item item = fuel.getItem();
                             fuel.decrement(1);
                             if (fuel.isEmpty()) {
-                                blockEntity.inventory.set(0, item.getRecipeRemainder());
+                                blockEntity.inventory.set(0, item.getRecipeRemainder().getDefaultStack());
                             }
                         }
                     }
@@ -189,6 +187,14 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
         }
     }
     
+    public void setLastRecipe(@Nullable RecipeEntry<?> recipe) {
+        if (recipe != null) {
+            Identifier identifier = recipe.id();
+            this.recipesUsed.addTo(identifier, 1);
+        }
+        
+    }
+    
     public static String getQuality(double chanceForPerfect, double chanceForBurnt, String perfect, String burnt, String average) {
         if (chanceForPerfect + chanceForBurnt > 1 || chanceForPerfect < 0 || chanceForBurnt < 0) {
             throw new IllegalArgumentException("Probabilities must be non-negative and sum up to at most 1");
@@ -221,9 +227,11 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
     
     public List<RecipeEntry<?>> getRecipesUsedAndDropExperience(ServerWorld world, Vec3d pos) {
         List<RecipeEntry<?>> list = Lists.newArrayList();
+        ObjectIterator<Object2IntMap.Entry<Identifier>> var4 = this.recipesUsed.object2IntEntrySet().iterator();
         
-        for (Reference2IntMap.Entry<RegistryKey<Recipe<?>>> entry : this.recipesUsed.reference2IntEntrySet()) {
-            world.getRecipeManager().get(entry.getKey()).ifPresent(recipe -> {
+        while(var4.hasNext()) {
+            Object2IntMap.Entry<Identifier> entry = var4.next();
+            world.getRecipeManager().get((Identifier)entry.getKey()).ifPresent((recipe) -> {
                 list.add(recipe);
                 dropExperience(world, pos, entry.getIntValue(), ((AbstractCookingRecipe)recipe.value()).getExperience());
             });
@@ -260,19 +268,22 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
             
             String quality = getQuality(chanceForPerfect, chanceForBurnt, "perfect", "burnt", "average");
             
-            int nutrition = itemToCraft.getComponents().getOrDefault(DataComponentTypes.FOOD, new FoodComponent(3, 0.3f, false)).nutrition();
-            float saturation = itemToCraft.getComponents().getOrDefault(DataComponentTypes.FOOD, new FoodComponent(3, 0.3f, false)).saturation();
+            int nutrition = itemToCraft.getComponents().getOrDefault(DataComponentTypes.FOOD, new FoodComponent(3, 0.3f, false, 1, Optional.ofNullable(Items.AIR.getDefaultStack()), List.of())).nutrition();
+            float saturation = itemToCraft.getComponents().getOrDefault(DataComponentTypes.FOOD, new FoodComponent(3, 0.3f, false, 1, Optional.ofNullable(Items.AIR.getDefaultStack()), List.of())).saturation();
+            float eatTime = itemToCraft.getComponents().getOrDefault(DataComponentTypes.FOOD, new FoodComponent(3, 0.3f, false, 1, Optional.ofNullable(Items.AIR.getDefaultStack()), List.of())).eatSeconds();
+            Optional<ItemStack> convert = itemToCraft.getComponents().getOrDefault(DataComponentTypes.FOOD, new FoodComponent(3, 0.3f, false, 1, Optional.ofNullable(Items.AIR.getDefaultStack()), List.of())).usingConvertsTo();
+            List<FoodComponent.StatusEffectEntry> effects = itemToCraft.getComponents().getOrDefault(DataComponentTypes.FOOD, new FoodComponent(3, 0.3f, false, 1, Optional.ofNullable(Items.AIR.getDefaultStack()), List.of())).effects();
             
             switch (quality) {
                 
                 case "perfect" -> {
                     itemToCraft.set(QuesComponents.COOK_QUALITY, quality);
-                    itemToCraft.set(DataComponentTypes.FOOD, new FoodComponent(nutrition*2, saturation*2, false));
+                    itemToCraft.set(DataComponentTypes.FOOD, new FoodComponent(nutrition*2, saturation*2, false, eatTime, convert, effects));
                     IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp((ServerPlayerEntity) world.getPlayerByUuid(chefUUID), state, "cooking", 16F);
                 }
                 case "burnt" -> {
                     itemToCraft.set(QuesComponents.COOK_QUALITY, quality);
-                    itemToCraft.set(DataComponentTypes.FOOD, new FoodComponent((int) (nutrition*0.75), (float) (saturation*0.75), false));
+                    itemToCraft.set(DataComponentTypes.FOOD, new FoodComponent((int) (nutrition*0.75), (float) (saturation*0.75), false, eatTime, convert, effects));
                     IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp((ServerPlayerEntity) world.getPlayerByUuid(chefUUID), state, "cooking", 8F);
                 }
                 case "average" -> {
@@ -286,8 +297,13 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
         }
     }
     
-    protected int getFuelTime(FuelRegistry fuelRegistry, ItemStack stack) {
-        return fuelRegistry.getFuelTicks(stack);
+    protected int getFuelTime(ItemStack fuel) {
+        if (fuel.isEmpty()) {
+            return 0;
+        } else {
+            Item item = fuel.getItem();
+            return (Integer) AbstractFurnaceBlockEntity.createFuelTimeMap().getOrDefault(item, 0);
+        }
     }
     
     private static int getCookTime(ServerWorld world, OvenBlockEntity furnace) {
@@ -329,7 +345,7 @@ public class OvenBlockEntity extends BlockEntity implements NamedScreenHandlerFa
             return false;
         } else {
             ItemStack itemStack = this.inventory.get(0);
-            return this.world.getFuelRegistry().isFuel(stack) || stack.isOf(Items.BUCKET) && !itemStack.isOf(Items.BUCKET);
+            return AbstractFurnaceBlockEntity.canUseAsFuel(stack) || stack.isOf(Items.BUCKET) && !itemStack.isOf(Items.BUCKET);
         }
     }
     

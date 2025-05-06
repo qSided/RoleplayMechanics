@@ -46,7 +46,7 @@ public class MiningSkill {
             });
             
             if (player.getEquippedStack(EquipmentSlot.MAINHAND).isIn(ItemTags.PICKAXES) || player.getEquippedStack(EquipmentSlot.MAINHAND).isIn(ItemTags.SHOVELS)
-                    && player.getEquippedStack(EquipmentSlot.MAINHAND).isDamaged() && randomInt <= miningLevel) {
+                    && player.getEquippedStack(EquipmentSlot.MAINHAND).isDamaged() && randomInt <= (miningLevel-1)) {
                 player.getEquippedStack(EquipmentSlot.MAINHAND).setDamage(Math.max(player.getEquippedStack(EquipmentSlot.MAINHAND).getDamage() - 1, 0));
             }
         });
@@ -57,12 +57,12 @@ public class MiningSkill {
                 Identifier efficiencyModifier = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "efficiency_modifier");
                 if (currentStack.isIn(ItemTags.PICKAXES) || currentStack.isIn(ItemTags.SHOVELS) && equipmentSlot.equals(EquipmentSlot.MAINHAND)) {
                     player.getAttributeInstance(EntityAttributes.PLAYER_MINING_EFFICIENCY).overwritePersistentModifier(
-                            new EntityAttributeModifier(efficiencyModifier, state.skillLevels.getOrDefault("mining", 1) * OWO_CONFIG.skillOptions.miningSettings.miningSpeed(),
+                            new EntityAttributeModifier(efficiencyModifier, (state.skillLevels.getOrDefault("mining", 1)-1) * OWO_CONFIG.skillOptions.miningSettings.miningSpeed(),
                                     EntityAttributeModifier.Operation.ADD_VALUE));
                     LOGGER.info("Added mining efficiency modifier");
                 } else if (currentStack.isIn(ItemTags.AXES) && equipmentSlot.equals(EquipmentSlot.MAINHAND)) {
                     player.getAttributeInstance(EntityAttributes.PLAYER_MINING_EFFICIENCY).overwritePersistentModifier(
-                            new EntityAttributeModifier(efficiencyModifier, state.skillLevels.getOrDefault("woodcutting", 1) * OWO_CONFIG.skillOptions.woodcuttingSettings.choppingSpeed(),
+                            new EntityAttributeModifier(efficiencyModifier, (state.skillLevels.getOrDefault("woodcutting", 1)-1) * OWO_CONFIG.skillOptions.woodcuttingSettings.choppingSpeed(),
                                     EntityAttributeModifier.Operation.ADD_VALUE));
                     LOGGER.info("Added chopping efficiency modifier");
                 } else if (player.getAttributeInstance(EntityAttributes.PLAYER_MINING_EFFICIENCY).hasModifier(efficiencyModifier)) {

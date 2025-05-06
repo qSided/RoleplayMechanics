@@ -54,6 +54,15 @@ public class QuesConfigModel {
             public double speed = 0.03;
         }
         @Nest
+        public CookingSettings cookingSettings = new CookingSettings();
+        public static class CookingSettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double speed = 0.1;
+            public double baseBurnChance = 0.6;
+            public double perfectChanceIncrease = 0.01;
+            public double burnChanceDecrease = 0.01;
+        }
+        @Nest
         public EnduranceSettings enduranceSettings = new EnduranceSettings();
         public static class EnduranceSettings {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
@@ -109,6 +118,16 @@ public class QuesConfigModel {
         @Nest
         public BowsOptions bowsOptions = new BowsOptions();
         public static class BowsOptions {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public float baseExperience = 60;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public Choices multiplicativeOrAdditive = Choices.MULTIPLY;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double amount = 3.4;
+        }
+        @Nest
+        public CookingOptions cookingOptions = new CookingOptions();
+        public static class CookingOptions {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
             public float baseExperience = 60;
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)

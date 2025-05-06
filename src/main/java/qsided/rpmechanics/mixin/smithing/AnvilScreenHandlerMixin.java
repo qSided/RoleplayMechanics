@@ -47,7 +47,7 @@ public class AnvilScreenHandlerMixin {
             PlayerData state = StateManager.getPlayerState(player);
             Random r = new Random();
             int randomInt = r.nextInt(100) + 1;
-            if (state.skillLevels.getOrDefault("smithing", 1) >= randomInt) {
+            if ((state.skillLevels.getOrDefault("smithing", 1)-1) >= randomInt) {
                 System.out.println("Didn't charge");
                 IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "smithing", (float) levelCost.get());
             } else {
@@ -72,7 +72,7 @@ public class AnvilScreenHandlerMixin {
                     PlayerData state = StateManager.getPlayerState(player);
                     Random r = new Random();
                     int randomInt = r.nextInt(100) + 1;
-                    if (state.skillLevels.getOrDefault("smithing", 1) >= randomInt) {
+                    if ((state.skillLevels.getOrDefault("smithing", 1)-1) >= randomInt) {
                         if (!item.isIn(ItemTags.SWORDS) &&
                                 !item.isIn(ItemTags.PICKAXES) &&
                                 !item.isIn(ItemTags.AXES) &&

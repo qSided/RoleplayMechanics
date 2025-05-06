@@ -45,7 +45,7 @@ public class MiningScreen extends SkillScreen {
     
     @Override
     protected ItemStack skillIcon() {
-        return QuesItems.MYTHRIL_PICKAXE.getDefaultStack();
+        return Items.GOLDEN_PICKAXE.getDefaultStack();
     }
     
     @Override

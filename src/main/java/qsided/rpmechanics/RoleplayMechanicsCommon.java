@@ -13,8 +13,12 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -22,6 +26,8 @@ import net.minecraft.world.gen.feature.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qsided.rpmechanics.attributes.RoleplayMechanicsAttributes;
+import qsided.rpmechanics.blockentities.QuesBlockEntityTypes;
+import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.commands.SkillsCommand;
 import qsided.rpmechanics.config.ConfigGenerator;
 import qsided.rpmechanics.config.RpMechanicsConfig;
@@ -29,6 +35,9 @@ import qsided.rpmechanics.config.experience_values.BlockExperience;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
 import qsided.rpmechanics.events.RoleplayClassSelectedCallback;
+import qsided.rpmechanics.gui.OvenScreenHandler;
+import qsided.rpmechanics.items.QuesComponents;
+import qsided.rpmechanics.items.QuesItems;
 import qsided.rpmechanics.networking.*;
 import qsided.rpmechanics.skills.*;
 import qsided.rpmechanics.skills.combat.ArcherySkill;
@@ -45,8 +54,10 @@ public class RoleplayMechanicsCommon implements ModInitializer {
  
 	public static final Logger LOGGER = LoggerFactory.getLogger("rpmechanics");
 	public static final String MOD_ID = "rpmechanics";
-	public static final RegistryKey<PlacedFeature> MYTHRIL_DEBRIS_FEATURE = RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(MOD_ID, "mythril_debris_feature"));
     public static final RpMechanicsConfig OWO_CONFIG = RpMechanicsConfig.createAndLoad();
+    
+    public static final ScreenHandlerType<OvenScreenHandler> OVEN_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER, Identifier.of(MOD_ID, "oven"), new ScreenHandlerType<>(OvenScreenHandler::new, FeatureSet.empty()));
+    
     
     public static final File RP_CLASSES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/classes/classes.json");
     public static final File MINING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/mining_xp_values.json");
@@ -116,7 +127,10 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(PlayerFirstJoinPayload.ID, PlayerFirstJoinPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendClassAndLevelPayload.ID, SendClassAndLevelPayload.CODEC);
         
-        
+        QuesItems.initialize();
+        QuesBlocks.initialize();
+        QuesBlockEntityTypes.initialize();
+        QuesComponents.initialize();
         
         ObjectMapper mapper = new ObjectMapper();
         CollectionType miningRef = TypeFactory.defaultInstance().constructCollectionType(List.class, BlockExperience.class);

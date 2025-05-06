@@ -30,7 +30,7 @@ public class WoodcuttingSkill {
             
             Random r = new Random();
             int randomInt = r.nextInt(100) + 1;
-            if (randomInt <= state.skillLevels.getOrDefault("woodcutting", 1) && getWoodcuttingXpValues().stream().anyMatch(blockExperience -> blockExperience.getId().equals(blockState.getBlock().asItem().toString()))) {
+            if (randomInt <= (state.skillLevels.getOrDefault("woodcutting", 1)-1) && getWoodcuttingXpValues().stream().anyMatch(blockExperience -> blockExperience.getId().equals(blockState.getBlock().asItem().toString()))) {
                 Block.getDroppedStacks(blockState, (ServerWorld) world, pos, blockEntity).forEach(stack -> {
                     Block.dropStack(world, pos, stack);
                 });

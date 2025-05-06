@@ -99,11 +99,11 @@ public class LevelUp {
                     Identifier bowsModifier = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "bows_modifier");
                     
                     player.getAttributeInstance(RoleplayMechanicsAttributes.BOW_PROJECTILE_ACCURACY).overwritePersistentModifier(
-                            new EntityAttributeModifier(bowsModifier, state.skillLevels.getOrDefault(skill, 1) * OWO_CONFIG.skillOptions.bowsSettings.accuracy(),
+                            new EntityAttributeModifier(bowsModifier, (state.skillLevels.getOrDefault(skill, 1)-1) * OWO_CONFIG.skillOptions.bowsSettings.accuracy(),
                                     EntityAttributeModifier.Operation.ADD_VALUE)
                     );
                     player.getAttributeInstance(RoleplayMechanicsAttributes.BOW_PROJECTILE_SPEED).overwritePersistentModifier(
-                            new EntityAttributeModifier(bowsModifier, state.skillLevels.getOrDefault(skill, 1) * OWO_CONFIG.skillOptions.bowsSettings.speed(),
+                            new EntityAttributeModifier(bowsModifier, (state.skillLevels.getOrDefault(skill, 1)-1) * OWO_CONFIG.skillOptions.bowsSettings.speed(),
                                     EntityAttributeModifier.Operation.ADD_VALUE)
                     );
                 }
@@ -111,7 +111,7 @@ public class LevelUp {
                     Identifier enduranceModifier = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "endurance_modifier");
                     
                     player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).overwritePersistentModifier(
-                            new EntityAttributeModifier(enduranceModifier, state.skillLevels.getOrDefault(skill, 1) * OWO_CONFIG.skillOptions.enduranceSettings.health(),
+                            new EntityAttributeModifier(enduranceModifier, (state.skillLevels.getOrDefault(skill, 1)-1) * OWO_CONFIG.skillOptions.enduranceSettings.health(),
                                     EntityAttributeModifier.Operation.ADD_VALUE)
                     );
                 }
@@ -119,13 +119,13 @@ public class LevelUp {
                     Identifier agilityModifier = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "agility_modifier");
                     
                     player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).overwritePersistentModifier(
-                            new EntityAttributeModifier(agilityModifier, state.skillLevels.getOrDefault(skill, 1) * OWO_CONFIG.skillOptions.agilitySettings.movementSpeed(), EntityAttributeModifier.Operation.ADD_VALUE)
+                            new EntityAttributeModifier(agilityModifier, (state.skillLevels.getOrDefault(skill, 1)-1) * OWO_CONFIG.skillOptions.agilitySettings.movementSpeed(), EntityAttributeModifier.Operation.ADD_VALUE)
                     );
                     player.getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).overwritePersistentModifier(
-                            new EntityAttributeModifier(agilityModifier, state.skillLevels.getOrDefault(skill, 1) * OWO_CONFIG.skillOptions.agilitySettings.safeFall(), EntityAttributeModifier.Operation.ADD_VALUE)
+                            new EntityAttributeModifier(agilityModifier, (state.skillLevels.getOrDefault(skill, 1)-1) * OWO_CONFIG.skillOptions.agilitySettings.safeFall(), EntityAttributeModifier.Operation.ADD_VALUE)
                     );
                     player.getAttributeInstance(EntityAttributes.GENERIC_JUMP_STRENGTH).overwritePersistentModifier(
-                            new EntityAttributeModifier(agilityModifier, state.skillLevels.getOrDefault(skill, 1) * OWO_CONFIG.skillOptions.agilitySettings.jumpStrength(), EntityAttributeModifier.Operation.ADD_VALUE)
+                            new EntityAttributeModifier(agilityModifier, (state.skillLevels.getOrDefault(skill, 1)-1) * OWO_CONFIG.skillOptions.agilitySettings.jumpStrength(), EntityAttributeModifier.Operation.ADD_VALUE)
                     );
                 }
             }

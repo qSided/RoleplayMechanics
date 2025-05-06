@@ -42,9 +42,9 @@ public class SwordsAndAxesSkills {
                 
                 if (next.isIn(ItemTags.AXES) && (!player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).hasModifier(axeModifier) && !player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED).hasModifier(axeModifier))) {
                     player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).addTemporaryModifier(
-                            new EntityAttributeModifier(axeModifier, axesLevel * OWO_CONFIG.skillOptions.axesSettings.damage(), EntityAttributeModifier.Operation.ADD_VALUE));
+                            new EntityAttributeModifier(axeModifier, (axesLevel-1) * OWO_CONFIG.skillOptions.axesSettings.damage(), EntityAttributeModifier.Operation.ADD_VALUE));
                     player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED).addTemporaryModifier(
-                            new EntityAttributeModifier(axeModifier, axesLevel * OWO_CONFIG.skillOptions.axesSettings.speed(), EntityAttributeModifier.Operation.ADD_VALUE));
+                            new EntityAttributeModifier(axeModifier, (axesLevel-1) * OWO_CONFIG.skillOptions.axesSettings.speed(), EntityAttributeModifier.Operation.ADD_VALUE));
                 } else if (player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).hasModifier(axeModifier) || player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED).hasModifier(axeModifier)) {
                     player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).removeModifier(axeModifier);
                     player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED).removeModifier(axeModifier);
@@ -52,9 +52,9 @@ public class SwordsAndAxesSkills {
                 
                 if (next.isIn(ItemTags.SWORDS) && (!player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).hasModifier(swordModifier) && !player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED).hasModifier(swordModifier))) {
                     player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).addTemporaryModifier(
-                            new EntityAttributeModifier(swordModifier, swordsLevel * OWO_CONFIG.skillOptions.swordsSettings.damage(), EntityAttributeModifier.Operation.ADD_VALUE));
+                            new EntityAttributeModifier(swordModifier, (swordsLevel-1) * OWO_CONFIG.skillOptions.swordsSettings.damage(), EntityAttributeModifier.Operation.ADD_VALUE));
                     player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED).addTemporaryModifier(
-                            new EntityAttributeModifier(swordModifier, swordsLevel * OWO_CONFIG.skillOptions.swordsSettings.speed(), EntityAttributeModifier.Operation.ADD_VALUE));
+                            new EntityAttributeModifier(swordModifier, (swordsLevel-1) * OWO_CONFIG.skillOptions.swordsSettings.speed(), EntityAttributeModifier.Operation.ADD_VALUE));
                 } else if (player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).hasModifier(axeModifier) || player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED).hasModifier(axeModifier)) {
                     player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).removeModifier(swordModifier);
                     player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_SPEED).removeModifier(swordModifier);

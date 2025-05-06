@@ -21,12 +21,14 @@ import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 public class QuesBlocks {
-    public static final Block MYTHRIL_DEBRIS = registerBlock("mythril_debris", PillarBlock::new, AbstractBlock.Settings.create().mapColor(DyeColor.CYAN).requiresTool().strength(35.0F, 1300.0F).sounds(BlockSoundGroup.ANCIENT_DEBRIS), false);
-    public static final Block OVEN = registerBlock("oven", OvenBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.STONE_GRAY)
-            .instrument(NoteBlockInstrument.BASEDRUM)
-            .requiresTool()
-            .strength(3.5F)
-            .luminance(createLightLevelFromLitBlockState(13)), true);
+    public static final Block OVEN = register(
+            new OvenBlock(AbstractBlock.Settings.create()
+                    .mapColor(MapColor.STONE_GRAY).instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresTool()
+                    .strength(3.5F)
+                    .luminance(createLightLevelFromLitBlockState(13))),
+            "oven",
+            true);
     
     public static final ScreenHandlerType<OvenScreenHandler> OVEN_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER, Identifier.of(RoleplayMechanicsCommon.MOD_ID, "oven_block"), new ScreenHandlerType<>(OvenScreenHandler::new, FeatureSet.empty()));
     
@@ -34,24 +36,18 @@ public class QuesBlocks {
         return state -> state.get(Properties.LIT) ? litLevel : 0;
     }
     
-    public static Block registerToRegistry(RegistryKey<Block> key, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, boolean shouldRegisterItem) {
-        Block block = factory.apply(settings.registryKey(key));
+    public static Block register(Block block, String name, boolean shouldRegisterItem) {
+        // Register the block and its item.
+        Identifier id = Identifier.of(RoleplayMechanicsCommon.MOD_ID, name);
+        
+        // Sometimes, you may not want to register an item for the block.
+        // Eg: if it's a technical block like `minecraft:air` or `minecraft:end_gateway`
         if (shouldRegisterItem) {
-            RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, key.getValue());
-            BlockItem blockItem = new BlockItem(block, new Item.Settings().registryKey(itemKey));
-            Registry.register(Registries.ITEM, itemKey, blockItem);
+            BlockItem blockItem = new BlockItem(block, new Item.Settings());
+            Registry.register(Registries.ITEM, id, blockItem);
         }
-        return Registry.register(Registries.BLOCK, key, block);
-    }
-    private static RegistryKey<Block> keyOf(String id) {
-        return RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(RoleplayMechanicsCommon.MOD_ID, id));
-    }
-    private static Block registerKey(String id, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, boolean shouldRegisterItem) {
-        return registerToRegistry(keyOf(id), factory, settings, shouldRegisterItem);
-    }
-    
-    private static Block registerBlock(String id, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, boolean shouldRegisterItem) {
-        return registerKey(id, factory, settings, shouldRegisterItem);
+        
+        return Registry.register(Registries.BLOCK, id, block);
     }
     
     public static void initialize() {
