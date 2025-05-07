@@ -22,5 +22,9 @@ public class ServerPlayerEntityMixin {
         if (stat.equals(Stats.WALK_ONE_CM) || stat.equals(Stats.SPRINT_ONE_CM) || stat.equals(Stats.CROUCH_ONE_CM) || stat.equals(Stats.CLIMB_ONE_CM)) {
             IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "agility", 0.05F);
         }
+        
+        //if (stat.equals(Stats.SWIM_ONE_CM)) {
+        //    IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "swimming", 0.05f);
+        //}
     }
 }
