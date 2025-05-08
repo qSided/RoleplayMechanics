@@ -12,7 +12,10 @@
   "item.rpmechanics.mythril_boots": "Mythril Boots",
   "block.rpmechanics.mythril_debris": "Mythril Debris",
   "block.rpmechanics.oven": "Oven",
-  "block.rpmechanics.oven.tooltip": "The oven is the sole means of levelling Cooking.",
+  "block.rpmechanics.oven.tooltip": {
+    "text": "Used to cook food and level Cooking",
+    "color": "gray"
+  },
   "item.rpmechanics.oven": "Oven",
   "item.rpmechanics.mythril_template_apply": "Netherite Equipment",
   "item.rpmechanics.mythril_template_ingredient": "Mythril Ingot",
@@ -227,7 +230,7 @@
     { "text": "You are using ", "color": "#2e469e"},
     { "text": "Roleplay Mechanics", "color": "#2e6391"},
     { "text": " version ", "color": "#2e469e"},
-    { "text": "0.9.1-", "color": "#3533d4"},
+    { "text": "0.9.3-", "color": "#3533d4"},
     { "text": "alpha", "color": "#b633d4"},
     { "text": ".", "color": "#2e469e"},
     { "text": " Press ", "color": "#2e469e"},
@@ -544,7 +547,7 @@
     { "text": "damage done", "color": "#288da6"},
     { "text": " to other creatures and your ", "color": "#d1d0cd"},
     { "text": "attack speed", "color": "#288da6"},
-    { "text": " with axes. Experience is gained by defeating any mobs with a sword.", "color": "#d1d0cd"}
+    { "text": " with axes. Experience is gained by defeating any mobs with an axe.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.bows": [
     { "text": "Your ", "color": "#d1d0cd"},

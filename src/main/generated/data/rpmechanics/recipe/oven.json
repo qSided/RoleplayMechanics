@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "g": {
+      "tag": "minecraft:logs"
+    },
+    "h": {
+      "item": "minecraft:smoker"
+    },
+    "j": {
+      "item": "minecraft:iron_ingot"
+    },
+    "w": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    " w ",
+    "ghg",
+    " j "
+  ],
+  "result": {
+    "count": 1,
+    "id": "rpmechanics:oven"
+  }
+}
