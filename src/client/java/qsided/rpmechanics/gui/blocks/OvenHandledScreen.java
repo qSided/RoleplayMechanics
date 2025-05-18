@@ -1,4 +1,4 @@
-package qsided.rpmechanics.gui.other;
+package qsided.rpmechanics.gui.blocks;
 
 import io.wispforest.owo.ui.base.BaseOwoHandledScreen;
 import io.wispforest.owo.ui.component.Components;

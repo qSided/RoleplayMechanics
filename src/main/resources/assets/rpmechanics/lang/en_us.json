@@ -12,6 +12,7 @@
   "item.rpmechanics.mythril_boots": "Mythril Boots",
   "block.rpmechanics.mythril_debris": "Mythril Debris",
   "block.rpmechanics.oven": "Oven",
+  "block.rpmechanics.se_enchanting_table": "Enchanting Table",
   "block.rpmechanics.oven.tooltip": {
     "text": "Used to cook food and level Cooking",
     "color": "gray"
@@ -23,6 +24,7 @@
   "item.rpmechanics.mythril_template_addition_description": "Add Mythril Ingot",
   "item.rpmechanics.mythril_upgrade_template": "Mythril Upgrade",
   "itemGroup.ques_items": "Roleplay Mechanics Items",
+  "container.enchant.power": "Enchant power: %s",
 
   "classes.rpmechanics.select": "Select",
   "classes.rpmechanics.yes": "Yes",
@@ -230,7 +232,7 @@
     { "text": "You are using ", "color": "#2e469e"},
     { "text": "Roleplay Mechanics", "color": "#2e6391"},
     { "text": " version ", "color": "#2e469e"},
-    { "text": "0.9.3-", "color": "#3533d4"},
+    { "text": "0.10.0-", "color": "#3533d4"},
     { "text": "alpha", "color": "#b633d4"},
     { "text": ".", "color": "#2e469e"},
     { "text": " Press ", "color": "#2e469e"},
@@ -455,6 +457,22 @@
     { "text": "↑", "color": "#8f8f96"}
   ],
 
+  "skills.rpmechanics.swimming": [
+    { "text": "Swimming", "color": "#2c79f5"}
+  ],
+  "skills.rpmechanics.swimming.oxygen_bonus": [
+    { "text": "Oxygen Bonus", "color": "white"},
+    { "text": ": ", "color": "gray"}
+  ],
+  "skills.rpmechanics.swimming.swimming_speed": [
+    { "text": "Swimming Speed", "color": "white"},
+    { "text": ": ", "color": "gray"}
+  ],
+  "skills.level_up.rpmechanics.swimming": [
+    { "text": "Swimming ", "color": "#2c79f5"},
+    { "text": "↑", "color": "#8f8f96"}
+  ],
+
   "skills.rpmechanics.crafting": [
     { "text": "Crafting", "color": "gold"}
   ],
@@ -599,6 +617,15 @@
     { "text": " when using an anvil and the ", "color": "#d1d0cd"},
     { "text": "chance of saving materials", "color": "#5e5d5d"},
     { "text": " when using an anvil or smithing table. Experience is gained by using an anvil or smithing table.", "color": "#d1d0cd"}
+  ],
+  "skills.descriptions.rpmechanics.swimming": [
+    { "text": "Your ", "color": "#d1d0cd"},
+    { "text": "swimming", "color": "#2c79f5"},
+    { "text": " skill determines your ", "color": "#d1d0cd"},
+    { "text": "oxygen amount", "color": "#1961d4"},
+    { "text": " while underwater and your ", "color": "#d1d0cd"},
+    { "text": "swimming speed", "color": "#1961d4"},
+    { "text": ". Experience is gained by swimming in water.", "color": "#d1d0cd"}
   ],
   "skills.descriptions.rpmechanics.cooking": [
     { "text": "Your ", "color": "#d1d0cd"},

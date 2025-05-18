@@ -6,6 +6,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.config.QuesConfigModel;
+import qsided.rpmechanics.skills.milestones.SkillMilestone;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -74,44 +75,52 @@ public class EnchantingScreen extends SkillScreen {
         return stats;
     }
     
-    private static boolean isBetween(int x, int lower, int upper) {
-        return lower <= x && x <= upper;
-    }
     private static int costReduction(Integer level) {
-        if (isBetween(level, 33, 65)) {
-            return 1;
-        } else if (isBetween(level, 66, 100)) {
-            return 2;
+        int costReduction = 0;
+        for (SkillMilestone skillMilestone : RoleplayMechanicsCommon.getMilestones()) {
+            if (skillMilestone.hasMet(level) &&
+                    skillMilestone.getSkill().equals("enchanting") &&
+                    skillMilestone.getRewardType().equals("ENCHANT_COST_REDUCTION") &&
+                    skillMilestone.getRewardAmount() != null) {
+                costReduction += skillMilestone.getRewardAmount();
+            }
         }
-        return 0;
+        
+        return costReduction;
     }
     private static int modifier (Integer level) {
-        if (isBetween(level, 20, 39)) {
-            return 1;
+        int powerModifier = 0;
+        for (SkillMilestone skillMilestone : RoleplayMechanicsCommon.getMilestones()) {
+            if (skillMilestone.hasMet(level) &&
+                    skillMilestone.getSkill().equals("enchanting") &&
+                    skillMilestone.getRewardType().equals("ENCHANT_POWER") &&
+                    skillMilestone.getRewardAmount() != null) {
+                powerModifier += skillMilestone.getRewardAmount();
+            }
         }
-        else if (isBetween(level, 40, 59)) {
-            return 2;
-        }
-        else if (isBetween(level, 60, 79)) {
-            return 3;
-        }
-        else if (isBetween(level, 80, 99)) {
-            return 4;
-        }
-        else if (level >= 100) {
-            return 5;
-        }
-        return 0;
+        
+        return powerModifier;
     }
     
     @Override
     protected int milestoneCount() {
-        return 1;
+        return (int) RoleplayMechanicsCommon.getMilestones().stream().filter(skillMilestone -> skillMilestone.getSkill().equals("enchanting")).count();
     }
     
     @Override
     protected List<Milestone> milestones() {
-        return List.of();
+        List<Milestone> milestones = new ArrayList<>();
+        
+        RoleplayMechanicsCommon.getMilestones()
+                .stream()
+                .filter(
+                        skillMilestone -> skillMilestone.getSkill().equals("enchanting")
+                )
+                .forEach(
+                        skillMilestone -> milestones.add(new Milestone(skillMilestone.getLevelReq(), Text.literal(skillMilestone.getText())))
+                );
+        
+        return milestones;
     }
     
     @Override

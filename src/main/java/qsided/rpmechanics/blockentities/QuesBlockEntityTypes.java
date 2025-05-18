@@ -27,6 +27,12 @@ public class QuesBlockEntityTypes {
             QuesBlocks.OVEN
     );
     
+    public static final BlockEntityType<SkillEnabledEnchantingTableBlockEntity> ENCHANTING_TABLE_BLOCK = register(
+            "enchanting_table",
+            SkillEnabledEnchantingTableBlockEntity::new,
+            QuesBlocks.ENCHANTING_TABLE
+    );
+    
     public static void initialize() {
     }
 

@@ -5,7 +5,11 @@ import io.wispforest.owo.ui.component.Components;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.container.GridLayout;
+import io.wispforest.owo.ui.container.ScrollContainer;
 import io.wispforest.owo.ui.core.*;
+import io.wispforest.owo.ui.core.Color;
+import io.wispforest.owo.ui.core.Component;
+import io.wispforest.owo.ui.core.Insets;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
@@ -16,6 +20,7 @@ import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.config.QuesConfigModel;
 import qsided.rpmechanics.items.QuesItems;
 
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -87,7 +92,9 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
     
     protected void drawSkillStats(FlowLayout root) {
         DecimalFormat df = new DecimalFormat();
+        DecimalFormat df2 = new DecimalFormat();
         df.setMaximumFractionDigits(2);
+        df2.setMaximumFractionDigits(0);
         
         root.childById(FlowLayout.class, "main-container")
                 .child(
@@ -112,7 +119,7 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
         if (skillLevel() < 100) {
             root.childById(GridLayout.class, "skill-stats")
                     .child(
-                            Components.label(Text.of(df.format(skillExperience()) + "/" + expToNext()))
+                            Components.label(Text.of(df.format(skillExperience()) + "/" + df2.format(expToNext())))
                                     .horizontalTextAlignment(HorizontalAlignment.RIGHT)
                                     .sizing(Sizing.fill(50), Sizing.content()),
                             1,
@@ -191,7 +198,9 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
                                 Containers.horizontalScroll(Sizing.fill(60), Sizing.content(),
                                         Components.label(milestones().get(j).getTranslationKey())
                                                 .horizontalTextAlignment(HorizontalAlignment.LEFT)
-                                ).positioning(Positioning.absolute(11, (j)*10))
+                                )
+                                        .scrollbar(ScrollContainer.Scrollbar.flat(Color.ofHsv(26, 0, 100, 0.2f)))
+                                        .positioning(Positioning.absolute(11, (j)*10))
                         )
                         .child(Components.label(Text.literal("Lv." + (milestones().get(j).getRequiredLevel())))
                                 .horizontalTextAlignment(HorizontalAlignment.RIGHT)
@@ -272,6 +281,13 @@ public abstract class SkillScreen extends BaseOwoScreen<FlowLayout> {
                         .button(Text.translatable("skills.rpmechanics.smithing"), button -> {
                             RoleplayMechanicsClient.setLastScreenOpen("smithing");
                             client.setScreen(new SmithingScreen());
+                        })
+                        
+                        .divider()
+                        
+                        .button(Text.translatable("skills.rpmechanics.swimming"), button -> {
+                            RoleplayMechanicsClient.setLastScreenOpen("swimming");
+                            client.setScreen(new SwimmingScreen());
                         })
                         
                         .divider()

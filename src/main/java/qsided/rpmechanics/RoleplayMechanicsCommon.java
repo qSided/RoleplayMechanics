@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
@@ -13,16 +14,10 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.resource.featuretoggle.FeatureSet;
-import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.feature.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qsided.rpmechanics.attributes.RoleplayMechanicsAttributes;
@@ -35,7 +30,7 @@ import qsided.rpmechanics.config.experience_values.BlockExperience;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
 import qsided.rpmechanics.events.RoleplayClassSelectedCallback;
-import qsided.rpmechanics.gui.OvenScreenHandler;
+import qsided.rpmechanics.gui.SkillEnabledEnchantingTableScreenHandler;
 import qsided.rpmechanics.items.QuesComponents;
 import qsided.rpmechanics.items.QuesItems;
 import qsided.rpmechanics.networking.*;
@@ -44,6 +39,7 @@ import qsided.rpmechanics.skills.combat.ArcherySkill;
 import qsided.rpmechanics.skills.combat.SwordsAndAxesSkills;
 import qsided.rpmechanics.skills.leveling.ExperienceUp;
 import qsided.rpmechanics.skills.leveling.LevelUp;
+import qsided.rpmechanics.skills.milestones.SkillMilestone;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,10 +52,8 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 	public static final String MOD_ID = "rpmechanics";
     public static final RpMechanicsConfig OWO_CONFIG = RpMechanicsConfig.createAndLoad();
     
-    public static final ScreenHandlerType<OvenScreenHandler> OVEN_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER, Identifier.of(MOD_ID, "oven"), new ScreenHandlerType<>(OvenScreenHandler::new, FeatureSet.empty()));
-    
-    
     public static final File RP_CLASSES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/classes/classes.json");
+    public static final File MILESTONES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/milestones.xml");
     public static final File MINING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/mining_xp_values.json");
     public static final File CRAFTING_REQS_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting_level_reqs.json");
     public static final File FARMING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/farming_xp_values.json");
@@ -67,6 +61,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
     
     static Map<Integer, RoleplayClass> RP_CLASSES;
     static List<BlockExperience> MINING_XP_VALUES;
+    static List<SkillMilestone> MILESTONES;
     
     public static List<BlockExperience> getWoodcuttingXpValues() {
         return WOODCUTTING_XP_VALUES;
@@ -113,11 +108,21 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         RoleplayMechanicsCommon.CRAFTING_REQS = craftingReqsFile;
     }
     
+    public static List<SkillMilestone> getMilestones() {
+        return MILESTONES;
+    }
+    
+    public static void setMilestones(List<SkillMilestone> milestones) {
+        RoleplayMechanicsCommon.MILESTONES = milestones;
+    }
+    
     @Override
 	public void onInitialize() {
         PayloadTypeRegistry.playS2C().register(LevelUpPayload.ID, LevelUpPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(RequestSkillsPayload.ID, RequestSkillsPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendSkillsLevelsPayload.ID, SendSkillsLevelsPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendLevelsPayload.ID, SendLevelsPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendExperiencePayload.ID, SendExperiencePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendSkillsLevelsTwoPayload.ID, SendSkillsLevelsTwoPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendSkillsExperiencePayload.ID, SendSkillsExperiencePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendSkillsExperienceTwoPayload.ID, SendSkillsExperienceTwoPayload.CODEC);
@@ -126,6 +131,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         PayloadTypeRegistry.playC2S().register(SendClassSelectedPayload.ID, SendClassSelectedPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(PlayerFirstJoinPayload.ID, PlayerFirstJoinPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SendClassAndLevelPayload.ID, SendClassAndLevelPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SendPlayerS2CPayload.ID, SendPlayerS2CPayload.CODEC);
         
         QuesItems.initialize();
         QuesBlocks.initialize();
@@ -133,8 +139,10 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         QuesComponents.initialize();
         
         ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper xmlMapper = new XmlMapper();
         CollectionType miningRef = TypeFactory.defaultInstance().constructCollectionType(List.class, BlockExperience.class);
         CollectionType craftingRef = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemCraftingRequirement.class);
+        CollectionType milestoneRef = TypeFactory.defaultInstance().constructCollectionType(List.class, SkillMilestone.class);
         try {
             ConfigGenerator.genReqsConfig();
             ConfigGenerator.genWoodcuttingConfig();
@@ -143,18 +151,21 @@ public class RoleplayMechanicsCommon implements ModInitializer {
             ConfigGenerator.genPassiveMobs();
             ConfigGenerator.genCraftingConfig();
             ConfigGenerator.genFarmingConfig();
+            ConfigGenerator.genDefaultMilestones();
             
             Map<Integer, RoleplayClass> rpClasses = mapper.readValue(RP_CLASSES_FILE, new TypeReference<Map<Integer, RoleplayClass>>() {});
             List<BlockExperience> miningXpValues = mapper.readValue(MINING_XP_VALUES_FILE, miningRef);
             List<BlockExperience> farmingXpValues = mapper.readValue(FARMING_XP_VALUES_FILE, miningRef);
             List<BlockExperience> woodcuttingXpValues = mapper.readValue(WOODCUTTING_XP_VALUES_FILE, miningRef);
             List<ItemCraftingRequirement> craftingReqs = mapper.readValue(CRAFTING_REQS_FILE, craftingRef);
+            List<SkillMilestone> milestones = xmlMapper.readValue(MILESTONES_FILE, milestoneRef);
             
             setRpClasses(rpClasses);
             setMiningXpValues(miningXpValues);
             setCraftingReqs(craftingReqs);
             setFarmingXpValues(farmingXpValues);
             setWoodcuttingXpValues(woodcuttingXpValues);
+            setMilestones(milestones);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -268,6 +279,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 		Integer smithingLevel = playerState.skillLevels.getOrDefault("smithing", 1);
 		Integer farmingLevel = playerState.skillLevels.getOrDefault("farming", 1);
 		Integer cookingLevel = playerState.skillLevels.getOrDefault("cooking", 1);
+		Integer swimmingLevel = playerState.skillLevels.getOrDefault("swimming", 1);
 		
 		Float miningExp = playerState.skillExperience.getOrDefault("mining", 0F);
 		Float enchantingExp = playerState.skillExperience.getOrDefault("enchanting", 0F);
@@ -281,12 +293,46 @@ public class RoleplayMechanicsCommon implements ModInitializer {
 		Float smithingExp = playerState.skillExperience.getOrDefault("smithing", 0F);
         Float farmingExp = playerState.skillExperience.getOrDefault("farming", 0F);
         Float cookingExp = playerState.skillExperience.getOrDefault("cooking", 0F);
+        Float swimmingExp = playerState.skillExperience.getOrDefault("swimming", 0F);
         
         ServerPlayNetworking.send(player, new SendClassAndLevelPayload(playerState.rpClass, playerState.rpClassLevel, playerState.rpClassExp));
+        
+        NbtCompound levels = new NbtCompound();
+        levels.putInt("agility", agilityLevel);
+		levels.putInt("axes", axesLevel);
+		levels.putInt("bows", bowsLevel);
+		levels.putInt("cooking", cookingLevel);
+		levels.putInt("crafting", craftingLevel);
+		levels.putInt("enchanting", enchantingLevel);
+		levels.putInt("endurance", enduranceLevel);
+		levels.putInt("farming", farmingLevel);
+		levels.putInt("mining", miningLevel);
+		levels.putInt("smithing", smithingLevel);
+		levels.putInt("swimming", swimmingLevel);
+		levels.putInt("swords", swordsLevel);
+		levels.putInt("woodcutting", woodcuttingLevel);
+        
+        NbtCompound experience = new NbtCompound();
+        experience.putFloat("agility", agilityExp);
+		experience.putFloat("axes", axesExp);
+		experience.putFloat("bows", bowsExp);
+		experience.putFloat("cooking", cookingExp);
+		experience.putFloat("crafting", craftingExp);
+		experience.putFloat("enchanting", enchantingExp);
+		experience.putFloat("endurance", enduranceExp);
+		experience.putFloat("farming", farmingExp);
+		experience.putFloat("mining", miningExp);
+		experience.putFloat("smithing", smithingExp);
+		experience.putFloat("swimming", swimmingExp);
+		experience.putFloat("swords", swordsExp);
+		experience.putFloat("woodcutting", woodcuttingExp);
+        
+        ServerPlayNetworking.send(player, new SendLevelsPayload(levels));
+		ServerPlayNetworking.send(player, new SendExperiencePayload(experience));
 		
-		ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, swordsLevel, woodcuttingLevel, enduranceLevel, agilityLevel));
-		ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, smithingLevel, craftingLevel, axesLevel, bowsLevel, cookingLevel));
-		ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, swordsExp, woodcuttingExp, enduranceExp, agilityExp));
-        ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, smithingExp, craftingExp, axesExp, bowsExp, cookingExp));
+		//ServerPlayNetworking.send(player, new SendSkillsLevelsPayload(miningLevel, enchantingLevel, swordsLevel, woodcuttingLevel, enduranceLevel, agilityLevel));
+		//ServerPlayNetworking.send(player, new SendSkillsLevelsTwoPayload(farmingLevel, smithingLevel, craftingLevel, axesLevel, bowsLevel, cookingLevel));
+		//ServerPlayNetworking.send(player, new SendSkillsExperiencePayload(miningExp, enchantingExp, swordsExp, woodcuttingExp, enduranceExp, agilityExp));
+        //ServerPlayNetworking.send(player, new SendSkillsExperienceTwoPayload(farmingExp, smithingExp, craftingExp, axesExp, bowsExp, cookingExp));
 	}
 }

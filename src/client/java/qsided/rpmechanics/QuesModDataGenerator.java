@@ -2,6 +2,8 @@ package qsided.rpmechanics;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import qsided.rpmechanics.data.QuesBlockTagProvider;
+import qsided.rpmechanics.data.QuesRecipeProvider;
 
 public class QuesModDataGenerator implements DataGeneratorEntrypoint {
 	@Override
@@ -10,7 +12,7 @@ public class QuesModDataGenerator implements DataGeneratorEntrypoint {
 		
 		//quesPack.addProvider(QuesModelProvider::new);
 		//quesPack.addProvider(QuesItemTagProvider::new);
-		//quesPack.addProvider(QuesBlockTagProvider::new);
+		quesPack.addProvider(QuesBlockTagProvider::new);
 		quesPack.addProvider(QuesRecipeProvider::new);
 		//quesPack.addProvider(QuesBlockLootTableProvider::new);
 	}

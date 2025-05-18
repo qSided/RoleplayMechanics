@@ -1,4 +1,4 @@
-package qsided.rpmechanics;
+package qsided.rpmechanics.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -30,6 +30,16 @@ public class QuesRecipeProvider extends FabricRecipeProvider {
                 .input('h', Items.SMOKER)
                 .input('j', Items.IRON_INGOT)
                 .criterion(hasItem(Items.SMOKER), conditionsFromItem(QuesBlocks.OVEN))
+                .offerTo(recipeExporter);
+        
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, QuesBlocks.ENCHANTING_TABLE, 1)
+                .pattern(" w ")
+                .pattern("ghg")
+                .pattern("hhh")
+                .input('w', Items.BOOK)
+                .input('g', Items.DIAMOND)
+                .input('h', Items.OBSIDIAN)
+                .criterion(hasItem(Items.OBSIDIAN), conditionsFromItem(QuesBlocks.ENCHANTING_TABLE))
                 .offerTo(recipeExporter);
     }
 }

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "g": {
+      "item": "minecraft:diamond"
+    },
+    "h": {
+      "item": "minecraft:obsidian"
+    },
+    "w": {
+      "item": "minecraft:book"
+    }
+  },
+  "pattern": [
+    " w ",
+    "ghg",
+    "hhh"
+  ],
+  "result": {
+    "count": 1,
+    "id": "rpmechanics:se_enchanting_table"
+  }
+}

@@ -1,3 +1,5 @@
-// 1.21.1	2025-05-08T07:15:32.3925393	Roleplay Mechanics/Recipes
+// 1.21.1	2025-05-18T10:20:56.2421635	Roleplay Mechanics/Recipes
 30c1042b95caa65fdea9a5536c17e5508d1525b1 data\rpmechanics\advancement\recipes\redstone\oven.json
+18e2ea3b482a8854d0303706475c5d6556b11186 data\rpmechanics\advancement\recipes\misc\se_enchanting_table.json
 5dee59a1333d9db8de0dad14a386eb393b8cf2ca data\rpmechanics\recipe\oven.json
+f901a1b99302b7528bf17b12dc68bdbfbd4b1a05 data\rpmechanics\recipe\se_enchanting_table.json

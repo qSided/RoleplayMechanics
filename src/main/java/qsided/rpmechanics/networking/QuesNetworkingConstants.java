@@ -7,6 +7,12 @@ public class QuesNetworkingConstants {
     public static final Identifier LEVEL_UP = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "level_up");
     public static final Identifier REQUEST_SKILLS = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "request_skills");
     public static final Identifier SEND_SKILLS_LEVELS = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_skills_levels");
+    
+    public static final Identifier SEND_SKILLS_LEVELS_NBT = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_levels");
+    public static final Identifier SEND_SKILLS_EXPERIENCE_NBT = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_experience");
+    
+    public static final Identifier SEND_PLAYER_S2C = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_player_s2c");
+    
     public static final Identifier SEND_SKILLS_LEVELS_TWO = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_skills_levels_two");
     public static final Identifier SEND_SKILLS_EXPERIENCE = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_skills_experience");
     public static final Identifier SEND_SKILLS_EXPERIENCE_TWO = Identifier.of(RoleplayMechanicsCommon.MOD_ID, "send_skills_experience_two");

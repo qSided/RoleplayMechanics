@@ -1,6 +1,5 @@
 package qsided.rpmechanics.skills.leveling;
 
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import qsided.rpmechanics.RoleplayMechanicsCommon;
 import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;

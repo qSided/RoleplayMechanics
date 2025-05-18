@@ -12,18 +12,22 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
+import qsided.rpmechanics.blockentities.QuesBlockEntityTypes;
 import qsided.rpmechanics.blocks.QuesBlocks;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.requirements.ItemWithRequirements;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
+import qsided.rpmechanics.gui.blocks.SkillEnabledEnchantingTableBlockEntityRenderer;
 import qsided.rpmechanics.gui.other.ClassSelectionScreen;
-import qsided.rpmechanics.gui.other.OvenHandledScreen;
+import qsided.rpmechanics.gui.blocks.OvenHandledScreen;
+import qsided.rpmechanics.gui.blocks.SkillEnabledEnchantingTableHandledScreen;
 import qsided.rpmechanics.gui.skills.*;
 import qsided.rpmechanics.items.QuesComponents;
 import qsided.rpmechanics.networking.*;
@@ -89,6 +93,8 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		MinecraftClient client = MinecraftClient.getInstance();
 		
 		HandledScreens.register(QuesBlocks.OVEN_SCREEN_HANDLER, OvenHandledScreen::new);
+		HandledScreens.register(QuesBlocks.SE_ENCHANTING_TABLE_SCREEN_HANDLER, SkillEnabledEnchantingTableHandledScreen::new);
+		BlockEntityRendererFactories.register(QuesBlockEntityTypes.ENCHANTING_TABLE_BLOCK, SkillEnabledEnchantingTableBlockEntityRenderer::new);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		CollectionType useRef = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemWithRequirements.class);
@@ -122,6 +128,7 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 					case "smithing" -> client.setScreen(new SmithingScreen());
 					case "farming" -> client.setScreen(new FarmingScreen());
                     case "cooking" -> client.setScreen(new CookingScreen());
+                    case "swimming" -> client.setScreen(new SwimmingScreen());
                     default -> client.setScreen(new AgilityScreen());
                 }
 			}
@@ -133,6 +140,10 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 		ClientPlayNetworking.registerGlobalReceiver(SendClassAndLevelPayload.ID, (payload, context) -> {
 			setPlayerClassName(payload.rpClassId());
 			setPlayerClassLevel(payload.level());
+		});
+		
+		ClientPlayNetworking.registerGlobalReceiver(SendPlayerS2CPayload.ID, (payload, context) -> {
+			SkillEnabledEnchantingTableHandledScreen.setEnchantingLevel(payload.enchantingLevel());
 		});
 		
 		ClientPlayNetworking.registerGlobalReceiver(LevelUpPayload.ID, (payload, context) -> {
@@ -185,45 +196,78 @@ public class RoleplayMechanicsClient implements ClientModInitializer {
 			}
         });
 		
-		ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsPayload.ID, (payload, context) -> {
-			MiningScreen.setLevel(payload.mining());
-			EnchantingScreen.setLevel(payload.enchanting());
-			SwordsScreen.setLevel(payload.swords());
-			WoodcuttingScreen.setLevel(payload.woodcutting());
-			EnduranceScreen.setLevel(payload.endurance());
-			
-			
-			AgilityScreen.setLevel(payload.agility());
-			AgilityScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
-			});
-		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperiencePayload.ID, (payload, context) -> {
-			MiningScreen.setExp(payload.mining());
-			EnchantingScreen.setExp(payload.enchanting());
-			SwordsScreen.setExp(payload.swords());
-			WoodcuttingScreen.setExp(payload.woodcutting());
-			EnduranceScreen.setExp(payload.endurance());
-			
-			
-			AgilityScreen.setExp(payload.agility());
-			AgilityScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
-			});
+		ClientPlayNetworking.registerGlobalReceiver(SendLevelsPayload.ID, ((payload, context) -> {
+			AgilityScreen.setLevel(payload.levels().getInt("agility"));
+			AgilityScreen.setSafeDistance(context.player().getAttributeValue(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE));
+			AxesScreen.setLevel(payload.levels().getInt("axes"));
+			BowsScreen.setLevel(payload.levels().getInt("bows"));
+			CookingScreen.setLevel(payload.levels().getInt("cooking"));
+			CraftingScreen.setLevel(payload.levels().getInt("crafting"));
+			EnchantingScreen.setLevel(payload.levels().getInt("enchanting"));
+			EnduranceScreen.setLevel(payload.levels().getInt("endurance"));
+			FarmingScreen.setLevel(payload.levels().getInt("farming"));
+			MiningScreen.setLevel(payload.levels().getInt("mining"));
+			SmithingScreen.setLevel(payload.levels().getInt("smithing"));
+			SwimmingScreen.setLevel(payload.levels().getInt("swimming"));
+			SwordsScreen.setLevel(payload.levels().getInt("swords"));
+			WoodcuttingScreen.setLevel(payload.levels().getInt("woodcutting"));
+		}));
+		ClientPlayNetworking.registerGlobalReceiver(SendExperiencePayload.ID, ((payload, context) -> {
+			AgilityScreen.setExp(payload.experience().getFloat("agility"));
+			AgilityScreen.setSafeDistance(context.player().getAttributeValue(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE));
+			AxesScreen.setExp(payload.experience().getFloat("axes"));
+			BowsScreen.setExp(payload.experience().getFloat("bows"));
+			CookingScreen.setExp(payload.experience().getFloat("cooking"));
+			CraftingScreen.setExp(payload.experience().getFloat("crafting"));
+			EnchantingScreen.setExp(payload.experience().getFloat("enchanting"));
+			EnduranceScreen.setExp(payload.experience().getFloat("endurance"));
+			FarmingScreen.setExp(payload.experience().getFloat("farming"));
+			MiningScreen.setExp(payload.experience().getFloat("mining"));
+			SmithingScreen.setExp(payload.experience().getFloat("smithing"));
+			SwimmingScreen.setExp(payload.experience().getFloat("swimming"));
+			SwordsScreen.setExp(payload.experience().getFloat("swords"));
+			WoodcuttingScreen.setExp(payload.experience().getFloat("woodcutting"));
+		}));
 		
-		ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsTwoPayload.ID, (payload, context) -> {
-			FarmingScreen.setLevel(payload.farming());
-			AxesScreen.setLevel(payload.axes());
-			BowsScreen.setLevel(payload.bows());
-			CookingScreen.setLevel(payload.cooking());
-			CraftingScreen.setLevel(payload.crafting());
-			SmithingScreen.setLevel(payload.smithing());
-		});
-		ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperienceTwoPayload.ID, (payload, context) -> {
-			FarmingScreen.setExp(payload.farming());
-			AxesScreen.setExp(payload.axes());
-			BowsScreen.setExp(payload.bows());
-			CookingScreen.setExp(payload.cooking());
-			CraftingScreen.setExp(payload.crafting());
-			SmithingScreen.setExp(payload.smithing());
-		});
+		//ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsPayload.ID, (payload, context) -> {
+		//	MiningScreen.setLevel(payload.mining());
+		//	EnchantingScreen.setLevel(payload.enchanting());
+		//	SwordsScreen.setLevel(payload.swords());
+		//	WoodcuttingScreen.setLevel(payload.woodcutting());
+		//	EnduranceScreen.setLevel(payload.endurance());
+		//
+		//
+		//	AgilityScreen.setLevel(payload.agility());
+		//	AgilityScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
+		//	});
+		//ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperiencePayload.ID, (payload, context) -> {
+		//	MiningScreen.setExp(payload.mining());
+		//	EnchantingScreen.setExp(payload.enchanting());
+		//	SwordsScreen.setExp(payload.swords());
+		//	WoodcuttingScreen.setExp(payload.woodcutting());
+		//	EnduranceScreen.setExp(payload.endurance());
+		//
+		//
+		//	AgilityScreen.setExp(payload.agility());
+		//	AgilityScreen.setSafeDistance(context.player().getAttributeInstance(EntityAttributes.GENERIC_SAFE_FALL_DISTANCE).getValue());
+		//	});
+		//
+		//ClientPlayNetworking.registerGlobalReceiver(SendSkillsLevelsTwoPayload.ID, (payload, context) -> {
+		//	FarmingScreen.setLevel(payload.farming());
+		//	AxesScreen.setLevel(payload.axes());
+		//	BowsScreen.setLevel(payload.bows());
+		//	CookingScreen.setLevel(payload.cooking());
+		//	CraftingScreen.setLevel(payload.crafting());
+		//	SmithingScreen.setLevel(payload.smithing());
+		//});
+		//ClientPlayNetworking.registerGlobalReceiver(SendSkillsExperienceTwoPayload.ID, (payload, context) -> {
+		//	FarmingScreen.setExp(payload.farming());
+		//	AxesScreen.setExp(payload.axes());
+		//	BowsScreen.setExp(payload.bows());
+		//	CookingScreen.setExp(payload.cooking());
+		//	CraftingScreen.setExp(payload.crafting());
+		//	SmithingScreen.setExp(payload.smithing());
+		//});
 	}
 	
 	public MinecraftClient getClient() {

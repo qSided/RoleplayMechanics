@@ -90,6 +90,14 @@ public class QuesConfigModel {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
             public double choppingSpeed = 0.5;
         }
+        @Nest
+        public SwimmingSettings swimmingSettings = new SwimmingSettings();
+        public static class SwimmingSettings {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double oxygenBonus = 0.5;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double swimmingSpeed = 0.01;
+        }
     }
     
     public static class ExperienceOptions {
@@ -218,6 +226,16 @@ public class QuesConfigModel {
         @Nest
         public WoodcuttingOptions woodcuttingOptions = new WoodcuttingOptions();
         public static class WoodcuttingOptions {
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public float baseExperience = 60;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public Choices multiplicativeOrAdditive = Choices.MULTIPLY;
+            @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+            public double amount = 3.4;
+        }
+        @Nest
+        public SwimmingOptions swimmingOptions = new SwimmingOptions();
+        public static class SwimmingOptions {
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)
             public float baseExperience = 60;
             @Sync(Option.SyncMode.OVERRIDE_CLIENT)

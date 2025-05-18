@@ -2,15 +2,16 @@ package qsided.rpmechanics.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
 import qsided.rpmechanics.RoleplayClasses;
 import qsided.rpmechanics.config.experience_values.BlockExperience;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
 import qsided.rpmechanics.config.requirements.ItemWithRequirements;
 import qsided.rpmechanics.config.requirements.Requirements;
 import qsided.rpmechanics.config.roleplay_classes.RoleplayClass;
+import qsided.rpmechanics.skills.milestones.SkillMilestone;
 
 import java.io.File;
 import java.io.IOException;
@@ -396,6 +397,33 @@ public class ConfigGenerator {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+    
+    public static void genDefaultMilestones() {
+        ObjectMapper xmlMapper = new XmlMapper();
+        xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        xmlMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        
+        List<SkillMilestone> milestones = new ArrayList<>();
+        
+        milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 20));
+        milestones.add(new SkillMilestone("+3 Enchant Power", "enchanting", SkillMilestone.Type.ENCHANT_POWER.toString(), 3, 33));
+        milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 40));
+        milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 60));
+        milestones.add(new SkillMilestone("+3 Enchant Power", "enchanting", SkillMilestone.Type.ENCHANT_POWER.toString(), 3, 66));
+        milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 80));
+        milestones.add(new SkillMilestone("+3 Enchant Power", "enchanting", SkillMilestone.Type.ENCHANT_POWER.toString(), 3, 99));
+        milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 100));
+        
+        File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
+        File milestonesFile = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/milestones.xml");
+        
+        try {
+            dir.mkdirs();
+            xmlMapper.writeValue(milestonesFile, milestones);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

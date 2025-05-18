@@ -15,6 +15,14 @@ public class QuesItems {
             new Item(new Item.Settings()),
             "checkmark"
     );
+    public static final Item EXPERIENCE = register(
+            new Item(new Item.Settings()),
+            "experience"
+    );
+    public static final Item EXPERIENCE_DISABLED = register(
+            new Item(new Item.Settings()),
+            "experience_disabled"
+    );
     
     public static Item register(Item item, String id) {
         // Create the identifier for the item.
