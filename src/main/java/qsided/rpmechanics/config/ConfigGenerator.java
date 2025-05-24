@@ -401,7 +401,7 @@ public class ConfigGenerator {
     }
     
     public static void genDefaultMilestones() {
-        ObjectMapper xmlMapper = new XmlMapper();
+        ObjectMapper xmlMapper = new ObjectMapper();
         xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
         xmlMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
         
@@ -417,13 +417,16 @@ public class ConfigGenerator {
         milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 100));
         
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
-        File milestonesFile = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/milestones.xml");
+        File milestonesFile = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/milestones.json");
         
-        try {
-            dir.mkdirs();
-            xmlMapper.writeValue(milestonesFile, milestones);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (!milestonesFile.exists() && !milestonesFile.isDirectory()) {
+            try {
+                dir.mkdirs();
+                xmlMapper.writeValue(milestonesFile, milestones);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
+        
     }
 }

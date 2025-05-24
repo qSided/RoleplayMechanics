@@ -11,10 +11,12 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -53,7 +55,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
     public static final RpMechanicsConfig OWO_CONFIG = RpMechanicsConfig.createAndLoad();
     
     public static final File RP_CLASSES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/classes/classes.json");
-    public static final File MILESTONES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/milestones.xml");
+    public static final File MILESTONES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/milestones.json");
     public static final File MINING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/mining_xp_values.json");
     public static final File CRAFTING_REQS_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting_level_reqs.json");
     public static final File FARMING_XP_VALUES_FILE = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/farming_xp_values.json");
@@ -139,7 +141,6 @@ public class RoleplayMechanicsCommon implements ModInitializer {
         QuesComponents.initialize();
         
         ObjectMapper mapper = new ObjectMapper();
-        ObjectMapper xmlMapper = new XmlMapper();
         CollectionType miningRef = TypeFactory.defaultInstance().constructCollectionType(List.class, BlockExperience.class);
         CollectionType craftingRef = TypeFactory.defaultInstance().constructCollectionType(List.class, ItemCraftingRequirement.class);
         CollectionType milestoneRef = TypeFactory.defaultInstance().constructCollectionType(List.class, SkillMilestone.class);
@@ -158,7 +159,7 @@ public class RoleplayMechanicsCommon implements ModInitializer {
             List<BlockExperience> farmingXpValues = mapper.readValue(FARMING_XP_VALUES_FILE, miningRef);
             List<BlockExperience> woodcuttingXpValues = mapper.readValue(WOODCUTTING_XP_VALUES_FILE, miningRef);
             List<ItemCraftingRequirement> craftingReqs = mapper.readValue(CRAFTING_REQS_FILE, craftingRef);
-            List<SkillMilestone> milestones = xmlMapper.readValue(MILESTONES_FILE, milestoneRef);
+            List<SkillMilestone> milestones = mapper.readValue(MILESTONES_FILE, milestoneRef);
             
             setRpClasses(rpClasses);
             setMiningXpValues(miningXpValues);

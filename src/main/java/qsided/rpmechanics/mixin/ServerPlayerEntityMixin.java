@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import qsided.rpmechanics.PlayerData;
 import qsided.rpmechanics.StateManager;
 import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
-import qsided.rpmechanics.events.PlayerJumpCallback;
 
 @Mixin(ServerPlayerEntity.class)
 public class ServerPlayerEntityMixin {
