@@ -5,6 +5,8 @@
   "mixins": [
     "LivingEntityMixin",
     "PlayerEntityMixin",
+    "PlayerFallDamageScaleMixin",
+    "PlayerFallMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerMixin",
     "bows.BowItemMixin",
