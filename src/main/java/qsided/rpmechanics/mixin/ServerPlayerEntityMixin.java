@@ -13,17 +13,32 @@ import qsided.rpmechanics.events.IncreaseSkillExperienceCallback;
 
 @Mixin(ServerPlayerEntity.class)
 public class ServerPlayerEntityMixin {
-    
-    @WrapOperation(method = "increaseTravelMotionStats", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;increaseStat(Lnet/minecraft/util/Identifier;I)V"))
-    public void increaseStat(ServerPlayerEntity player, Identifier stat, int amount, Operation<Void> original) {
+
+    @WrapOperation(
+            method = "increaseTravelMotionStats",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/server/network/ServerPlayerEntity;increaseStat(Lnet/minecraft/util/Identifier;I)V"
+            )
+    )
+    public void rpmechanics$increaseTravelMotionStats(ServerPlayerEntity player,
+                                                      Identifier stat,
+                                                      int amount,
+                                                      Operation<Void> original) {
         PlayerData state = StateManager.getPlayerState(player);
-        
-        if (stat.equals(Stats.WALK_ONE_CM) || stat.equals(Stats.SPRINT_ONE_CM) || stat.equals(Stats.CROUCH_ONE_CM) || stat.equals(Stats.CLIMB_ONE_CM)) {
-            IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "agility", 0.05F);
+
+        if (stat.equals(Stats.WALK_ONE_CM) || stat.equals(Stats.SPRINT_ONE_CM)
+                || stat.equals(Stats.CROUCH_ONE_CM) || stat.equals(Stats.CLIMB_ONE_CM)) {
+            IncreaseSkillExperienceCallback.EVENT.invoker()
+                    .increaseExp(player, state, "agility", 0.05F);
         }
-        
+
         if (stat.equals(Stats.SWIM_ONE_CM)) {
-            IncreaseSkillExperienceCallback.EVENT.invoker().increaseExp(player, state, "swimming", 0.05f);
+            IncreaseSkillExperienceCallback.EVENT.invoker()
+                    .increaseExp(player, state, "swimming", 0.05f);
         }
+
+        // **important**
+        original.call(player, stat, amount);
     }
 }
