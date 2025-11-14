@@ -38,7 +38,7 @@ fabricApi {
 }
 
 dependencies {
-	annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
+//	annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
 
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
