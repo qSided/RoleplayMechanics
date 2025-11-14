@@ -15,11 +15,11 @@ import qsided.rpmechanics.events.PlayerCancelBreakingCallback;
 
 @Mixin(ServerPlayerInteractionManager.class)
 public class ServerPlayerInteractionManagerMixin {
-    
+
     @Shadow protected ServerWorld world;
-    
+
     @Shadow @Final protected ServerPlayerEntity player;
-    
+
     @WrapMethod(method = "processBlockBreakingAction")
     public void onCancelled(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, int sequence, Operation<Void> original) {
         if (action.equals(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK) || action.equals(PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK)) {
@@ -29,5 +29,5 @@ public class ServerPlayerInteractionManagerMixin {
             original.call(pos, action, direction, worldHeight, sequence);
         }
     }
-    
+
 }
