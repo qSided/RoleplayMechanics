@@ -4,7 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.util.Identifier;
 import qsided.rpmechanics.RoleplayClasses;
 import qsided.rpmechanics.config.experience_values.BlockExperience;
 import qsided.rpmechanics.config.requirements.ItemCraftingRequirement;
@@ -21,12 +31,13 @@ import java.util.List;
 import java.util.Map;
 
 public class ConfigGenerator {
-    
+
     public static void genReqsConfig() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<ItemWithRequirements> items = new ArrayList<>();
-        
-        items.add(new ItemWithRequirements("minecraft:wooden_sword", new Requirements("combat", -1, 1)));
+
+
+        items.add(new ItemWithRequirements("minecraft:wooden_sword", new Requirements("swords", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:wooden_pickaxe", new Requirements("mining", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:wooden_axe", new Requirements("woodcutting", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:wooden_shovel", new Requirements("mining", -1, 1)));
@@ -35,8 +46,8 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:leather_chestplate", new Requirements("endurance", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:leather_leggings", new Requirements("endurance", -1, 1)));
         items.add(new ItemWithRequirements("minecraft:leather_boots", new Requirements("endurance", -1, 1)));
-        
-        items.add(new ItemWithRequirements("minecraft:stone_sword", new Requirements("combat", -1, 4)));
+
+        items.add(new ItemWithRequirements("minecraft:stone_sword", new Requirements("swords", -1, 4)));
         items.add(new ItemWithRequirements("minecraft:stone_pickaxe", new Requirements("mining", -1, 4)));
         items.add(new ItemWithRequirements("minecraft:stone_axe", new Requirements("woodcutting", -1, 4)));
         items.add(new ItemWithRequirements("minecraft:stone_shovel", new Requirements("mining", -1, 4)));
@@ -45,8 +56,8 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:chainmail_chestplate", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:chainmail_leggings", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:chainmail_boots", new Requirements("endurance", -1, 10)));
-        
-        items.add(new ItemWithRequirements("minecraft:iron_sword", new Requirements("combat", -1, 12)));
+
+        items.add(new ItemWithRequirements("minecraft:iron_sword", new Requirements("swords", -1, 12)));
         items.add(new ItemWithRequirements("minecraft:iron_pickaxe", new Requirements("mining", -1, 12)));
         items.add(new ItemWithRequirements("minecraft:iron_axe", new Requirements("woodcutting", -1, 12)));
         items.add(new ItemWithRequirements("minecraft:iron_shovel", new Requirements("mining", -1, 12)));
@@ -55,8 +66,8 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:iron_chestplate", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:iron_leggings", new Requirements("endurance", -1, 10)));
         items.add(new ItemWithRequirements("minecraft:iron_boots", new Requirements("endurance", -1, 10)));
-        
-        items.add(new ItemWithRequirements("minecraft:golden_sword", new Requirements("combat", -1, 15)));
+
+        items.add(new ItemWithRequirements("minecraft:golden_sword", new Requirements("swords", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_pickaxe", new Requirements("mining", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_axe", new Requirements("woodcutting", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_shovel", new Requirements("mining", -1, 15)));
@@ -65,8 +76,8 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:golden_chestplate", new Requirements("endurance", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_leggings", new Requirements("endurance", -1, 15)));
         items.add(new ItemWithRequirements("minecraft:golden_boots", new Requirements("endurance", -1, 15)));
-        
-        items.add(new ItemWithRequirements("minecraft:diamond_sword", new Requirements("combat", -1, 25)));
+
+        items.add(new ItemWithRequirements("minecraft:diamond_sword", new Requirements("swords", -1, 25)));
         items.add(new ItemWithRequirements("minecraft:diamond_pickaxe", new Requirements("mining", -1, 25)));
         items.add(new ItemWithRequirements("minecraft:diamond_axe", new Requirements("woodcutting", -1, 25)));
         items.add(new ItemWithRequirements("minecraft:diamond_shovel", new Requirements("mining", -1, 25)));
@@ -75,8 +86,8 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:diamond_chestplate", new Requirements("endurance", -1, 20)));
         items.add(new ItemWithRequirements("minecraft:diamond_leggings", new Requirements("endurance", -1, 20)));
         items.add(new ItemWithRequirements("minecraft:diamond_boots", new Requirements("endurance", -1, 20)));
-        
-        items.add(new ItemWithRequirements("minecraft:netherite_sword", new Requirements("combat", -1, 40)));
+
+        items.add(new ItemWithRequirements("minecraft:netherite_sword", new Requirements("swords", -1, 40)));
         items.add(new ItemWithRequirements("minecraft:netherite_pickaxe", new Requirements("mining", -1, 40)));
         items.add(new ItemWithRequirements("minecraft:netherite_axe", new Requirements("woodcutting", -1, 40)));
         items.add(new ItemWithRequirements("minecraft:netherite_shovel", new Requirements("mining", -1, 40)));
@@ -85,8 +96,8 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("minecraft:netherite_chestplate", new Requirements("endurance", -1, 30)));
         items.add(new ItemWithRequirements("minecraft:netherite_leggings", new Requirements("endurance", -1, 30)));
         items.add(new ItemWithRequirements("minecraft:netherite_boots", new Requirements("endurance", -1, 30)));
-        
-        items.add(new ItemWithRequirements("rpmechanics:mythril_sword", new Requirements("combat", -1, 50)));
+
+        items.add(new ItemWithRequirements("rpmechanics:mythril_sword", new Requirements("swords", -1, 50)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_pickaxe", new Requirements("mining", -1, 50)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_axe", new Requirements("woodcutting", -1, 50)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_shovel", new Requirements("mining", -1, 50)));
@@ -95,11 +106,33 @@ public class ConfigGenerator {
         items.add(new ItemWithRequirements("rpmechanics:mythril_chestplate", new Requirements("endurance", -1, 40)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_leggings", new Requirements("endurance", -1, 40)));
         items.add(new ItemWithRequirements("rpmechanics:mythril_boots", new Requirements("endurance", -1, 40)));
-        
-        
-        
+
+        // --- NEW: auto-generate requirements for other mods’ tools/weapons/armor ---
+
+        Registries.ITEM.forEach(item -> {
+            Identifier id = Registries.ITEM.getId(item);
+            if (id == null) return;
+
+            String itemId = id.toString();
+
+            // Skip vanilla + your own if you only want modded
+            if ("minecraft".equals(id.getNamespace()) || "rpmechanics".equals(id.getNamespace())) {
+                return;
+            }
+
+            // Already has a manual entry? Skip
+            if (containsItemRequirement(items, itemId)) {
+                return;
+            }
+
+            Requirements req = inferRequirementsFromItem(item);
+            if (req != null) {
+                items.add(new ItemWithRequirements(itemId, req));
+            }
+        });
+
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        
+
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
         File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/item_use_reqs.json");
         if (!reqs.exists() && !reqs.isDirectory()) {
@@ -111,11 +144,11 @@ public class ConfigGenerator {
             }
         }
     }
-    
+
     public static void genWoodcuttingConfig() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<BlockExperience> woodcutting = new ArrayList<>();
-        
+
         Registries.BLOCK.forEach(block -> {
             if (block.asItem().toString().contains("log") ||
                     block.asItem().toString().contains("wood") ||
@@ -124,13 +157,13 @@ public class ConfigGenerator {
                 woodcutting.add(new BlockExperience(block.asItem().toString(),
                         Map.of(
                                 "woodcutting", 20F
-                               )));
+                        )));
             }
         });
-        
-        
+
+
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        
+
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
         File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/woodcutting_xp_values.json");
         if (!reqs.exists() && !reqs.isDirectory()) {
@@ -141,38 +174,53 @@ public class ConfigGenerator {
                 throw new RuntimeException(e);
             }
         }
-        
-        
+
+
     }
-    
+
     public static void genMiningConfig() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<BlockExperience> mining = new ArrayList<>();
-        
+
         Registries.BLOCK.forEach(block -> {
-            if (block.asItem().toString().contains("stone") ||
-                    block.asItem().toString().contains("andesite") ||
-                    block.asItem().toString().contains("diorite") ||
-                    block.asItem().toString().contains("granite") ||
-                    block.asItem().toString().contains("slate") ||
-                    block.asItem().toString().contains("dirt") ||
-                    block.asItem().toString().contains("grass")) {
-                mining.add(new BlockExperience(block.asItem().toString(),
-                        Map.of(
-                                "mining", 5 + (block.getHardness() / 3))));
-            } else if (
-                    block.asItem().toString().contains("ore") ||
-                            block.asItem().toString().contains("debris") ||
-                            block.asItem().toString().contains("mythril")) {
-                mining.add(new BlockExperience(block.asItem().toString(),
-                        Map.of(
-                                "mining", 9 + (block.getHardness() / 3))));
+            Identifier id = Registries.BLOCK.getId(block);
+            if (id == null) return;
+
+            String blockId = id.toString();
+            BlockState state = block.getDefaultState();
+            float hardness = block.getHardness();
+
+            int toolTier = getRequiredToolTier(state);
+            if (toolTier == 0) {
+                // not really a mining target, skip
+                return;
             }
+
+            boolean ore = isOre(state)
+                    || blockId.contains("ore")
+                    || blockId.contains("debris")
+                    || blockId.contains("mythril");
+
+            // Base XP by required tool tier
+            float baseXp;
+            switch (toolTier) {
+                case 4 -> baseXp = ore ? 20F : 12F;  // diamond-level stuff
+                case 3 -> baseXp = ore ? 16F : 10F;  // iron-level
+                case 2 -> baseXp = ore ? 12F : 8F;   // stone-level
+                case 1 -> baseXp = ore ? 8F  : 5F;   // wood-level
+                default -> baseXp = 5F;
+            }
+
+            float xp = baseXp + (hardness / 3F);
+
+            mining.add(new BlockExperience(
+                    blockId,
+                    Map.of("mining", xp)
+            ));
         });
-        
-        
+
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        
+
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
         File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/mining_xp_values.json");
         if (!reqs.exists() && !reqs.isDirectory()) {
@@ -184,13 +232,13 @@ public class ConfigGenerator {
             }
         }
     }
-    
+
     public static void genFarmingConfig() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<BlockExperience> farming = new ArrayList<>();
         Map<String, Float> exp = new HashMap<>();
         exp.put("farming", 1.4F);
-        
+
         Registries.BLOCK.forEach(block -> {
             if (block.asItem().toString().contains("beet") ||
                     block.asItem().toString().contains("wheat") ||
@@ -199,17 +247,17 @@ public class ConfigGenerator {
                     block.asItem().toString().contains("cactus") ||
                     block.asItem().toString().contains("sugarcane") ||
                     block.asItem().toString().contains("mushroom") &&
-                    !block.asItem().toString().contains("carved")) {
+                            !block.asItem().toString().contains("carved")) {
                 farming.add(new BlockExperience(block.asItem().toString(), Map.of("farming", 5F)));
             } else if (block.asItem().toString().contains("pumpkin") || block.asItem().toString().contains("melon")) {
                 farming.add(new BlockExperience(block.asItem().toString(), Map.of("farming", 8F)));
             }
         });
-        
+
         farming.add(new BlockExperience("minecraft:chorus_fruit", exp));
-        
+
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        
+
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
         File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/farming_xp_values.json");
         if (!reqs.exists() && !reqs.isDirectory()) {
@@ -221,19 +269,19 @@ public class ConfigGenerator {
             }
         }
     }
-    
+
     public static void genDefaultClasses() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Map<Integer, RoleplayClass> classes = new HashMap<>();
-        
+
         classes.put(0, RoleplayClasses.PALADIN);
         classes.put(1, RoleplayClasses.RANGER);
         classes.put(2, RoleplayClasses.FIGHTER);
         classes.put(3, RoleplayClasses.ARTISAN);
         classes.put(4, RoleplayClasses.FARMER);
-        
+
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        
+
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/classes");
         File rpClasses = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/classes/classes.json");
         if (!rpClasses.exists() && !rpClasses.isDirectory()) {
@@ -245,11 +293,12 @@ public class ConfigGenerator {
             }
         }
     }
-    
+
     public static void genPassiveMobs() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<String> mobs = new ArrayList<>();
-        
+
+        // Vanilla baseline (same as before)
         mobs.add("sheep");
         mobs.add("cow");
         mobs.add("chicken");
@@ -284,9 +333,29 @@ public class ConfigGenerator {
         mobs.add("wandering_trader");
         mobs.add("zombie_horse");
         mobs.add("dolphin");
-        
+
+        // Add modded passives from registry
+        Registries.ENTITY_TYPE.forEach(type -> {
+            Identifier id = Registries.ENTITY_TYPE.getId(type);
+            if (id == null) return;
+
+            SpawnGroup group = type.getSpawnGroup();
+
+            // Heuristic: treat non-monsters / non-misc as passive-ish
+            if (group == SpawnGroup.MONSTER || group == SpawnGroup.MISC) {
+                return;
+            }
+
+            // You currently store just the path (e.g. "sheep"), so keep that style
+            String name = id.getPath();
+
+            if (!mobs.contains(name)) {
+                mobs.add(name);
+            }
+        });
+
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        
+
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
         File passiveMobs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/passive_mobs.json");
         if (!passiveMobs.exists() && !passiveMobs.isDirectory()) {
@@ -298,11 +367,11 @@ public class ConfigGenerator {
             }
         }
     }
-    
+
     public static void genCraftingConfig() {
         ObjectMapper mapper = new ObjectMapper();
         List<ItemCraftingRequirement> items = new ArrayList<>();
-        
+
         Registries.ITEM.forEach(item -> {
             if (item.toString().contains("plank") ||
                     item.toString().contains("log")) {
@@ -323,7 +392,7 @@ public class ConfigGenerator {
                 items.add(new ItemCraftingRequirement(item.toString(), 0, 1F));
             }
         });
-        
+
         items.add(new ItemCraftingRequirement("minecraft:stick", 0, 0.4F));
         items.add(new ItemCraftingRequirement("minecraft:beacon", 0, 400F));
         items.add(new ItemCraftingRequirement("minecraft:chest", 0, 8F));
@@ -334,7 +403,7 @@ public class ConfigGenerator {
         items.add(new ItemCraftingRequirement("minecraft:flint_and_steel", 10, 20F));
         items.add(new ItemCraftingRequirement("minecraft:netherite_ingot", 30, 30F));
         items.add(new ItemCraftingRequirement("rpmechanics:mythril_ingot", 45, 40F));
-        
+
         items.add(new ItemCraftingRequirement("minecraft:wooden_sword", 0, 35F));
         items.add(new ItemCraftingRequirement("minecraft:wooden_pickaxe", 0, 35F));
         items.add(new ItemCraftingRequirement("minecraft:wooden_axe", 0, 35F));
@@ -344,7 +413,7 @@ public class ConfigGenerator {
         items.add(new ItemCraftingRequirement("minecraft:leather_chestplate", 0, 35F));
         items.add(new ItemCraftingRequirement("minecraft:leather_leggings", 0, 35F));
         items.add(new ItemCraftingRequirement("minecraft:leather_boots", 0, 35F));
-        
+
         items.add(new ItemCraftingRequirement("minecraft:stone_sword", 3, 40F));
         items.add(new ItemCraftingRequirement("minecraft:stone_pickaxe", 3, 40F));
         items.add(new ItemCraftingRequirement("minecraft:stone_axe", 3, 40F));
@@ -354,7 +423,7 @@ public class ConfigGenerator {
         items.add(new ItemCraftingRequirement("minecraft:chainmail_chestplate", 15, 40F));
         items.add(new ItemCraftingRequirement("minecraft:chainmail_leggings", 15, 40F));
         items.add(new ItemCraftingRequirement("minecraft:chainmail_boots", 15, 40F));
-        
+
         items.add(new ItemCraftingRequirement("minecraft:golden_sword", 10, 40F));
         items.add(new ItemCraftingRequirement("minecraft:golden_pickaxe", 10, 40F));
         items.add(new ItemCraftingRequirement("minecraft:golden_axe", 10, 40F));
@@ -364,7 +433,7 @@ public class ConfigGenerator {
         items.add(new ItemCraftingRequirement("minecraft:golden_chestplate", 10, 40F));
         items.add(new ItemCraftingRequirement("minecraft:golden_leggings", 10, 40F));
         items.add(new ItemCraftingRequirement("minecraft:golden_boots", 10, 40F));
-        
+
         items.add(new ItemCraftingRequirement("minecraft:iron_sword", 8, 40F));
         items.add(new ItemCraftingRequirement("minecraft:iron_pickaxe", 8, 40F));
         items.add(new ItemCraftingRequirement("minecraft:iron_axe", 8, 40F));
@@ -374,7 +443,7 @@ public class ConfigGenerator {
         items.add(new ItemCraftingRequirement("minecraft:iron_chestplate", 8, 40F));
         items.add(new ItemCraftingRequirement("minecraft:iron_leggings", 8, 40F));
         items.add(new ItemCraftingRequirement("minecraft:iron_boots", 8, 40F));
-        
+
         items.add(new ItemCraftingRequirement("minecraft:diamond_sword", 24, 50F));
         items.add(new ItemCraftingRequirement("minecraft:diamond_pickaxe", 24, 50F));
         items.add(new ItemCraftingRequirement("minecraft:diamond_axe", 24, 50F));
@@ -384,9 +453,37 @@ public class ConfigGenerator {
         items.add(new ItemCraftingRequirement("minecraft:diamond_chestplate", 24, 50F));
         items.add(new ItemCraftingRequirement("minecraft:diamond_leggings", 24, 50F));
         items.add(new ItemCraftingRequirement("minecraft:diamond_boots", 24, 50F));
-        
+
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        
+
+        // --- NEW: auto-generate crafting reqs for other mods’ tools/weapons/armor ---
+        Registries.ITEM.forEach(item -> {
+            Identifier id = Registries.ITEM.getId(item);
+            if (id == null) return;
+
+            String itemId = id.toString();
+
+            // skip vanilla + your own if you only want modded
+            if ("minecraft".equals(id.getNamespace()) || "rpmechanics".equals(id.getNamespace())) return;
+
+            // only gear
+            if (!(item instanceof SwordItem || item instanceof AxeItem ||
+                    item instanceof PickaxeItem || item instanceof ShovelItem ||
+                    item instanceof HoeItem || item instanceof ArmorItem ||
+                    item instanceof BowItem || item instanceof CrossbowItem ||
+                    item instanceof ShieldItem || item instanceof TridentItem)) {
+                return;
+            }
+
+            Requirements req = inferRequirementsFromItem(item);
+            if (req == null) return;
+
+            int levelReq = req.getSkillLevel();
+            float expWorth = levelReq * 2.0F; // tweak to taste
+
+            items.add(new ItemCraftingRequirement(itemId, levelReq, expWorth));
+        });
+
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
         File dir2 = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
         File craftingReqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting_level_reqs.json");
@@ -399,14 +496,14 @@ public class ConfigGenerator {
             }
         }
     }
-    
+
     public static void genDefaultMilestones() {
         ObjectMapper xmlMapper = new ObjectMapper();
         xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
         xmlMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        
+
         List<SkillMilestone> milestones = new ArrayList<>();
-        
+
         milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 20));
         milestones.add(new SkillMilestone("+3 Enchant Power", "enchanting", SkillMilestone.Type.ENCHANT_POWER.toString(), 3, 33));
         milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 40));
@@ -415,10 +512,10 @@ public class ConfigGenerator {
         milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 80));
         milestones.add(new SkillMilestone("+3 Enchant Power", "enchanting", SkillMilestone.Type.ENCHANT_POWER.toString(), 3, 99));
         milestones.add(new SkillMilestone("-1 Enchant Cost", "enchanting", SkillMilestone.Type.ENCHANT_COST_REDUCTION.toString(), 1, 100));
-        
+
         File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
         File milestonesFile = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/milestones.json");
-        
+
         if (!milestonesFile.exists() && !milestonesFile.isDirectory()) {
             try {
                 dir.mkdirs();
@@ -427,6 +524,150 @@ public class ConfigGenerator {
                 throw new RuntimeException(e);
             }
         }
-        
+
+    }
+
+    // Helper Methods
+
+    /**
+     * Read base attack damage of an item from its attribute modifiers.
+     * Works for vanilla + modded weapons that use the standard attribute.
+     */
+    private static double getBaseAttackDamage(Item item) {
+        ItemStack stack = new ItemStack(item);
+        final double[] max = {0.0};
+
+        stack.applyAttributeModifiers(EquipmentSlot.MAINHAND,
+                (RegistryEntry<EntityAttribute> attr, EntityAttributeModifier mod) -> {
+                    if (attr.value() == EntityAttributes.GENERIC_ATTACK_DAMAGE) {
+                        // just take the biggest modifier we see
+                        double val = mod.value();
+                        if (val > max[0]) max[0] = val;
+                    }
+                });
+
+        return max[0];
+    }
+
+    // 0 = no pick needed / not really a mining block
+    // 1 = wood
+    // 2 = stone
+    // 3 = iron
+    // 4 = diamond / netherite
+    private static int getRequiredToolTier(BlockState state) {
+        if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) return 4;
+        if (state.isIn(BlockTags.NEEDS_IRON_TOOL))    return 3;
+        if (state.isIn(BlockTags.NEEDS_STONE_TOOL))   return 2;
+
+        // Mineable with a pickaxe but no “needs_*_tool” tag → wood / stone-ish
+        if (state.isIn(BlockTags.PICKAXE_MINEABLE))   return 1;
+
+        return 0;
+    }
+
+    private static boolean containsItemRequirement(List<ItemWithRequirements> list, String itemId) {
+        for (ItemWithRequirements entry : list) {
+            if (entry.getItemId().equals(itemId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static int clampLevel(int value) {
+        if (value < 1) return 1;
+        if (value > 100) return 100;
+        return value;
+    }
+
+    /**
+     * Generic scaling based on durability + enchantability of a fresh stack.
+     * Works for armor, tools, weapons, etc. without poking at ToolMaterial.
+     */
+    private static int scaleLevelFromStack(Item item, int base) {
+        ItemStack stack = new ItemStack(item);
+
+        int durability   = stack.getMaxDamage();   // 0 if not damageable
+        boolean enchFlag = stack.isEnchantable();  // true for most gear
+
+        int level = base
+                + durability / 128               // more durable -> higher
+                + (enchFlag ? 5 : 0);            // enchantable items get a bump
+
+        return clampLevel(level);
+    }
+
+    private static Requirements inferRequirementsFromItem(Item item) {
+        // Armor: scale with protection + durability
+        if (item instanceof ArmorItem armor) {
+            int protection = armor.getProtection();
+            int base = 3 + protection * 2; // iron/diamond/etc naturally higher
+            int level = scaleLevelFromStack(item, base);
+            return new Requirements("endurance", -1, level);
+        }
+
+        // Swords
+        if (item instanceof SwordItem) {
+            double dmg = getBaseAttackDamage(item);   // e.g. 7.0 for strong swords
+            int base = 6 + (int)Math.round(dmg * 2.0); // damage heavily influences level
+            int level = scaleLevelFromStack(item, base);
+            return new Requirements("swords", -1, level);
+        }
+
+        // Axes – woodcutting
+        if (item instanceof AxeItem) {
+            int level = scaleLevelFromStack(item, 10);
+            return new Requirements("woodcutting", -1, level);
+        }
+
+        // Pickaxes – mining
+        if (item instanceof PickaxeItem) {
+            int level = scaleLevelFromStack(item, 8);
+            return new Requirements("mining", -1, level);
+        }
+
+        // Shovels – mining, slightly lower
+        if (item instanceof ShovelItem) {
+            int level = scaleLevelFromStack(item, 6);
+            return new Requirements("mining", -1, level);
+        }
+
+        // Hoes – farming
+        if (item instanceof HoeItem) {
+            int level = scaleLevelFromStack(item, 6);
+            return new Requirements("farming", -1, level);
+        }
+
+        // Bows / crossbows – ranged
+        if (item instanceof BowItem || item instanceof CrossbowItem) {
+            int level = scaleLevelFromStack(item, 10);
+            return new Requirements("ranged", -1, level);
+        }
+
+        // Shields – endurance
+        if (item instanceof ShieldItem) {
+            int level = scaleLevelFromStack(item, 8);
+            return new Requirements("endurance", -1, level);
+        }
+
+        // Tridents – strong melee
+        if (item instanceof TridentItem) {
+            int level = scaleLevelFromStack(item, 15);
+            return new Requirements("swords", -1, level);
+        }
+
+        // Everything else: no automatic requirement
+        return null;
+    }
+
+    private static boolean isOre(BlockState state) {
+        return state.isIn(BlockTags.GOLD_ORES)
+                || state.isIn(BlockTags.IRON_ORES)
+                || state.isIn(BlockTags.DIAMOND_ORES)
+                || state.isIn(BlockTags.REDSTONE_ORES)
+                || state.isIn(BlockTags.LAPIS_ORES)
+                || state.isIn(BlockTags.COAL_ORES)
+                || state.isIn(BlockTags.EMERALD_ORES)
+                || state.isIn(BlockTags.COPPER_ORES);
     }
 }
