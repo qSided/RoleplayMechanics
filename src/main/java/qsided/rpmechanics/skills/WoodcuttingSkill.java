@@ -21,7 +21,7 @@ import static qsided.rpmechanics.StateManager.getPlayerState;
 public final class WoodcuttingSkill {
 
     // Prevent nuking huge forests in one go
-    private static final int MAX_TREE_BLOCKS = 128;
+    private static final int MAX_TREE_BLOCKS = 64;
 
     // Minimum woodcutting level to unlock tree harvesting
     private static final int TREE_HARVEST_MIN_LEVEL = 5;
