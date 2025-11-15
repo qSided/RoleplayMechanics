@@ -2,7 +2,6 @@ package qsided.rpmechanics.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
@@ -25,124 +24,144 @@ import qsided.rpmechanics.skills.milestones.SkillMilestone;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ConfigGenerator {
 
     public static void genReqsConfig() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        List<ItemWithRequirements> items = new ArrayList<>();
+        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/item_use_reqs.json");
+        File dir = reqs.getParentFile();
 
+        // Use map keyed by item id to avoid duplicates and preserve user overrides
+        Map<String, ItemWithRequirements> itemMap = new LinkedHashMap<>();
 
-        items.add(new ItemWithRequirements("minecraft:wooden_sword", new Requirements("swords", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:wooden_pickaxe", new Requirements("mining", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:wooden_axe", new Requirements("woodcutting", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:wooden_shovel", new Requirements("mining", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:wooden_hoe", new Requirements("farming", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:leather_helmet", new Requirements("endurance", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:leather_chestplate", new Requirements("endurance", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:leather_leggings", new Requirements("endurance", -1, 1)));
-        items.add(new ItemWithRequirements("minecraft:leather_boots", new Requirements("endurance", -1, 1)));
+        // 1) Load existing config if it exists
+        if (reqs.exists() && !reqs.isDirectory()) {
+            try {
+                ItemWithRequirements[] existing = mapper.readValue(reqs, ItemWithRequirements[].class);
+                for (ItemWithRequirements entry : existing) {
+                    if (entry != null && entry.getItemId() != null) {
+                        itemMap.put(entry.getItemId(), entry);
+                    }
+                }
+            } catch (Exception e) {
+                // if parsing fails, log and fall back to re-generating defaults
+                System.err.println("[RPMechanics] Failed to parse item_use_reqs.json, regenerating defaults");
+                e.printStackTrace();
+                itemMap.clear();
+            }
+        } else {
+            // 2) No file yet → seed with your manual defaults
+            // Wooden tier
+            itemMap.put("minecraft:wooden_sword", new ItemWithRequirements("minecraft:wooden_sword", new Requirements("swords", -1, 1)));
+            itemMap.put("minecraft:wooden_pickaxe", new ItemWithRequirements("minecraft:wooden_pickaxe", new Requirements("mining", -1, 1)));
+            itemMap.put("minecraft:wooden_axe", new ItemWithRequirements("minecraft:wooden_axe", new Requirements("woodcutting", -1, 1)));
+            itemMap.put("minecraft:wooden_shovel", new ItemWithRequirements("minecraft:wooden_shovel", new Requirements("mining", -1, 1)));
+            itemMap.put("minecraft:wooden_hoe", new ItemWithRequirements("minecraft:wooden_hoe", new Requirements("farming", -1, 1)));
+            itemMap.put("minecraft:leather_helmet", new ItemWithRequirements("minecraft:leather_helmet", new Requirements("endurance", -1, 1)));
+            itemMap.put("minecraft:leather_chestplate", new ItemWithRequirements("minecraft:leather_chestplate", new Requirements("endurance", -1, 1)));
+            itemMap.put("minecraft:leather_leggings", new ItemWithRequirements("minecraft:leather_leggings", new Requirements("endurance", -1, 1)));
+            itemMap.put("minecraft:leather_boots", new ItemWithRequirements("minecraft:leather_boots", new Requirements("endurance", -1, 1)));
 
-        items.add(new ItemWithRequirements("minecraft:stone_sword", new Requirements("swords", -1, 4)));
-        items.add(new ItemWithRequirements("minecraft:stone_pickaxe", new Requirements("mining", -1, 4)));
-        items.add(new ItemWithRequirements("minecraft:stone_axe", new Requirements("woodcutting", -1, 4)));
-        items.add(new ItemWithRequirements("minecraft:stone_shovel", new Requirements("mining", -1, 4)));
-        items.add(new ItemWithRequirements("minecraft:stone_hoe", new Requirements("farming", -1, 4)));
-        items.add(new ItemWithRequirements("minecraft:chainmail_helmet", new Requirements("endurance", -1, 10)));
-        items.add(new ItemWithRequirements("minecraft:chainmail_chestplate", new Requirements("endurance", -1, 10)));
-        items.add(new ItemWithRequirements("minecraft:chainmail_leggings", new Requirements("endurance", -1, 10)));
-        items.add(new ItemWithRequirements("minecraft:chainmail_boots", new Requirements("endurance", -1, 10)));
+            // Stone + chainmail
+            itemMap.put("minecraft:stone_sword", new ItemWithRequirements("minecraft:stone_sword", new Requirements("swords", -1, 4)));
+            itemMap.put("minecraft:stone_pickaxe", new ItemWithRequirements("minecraft:stone_pickaxe", new Requirements("mining", -1, 4)));
+            itemMap.put("minecraft:stone_axe", new ItemWithRequirements("minecraft:stone_axe", new Requirements("woodcutting", -1, 4)));
+            itemMap.put("minecraft:stone_shovel", new ItemWithRequirements("minecraft:stone_shovel", new Requirements("mining", -1, 4)));
+            itemMap.put("minecraft:stone_hoe", new ItemWithRequirements("minecraft:stone_hoe", new Requirements("farming", -1, 4)));
+            itemMap.put("minecraft:chainmail_helmet", new ItemWithRequirements("minecraft:chainmail_helmet", new Requirements("endurance", -1, 10)));
+            itemMap.put("minecraft:chainmail_chestplate", new ItemWithRequirements("minecraft:chainmail_chestplate", new Requirements("endurance", -1, 10)));
+            itemMap.put("minecraft:chainmail_leggings", new ItemWithRequirements("minecraft:chainmail_leggings", new Requirements("endurance", -1, 10)));
+            itemMap.put("minecraft:chainmail_boots", new ItemWithRequirements("minecraft:chainmail_boots", new Requirements("endurance", -1, 10)));
 
-        items.add(new ItemWithRequirements("minecraft:iron_sword", new Requirements("swords", -1, 12)));
-        items.add(new ItemWithRequirements("minecraft:iron_pickaxe", new Requirements("mining", -1, 12)));
-        items.add(new ItemWithRequirements("minecraft:iron_axe", new Requirements("woodcutting", -1, 12)));
-        items.add(new ItemWithRequirements("minecraft:iron_shovel", new Requirements("mining", -1, 12)));
-        items.add(new ItemWithRequirements("minecraft:iron_hoe", new Requirements("farming", -1, 12)));
-        items.add(new ItemWithRequirements("minecraft:iron_helmet", new Requirements("endurance", -1, 10)));
-        items.add(new ItemWithRequirements("minecraft:iron_chestplate", new Requirements("endurance", -1, 10)));
-        items.add(new ItemWithRequirements("minecraft:iron_leggings", new Requirements("endurance", -1, 10)));
-        items.add(new ItemWithRequirements("minecraft:iron_boots", new Requirements("endurance", -1, 10)));
+            // Iron
+            itemMap.put("minecraft:iron_sword", new ItemWithRequirements("minecraft:iron_sword", new Requirements("swords", -1, 12)));
+            itemMap.put("minecraft:iron_pickaxe", new ItemWithRequirements("minecraft:iron_pickaxe", new Requirements("mining", -1, 12)));
+            itemMap.put("minecraft:iron_axe", new ItemWithRequirements("minecraft:iron_axe", new Requirements("woodcutting", -1, 12)));
+            itemMap.put("minecraft:iron_shovel", new ItemWithRequirements("minecraft:iron_shovel", new Requirements("mining", -1, 12)));
+            itemMap.put("minecraft:iron_hoe", new ItemWithRequirements("minecraft:iron_hoe", new Requirements("farming", -1, 12)));
+            itemMap.put("minecraft:iron_helmet", new ItemWithRequirements("minecraft:iron_helmet", new Requirements("endurance", -1, 10)));
+            itemMap.put("minecraft:iron_chestplate", new ItemWithRequirements("minecraft:iron_chestplate", new Requirements("endurance", -1, 10)));
+            itemMap.put("minecraft:iron_leggings", new ItemWithRequirements("minecraft:iron_leggings", new Requirements("endurance", -1, 10)));
+            itemMap.put("minecraft:iron_boots", new ItemWithRequirements("minecraft:iron_boots", new Requirements("endurance", -1, 10)));
 
-        items.add(new ItemWithRequirements("minecraft:golden_sword", new Requirements("swords", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_pickaxe", new Requirements("mining", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_axe", new Requirements("woodcutting", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_shovel", new Requirements("mining", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_hoe", new Requirements("farming", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_helmet", new Requirements("endurance", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_chestplate", new Requirements("endurance", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_leggings", new Requirements("endurance", -1, 15)));
-        items.add(new ItemWithRequirements("minecraft:golden_boots", new Requirements("endurance", -1, 15)));
+            // Gold
+            itemMap.put("minecraft:golden_sword", new ItemWithRequirements("minecraft:golden_sword", new Requirements("swords", -1, 15)));
+            itemMap.put("minecraft:golden_pickaxe", new ItemWithRequirements("minecraft:golden_pickaxe", new Requirements("mining", -1, 15)));
+            itemMap.put("minecraft:golden_axe", new ItemWithRequirements("minecraft:golden_axe", new Requirements("woodcutting", -1, 15)));
+            itemMap.put("minecraft:golden_shovel", new ItemWithRequirements("minecraft:golden_shovel", new Requirements("mining", -1, 15)));
+            itemMap.put("minecraft:golden_hoe", new ItemWithRequirements("minecraft:golden_hoe", new Requirements("farming", -1, 15)));
+            itemMap.put("minecraft:golden_helmet", new ItemWithRequirements("minecraft:golden_helmet", new Requirements("endurance", -1, 15)));
+            itemMap.put("minecraft:golden_chestplate", new ItemWithRequirements("minecraft:golden_chestplate", new Requirements("endurance", -1, 15)));
+            itemMap.put("minecraft:golden_leggings", new ItemWithRequirements("minecraft:golden_leggings", new Requirements("endurance", -1, 15)));
+            itemMap.put("minecraft:golden_boots", new ItemWithRequirements("minecraft:golden_boots", new Requirements("endurance", -1, 15)));
 
-        items.add(new ItemWithRequirements("minecraft:diamond_sword", new Requirements("swords", -1, 25)));
-        items.add(new ItemWithRequirements("minecraft:diamond_pickaxe", new Requirements("mining", -1, 25)));
-        items.add(new ItemWithRequirements("minecraft:diamond_axe", new Requirements("woodcutting", -1, 25)));
-        items.add(new ItemWithRequirements("minecraft:diamond_shovel", new Requirements("mining", -1, 25)));
-        items.add(new ItemWithRequirements("minecraft:diamond_hoe", new Requirements("farming", -1, 25)));
-        items.add(new ItemWithRequirements("minecraft:diamond_helmet", new Requirements("endurance", -1, 20)));
-        items.add(new ItemWithRequirements("minecraft:diamond_chestplate", new Requirements("endurance", -1, 20)));
-        items.add(new ItemWithRequirements("minecraft:diamond_leggings", new Requirements("endurance", -1, 20)));
-        items.add(new ItemWithRequirements("minecraft:diamond_boots", new Requirements("endurance", -1, 20)));
+            // Diamond
+            itemMap.put("minecraft:diamond_sword", new ItemWithRequirements("minecraft:diamond_sword", new Requirements("swords", -1, 25)));
+            itemMap.put("minecraft:diamond_pickaxe", new ItemWithRequirements("minecraft:diamond_pickaxe", new Requirements("mining", -1, 25)));
+            itemMap.put("minecraft:diamond_axe", new ItemWithRequirements("minecraft:diamond_axe", new Requirements("woodcutting", -1, 25)));
+            itemMap.put("minecraft:diamond_shovel", new ItemWithRequirements("minecraft:diamond_shovel", new Requirements("mining", -1, 25)));
+            itemMap.put("minecraft:diamond_hoe", new ItemWithRequirements("minecraft:diamond_hoe", new Requirements("farming", -1, 25)));
+            itemMap.put("minecraft:diamond_helmet", new ItemWithRequirements("minecraft:diamond_helmet", new Requirements("endurance", -1, 20)));
+            itemMap.put("minecraft:diamond_chestplate", new ItemWithRequirements("minecraft:diamond_chestplate", new Requirements("endurance", -1, 20)));
+            itemMap.put("minecraft:diamond_leggings", new ItemWithRequirements("minecraft:diamond_leggings", new Requirements("endurance", -1, 20)));
+            itemMap.put("minecraft:diamond_boots", new ItemWithRequirements("minecraft:diamond_boots", new Requirements("endurance", -1, 20)));
 
-        items.add(new ItemWithRequirements("minecraft:netherite_sword", new Requirements("swords", -1, 40)));
-        items.add(new ItemWithRequirements("minecraft:netherite_pickaxe", new Requirements("mining", -1, 40)));
-        items.add(new ItemWithRequirements("minecraft:netherite_axe", new Requirements("woodcutting", -1, 40)));
-        items.add(new ItemWithRequirements("minecraft:netherite_shovel", new Requirements("mining", -1, 40)));
-        items.add(new ItemWithRequirements("minecraft:netherite_hoe", new Requirements("farming", -1, 40)));
-        items.add(new ItemWithRequirements("minecraft:netherite_helmet", new Requirements("endurance", -1, 30)));
-        items.add(new ItemWithRequirements("minecraft:netherite_chestplate", new Requirements("endurance", -1, 30)));
-        items.add(new ItemWithRequirements("minecraft:netherite_leggings", new Requirements("endurance", -1, 30)));
-        items.add(new ItemWithRequirements("minecraft:netherite_boots", new Requirements("endurance", -1, 30)));
+            // Netherite
+            itemMap.put("minecraft:netherite_sword", new ItemWithRequirements("minecraft:netherite_sword", new Requirements("swords", -1, 40)));
+            itemMap.put("minecraft:netherite_pickaxe", new ItemWithRequirements("minecraft:netherite_pickaxe", new Requirements("mining", -1, 40)));
+            itemMap.put("minecraft:netherite_axe", new ItemWithRequirements("minecraft:netherite_axe", new Requirements("woodcutting", -1, 40)));
+            itemMap.put("minecraft:netherite_shovel", new ItemWithRequirements("minecraft:netherite_shovel", new Requirements("mining", -1, 40)));
+            itemMap.put("minecraft:netherite_hoe", new ItemWithRequirements("minecraft:netherite_hoe", new Requirements("farming", -1, 40)));
+            itemMap.put("minecraft:netherite_helmet", new ItemWithRequirements("minecraft:netherite_helmet", new Requirements("endurance", -1, 30)));
+            itemMap.put("minecraft:netherite_chestplate", new ItemWithRequirements("minecraft:netherite_chestplate", new Requirements("endurance", -1, 30)));
+            itemMap.put("minecraft:netherite_leggings", new ItemWithRequirements("minecraft:netherite_leggings", new Requirements("endurance", -1, 30)));
+            itemMap.put("minecraft:netherite_boots", new ItemWithRequirements("minecraft:netherite_boots", new Requirements("endurance", -1, 30)));
 
-        items.add(new ItemWithRequirements("rpmechanics:mythril_sword", new Requirements("swords", -1, 50)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_pickaxe", new Requirements("mining", -1, 50)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_axe", new Requirements("woodcutting", -1, 50)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_shovel", new Requirements("mining", -1, 50)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_hoe", new Requirements("farming", -1, 50)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_helmet", new Requirements("endurance", -1, 40)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_chestplate", new Requirements("endurance", -1, 40)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_leggings", new Requirements("endurance", -1, 40)));
-        items.add(new ItemWithRequirements("rpmechanics:mythril_boots", new Requirements("endurance", -1, 40)));
+            // Mythril
+            itemMap.put("rpmechanics:mythril_sword", new ItemWithRequirements("rpmechanics:mythril_sword", new Requirements("swords", -1, 50)));
+            itemMap.put("rpmechanics:mythril_pickaxe", new ItemWithRequirements("rpmechanics:mythril_pickaxe", new Requirements("mining", -1, 50)));
+            itemMap.put("rpmechanics:mythril_axe", new ItemWithRequirements("rpmechanics:mythril_axe", new Requirements("woodcutting", -1, 50)));
+            itemMap.put("rpmechanics:mythril_shovel", new ItemWithRequirements("rpmechanics:mythril_shovel", new Requirements("mining", -1, 50)));
+            itemMap.put("rpmechanics:mythril_hoe", new ItemWithRequirements("rpmechanics:mythril_hoe", new Requirements("farming", -1, 50)));
+            itemMap.put("rpmechanics:mythril_helmet", new ItemWithRequirements("rpmechanics:mythril_helmet", new Requirements("endurance", -1, 40)));
+            itemMap.put("rpmechanics:mythril_chestplate", new ItemWithRequirements("rpmechanics:mythril_chestplate", new Requirements("endurance", -1, 40)));
+            itemMap.put("rpmechanics:mythril_leggings", new ItemWithRequirements("rpmechanics:mythril_leggings", new Requirements("endurance", -1, 40)));
+            itemMap.put("rpmechanics:mythril_boots", new ItemWithRequirements("rpmechanics:mythril_boots", new Requirements("endurance", -1, 40)));
+        }
 
-        // --- NEW: auto-generate requirements for other mods’ tools/weapons/armor ---
-
+        // 3) Auto-generate new entries for other mods’ gear
         Registries.ITEM.forEach(item -> {
             Identifier id = Registries.ITEM.getId(item);
+            if (id != null && !"minecraft".equals(id.getNamespace()) && !"rpmechanics".equals(id.getNamespace())) {
+                System.out.println("[RPMechanics] Saw modded item: " + id);
+            }
             if (id == null) return;
 
             String itemId = id.toString();
 
-            // Skip vanilla + your own if you only want modded
-            if ("minecraft".equals(id.getNamespace()) || "rpmechanics".equals(id.getNamespace())) {
-                return;
-            }
+            // Skip vanilla + your own
+            if ("minecraft".equals(id.getNamespace()) || "rpmechanics".equals(id.getNamespace())) return;
 
-            // Already has a manual entry? Skip
-            if (containsItemRequirement(items, itemId)) {
-                return;
-            }
+            // Don’t touch items already in config
+            if (itemMap.containsKey(itemId)) return;
 
             Requirements req = inferRequirementsFromItem(item);
             if (req != null) {
-                items.add(new ItemWithRequirements(itemId, req));
+                itemMap.put(itemId, new ItemWithRequirements(itemId, req));
             }
         });
 
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
-        File reqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/item_use_reqs.json");
-        if (!reqs.exists() && !reqs.isDirectory()) {
-            try {
-                dir.mkdirs();
-                mapper.writeValue(reqs, items);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
         }
+
+        // 4) Always write merged result back
+        mapper.writeValue(reqs, new ArrayList<>(itemMap.values()));
     }
 
     public static void genWoodcuttingConfig() throws IOException {
@@ -150,17 +169,15 @@ public class ConfigGenerator {
         List<BlockExperience> woodcutting = new ArrayList<>();
 
         Registries.BLOCK.forEach(block -> {
-            if (block.asItem().toString().contains("log") ||
-                    block.asItem().toString().contains("wood") ||
-                    block.asItem().toString().contains("roots") ||
-                    block.asItem().toString().contains("bamboo")) {
-                woodcutting.add(new BlockExperience(block.asItem().toString(),
-                        Map.of(
-                                "woodcutting", 20F
-                        )));
+            String idStr = block.asItem().toString();
+            if (idStr.contains("log") ||
+                    idStr.contains("wood") ||
+                    idStr.contains("roots") ||
+                    idStr.contains("bamboo")) {
+                woodcutting.add(new BlockExperience(idStr,
+                        Map.of("woodcutting", 20F)));
             }
         });
-
 
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
@@ -174,8 +191,6 @@ public class ConfigGenerator {
                 throw new RuntimeException(e);
             }
         }
-
-
     }
 
     public static void genMiningConfig() throws IOException {
@@ -207,7 +222,7 @@ public class ConfigGenerator {
                 case 4 -> baseXp = ore ? 20F : 12F;  // diamond-level stuff
                 case 3 -> baseXp = ore ? 16F : 10F;  // iron-level
                 case 2 -> baseXp = ore ? 12F : 8F;   // stone-level
-                case 1 -> baseXp = ore ? 8F  : 5F;   // wood-level
+                case 1 -> baseXp = ore ? 8F : 5F;   // wood-level
                 default -> baseXp = 5F;
             }
 
@@ -240,17 +255,17 @@ public class ConfigGenerator {
         exp.put("farming", 1.4F);
 
         Registries.BLOCK.forEach(block -> {
-            if (block.asItem().toString().contains("beet") ||
-                    block.asItem().toString().contains("wheat") ||
-                    block.asItem().toString().contains("potato") ||
-                    block.asItem().toString().contains("carrot") ||
-                    block.asItem().toString().contains("cactus") ||
-                    block.asItem().toString().contains("sugarcane") ||
-                    block.asItem().toString().contains("mushroom") &&
-                            !block.asItem().toString().contains("carved")) {
-                farming.add(new BlockExperience(block.asItem().toString(), Map.of("farming", 5F)));
-            } else if (block.asItem().toString().contains("pumpkin") || block.asItem().toString().contains("melon")) {
-                farming.add(new BlockExperience(block.asItem().toString(), Map.of("farming", 8F)));
+            String idStr = block.asItem().toString();
+            if (idStr.contains("beet") ||
+                    idStr.contains("wheat") ||
+                    idStr.contains("potato") ||
+                    idStr.contains("carrot") ||
+                    idStr.contains("cactus") ||
+                    idStr.contains("sugarcane") ||
+                    (idStr.contains("mushroom") && !idStr.contains("carved"))) {
+                farming.add(new BlockExperience(idStr, Map.of("farming", 5F)));
+            } else if (idStr.contains("pumpkin") || idStr.contains("melon")) {
+                farming.add(new BlockExperience(idStr, Map.of("farming", 8F)));
             }
         });
 
@@ -296,9 +311,11 @@ public class ConfigGenerator {
 
     public static void genPassiveMobs() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        List<String> mobs = new ArrayList<>();
 
-        // Vanilla baseline (same as before)
+        // LinkedHashSet keeps insertion order and guarantees uniqueness
+        Set<String> mobs = new LinkedHashSet<>();
+
+        // Vanilla baseline
         mobs.add("sheep");
         mobs.add("cow");
         mobs.add("chicken");
@@ -347,11 +364,7 @@ public class ConfigGenerator {
             }
 
             // You currently store just the path (e.g. "sheep"), so keep that style
-            String name = id.getPath();
-
-            if (!mobs.contains(name)) {
-                mobs.add(name);
-            }
+            mobs.add(id.getPath());
         });
 
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -361,7 +374,7 @@ public class ConfigGenerator {
         if (!passiveMobs.exists() && !passiveMobs.isDirectory()) {
             try {
                 dir.mkdirs();
-                mapper.writeValue(passiveMobs, mobs);
+                mapper.writeValue(passiveMobs, new ArrayList<>(mobs));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -370,93 +383,105 @@ public class ConfigGenerator {
 
     public static void genCraftingConfig() {
         ObjectMapper mapper = new ObjectMapper();
-        List<ItemCraftingRequirement> items = new ArrayList<>();
 
+        // Key by itemId to avoid duplicates and allow overrides
+        Map<String, ItemCraftingRequirement> craftingMap = new LinkedHashMap<>();
+
+        // --- Heuristics from registry for generic crafting XP ---
         Registries.ITEM.forEach(item -> {
-            if (item.toString().contains("plank") ||
-                    item.toString().contains("log")) {
-                items.add(new ItemCraftingRequirement(item.toString(), 0, 0.8F));
+            Identifier id = Registries.ITEM.getId(item);
+            if (id == null) return;
+
+            String itemId = id.toString();
+
+            if (itemId.contains("plank") || itemId.contains("log")) {
+                craftingMap.putIfAbsent(itemId, new ItemCraftingRequirement(itemId, 0, 0.8F));
             }
-            if (item.toString().contains("door") ||
-                    item.toString().contains("trapdoor")) {
-                items.add(new ItemCraftingRequirement(item.toString(), 0, 14F));
+            if (itemId.contains("door") || itemId.contains("trapdoor")) {
+                craftingMap.putIfAbsent(itemId, new ItemCraftingRequirement(itemId, 0, 14F));
             }
-            if (item.toString().contains("emerald")
-                    || item.toString().contains("diamond")
-                    || item.toString().contains("iron")
-                    || item.toString().contains("coal")
-                    || item.toString().contains("lapis")
-                    || item.toString().contains("redstone")
-                    || item.toString().contains("gold")
-                    && item.toString().contains("block")) {
-                items.add(new ItemCraftingRequirement(item.toString(), 0, 1F));
+            if ((itemId.contains("emerald")
+                    || itemId.contains("diamond")
+                    || itemId.contains("iron")
+                    || itemId.contains("coal")
+                    || itemId.contains("lapis")
+                    || itemId.contains("redstone")
+                    || itemId.contains("gold"))
+                    && itemId.contains("block")) {
+                craftingMap.putIfAbsent(itemId, new ItemCraftingRequirement(itemId, 0, 1F));
             }
         });
 
-        items.add(new ItemCraftingRequirement("minecraft:stick", 0, 0.4F));
-        items.add(new ItemCraftingRequirement("minecraft:beacon", 0, 400F));
-        items.add(new ItemCraftingRequirement("minecraft:chest", 0, 8F));
-        items.add(new ItemCraftingRequirement("minecraft:anvil", 0, 15F));
-        items.add(new ItemCraftingRequirement("minecraft:crafting_table", 0, 4F));
-        items.add(new ItemCraftingRequirement("minecraft:smithing_table", 0, 10F));
-        items.add(new ItemCraftingRequirement("minecraft:bow", 8, 28F));
-        items.add(new ItemCraftingRequirement("minecraft:flint_and_steel", 10, 20F));
-        items.add(new ItemCraftingRequirement("minecraft:netherite_ingot", 30, 30F));
-        items.add(new ItemCraftingRequirement("rpmechanics:mythril_ingot", 45, 40F));
+        // --- Hand-tuned entries (these override heuristics) ---
+        craftingMap.put("minecraft:stick", new ItemCraftingRequirement("minecraft:stick", 0, 0.4F));
+        craftingMap.put("minecraft:beacon", new ItemCraftingRequirement("minecraft:beacon", 0, 400F));
+        craftingMap.put("minecraft:chest", new ItemCraftingRequirement("minecraft:chest", 0, 8F));
+        craftingMap.put("minecraft:anvil", new ItemCraftingRequirement("minecraft:anvil", 0, 15F));
+        craftingMap.put("minecraft:crafting_table", new ItemCraftingRequirement("minecraft:crafting_table", 0, 4F));
+        craftingMap.put("minecraft:smithing_table", new ItemCraftingRequirement("minecraft:smithing_table", 0, 10F));
+        craftingMap.put("minecraft:bow", new ItemCraftingRequirement("minecraft:bow", 8, 28F));
+        craftingMap.put("minecraft:flint_and_steel", new ItemCraftingRequirement("minecraft:flint_and_steel", 10, 20F));
+        craftingMap.put("minecraft:netherite_ingot", new ItemCraftingRequirement("minecraft:netherite_ingot", 30, 30F));
+        craftingMap.put("rpmechanics:mythril_ingot", new ItemCraftingRequirement("rpmechanics:mythril_ingot", 45, 40F));
 
-        items.add(new ItemCraftingRequirement("minecraft:wooden_sword", 0, 35F));
-        items.add(new ItemCraftingRequirement("minecraft:wooden_pickaxe", 0, 35F));
-        items.add(new ItemCraftingRequirement("minecraft:wooden_axe", 0, 35F));
-        items.add(new ItemCraftingRequirement("minecraft:wooden_shovel", 0, 35F));
-        items.add(new ItemCraftingRequirement("minecraft:wooden_hoe", 0, 35F));
-        items.add(new ItemCraftingRequirement("minecraft:leather_helmet", 0, 35F));
-        items.add(new ItemCraftingRequirement("minecraft:leather_chestplate", 0, 35F));
-        items.add(new ItemCraftingRequirement("minecraft:leather_leggings", 0, 35F));
-        items.add(new ItemCraftingRequirement("minecraft:leather_boots", 0, 35F));
+        // Wooden gear
+        craftingMap.put("minecraft:wooden_sword", new ItemCraftingRequirement("minecraft:wooden_sword", 0, 35F));
+        craftingMap.put("minecraft:wooden_pickaxe", new ItemCraftingRequirement("minecraft:wooden_pickaxe", 0, 35F));
+        craftingMap.put("minecraft:wooden_axe", new ItemCraftingRequirement("minecraft:wooden_axe", 0, 35F));
+        craftingMap.put("minecraft:wooden_shovel", new ItemCraftingRequirement("minecraft:wooden_shovel", 0, 35F));
+        craftingMap.put("minecraft:wooden_hoe", new ItemCraftingRequirement("minecraft:wooden_hoe", 0, 35F));
+        craftingMap.put("minecraft:leather_helmet", new ItemCraftingRequirement("minecraft:leather_helmet", 0, 35F));
+        craftingMap.put("minecraft:leather_chestplate", new ItemCraftingRequirement("minecraft:leather_chestplate", 0, 35F));
+        craftingMap.put("minecraft:leather_leggings", new ItemCraftingRequirement("minecraft:leather_leggings", 0, 35F));
+        craftingMap.put("minecraft:leather_boots", new ItemCraftingRequirement("minecraft:leather_boots", 0, 35F));
 
-        items.add(new ItemCraftingRequirement("minecraft:stone_sword", 3, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:stone_pickaxe", 3, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:stone_axe", 3, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:stone_shovel", 3, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:stone_hoe", 3, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:chainmail_helmet", 15, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:chainmail_chestplate", 15, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:chainmail_leggings", 15, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:chainmail_boots", 15, 40F));
+        // Stone + chainmail
+        craftingMap.put("minecraft:stone_sword", new ItemCraftingRequirement("minecraft:stone_sword", 3, 40F));
+        craftingMap.put("minecraft:stone_pickaxe", new ItemCraftingRequirement("minecraft:stone_pickaxe", 3, 40F));
+        craftingMap.put("minecraft:stone_axe", new ItemCraftingRequirement("minecraft:stone_axe", 3, 40F));
+        craftingMap.put("minecraft:stone_shovel", new ItemCraftingRequirement("minecraft:stone_shovel", 3, 40F));
+        craftingMap.put("minecraft:stone_hoe", new ItemCraftingRequirement("minecraft:stone_hoe", 3, 40F));
+        craftingMap.put("minecraft:chainmail_helmet", new ItemCraftingRequirement("minecraft:chainmail_helmet", 15, 40F));
+        craftingMap.put("minecraft:chainmail_chestplate", new ItemCraftingRequirement("minecraft:chainmail_chestplate", 15, 40F));
+        craftingMap.put("minecraft:chainmail_leggings", new ItemCraftingRequirement("minecraft:chainmail_leggings", 15, 40F));
+        craftingMap.put("minecraft:chainmail_boots", new ItemCraftingRequirement("minecraft:chainmail_boots", 15, 40F));
 
-        items.add(new ItemCraftingRequirement("minecraft:golden_sword", 10, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:golden_pickaxe", 10, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:golden_axe", 10, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:golden_shovel", 10, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:golden_hoe", 10, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:golden_helmet", 10, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:golden_chestplate", 10, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:golden_leggings", 10, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:golden_boots", 10, 40F));
+        // Gold gear
+        craftingMap.put("minecraft:golden_sword", new ItemCraftingRequirement("minecraft:golden_sword", 10, 40F));
+        craftingMap.put("minecraft:golden_pickaxe", new ItemCraftingRequirement("minecraft:golden_pickaxe", 10, 40F));
+        craftingMap.put("minecraft:golden_axe", new ItemCraftingRequirement("minecraft:golden_axe", 10, 40F));
+        craftingMap.put("minecraft:golden_shovel", new ItemCraftingRequirement("minecraft:golden_shovel", 10, 40F));
+        craftingMap.put("minecraft:golden_hoe", new ItemCraftingRequirement("minecraft:golden_hoe", 10, 40F));
+        craftingMap.put("minecraft:golden_helmet", new ItemCraftingRequirement("minecraft:golden_helmet", 10, 40F));
+        craftingMap.put("minecraft:golden_chestplate", new ItemCraftingRequirement("minecraft:golden_chestplate", 10, 40F));
+        craftingMap.put("minecraft:golden_leggings", new ItemCraftingRequirement("minecraft:golden_leggings", 10, 40F));
+        craftingMap.put("minecraft:golden_boots", new ItemCraftingRequirement("minecraft:golden_boots", 10, 40F));
 
-        items.add(new ItemCraftingRequirement("minecraft:iron_sword", 8, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:iron_pickaxe", 8, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:iron_axe", 8, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:iron_shovel", 8, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:iron_hoe", 8, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:iron_helmet", 8, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:iron_chestplate", 8, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:iron_leggings", 8, 40F));
-        items.add(new ItemCraftingRequirement("minecraft:iron_boots", 8, 40F));
+        // Iron gear
+        craftingMap.put("minecraft:iron_sword", new ItemCraftingRequirement("minecraft:iron_sword", 8, 40F));
+        craftingMap.put("minecraft:iron_pickaxe", new ItemCraftingRequirement("minecraft:iron_pickaxe", 8, 40F));
+        craftingMap.put("minecraft:iron_axe", new ItemCraftingRequirement("minecraft:iron_axe", 8, 40F));
+        craftingMap.put("minecraft:iron_shovel", new ItemCraftingRequirement("minecraft:iron_shovel", 8, 40F));
+        craftingMap.put("minecraft:iron_hoe", new ItemCraftingRequirement("minecraft:iron_hoe", 8, 40F));
+        craftingMap.put("minecraft:iron_helmet", new ItemCraftingRequirement("minecraft:iron_helmet", 8, 40F));
+        craftingMap.put("minecraft:iron_chestplate", new ItemCraftingRequirement("minecraft:iron_chestplate", 8, 40F));
+        craftingMap.put("minecraft:iron_leggings", new ItemCraftingRequirement("minecraft:iron_leggings", 8, 40F));
+        craftingMap.put("minecraft:iron_boots", new ItemCraftingRequirement("minecraft:iron_boots", 8, 40F));
 
-        items.add(new ItemCraftingRequirement("minecraft:diamond_sword", 24, 50F));
-        items.add(new ItemCraftingRequirement("minecraft:diamond_pickaxe", 24, 50F));
-        items.add(new ItemCraftingRequirement("minecraft:diamond_axe", 24, 50F));
-        items.add(new ItemCraftingRequirement("minecraft:diamond_shovel", 24, 50F));
-        items.add(new ItemCraftingRequirement("minecraft:diamond_hoe", 24, 50F));
-        items.add(new ItemCraftingRequirement("minecraft:diamond_helmet", 24, 50F));
-        items.add(new ItemCraftingRequirement("minecraft:diamond_chestplate", 24, 50F));
-        items.add(new ItemCraftingRequirement("minecraft:diamond_leggings", 24, 50F));
-        items.add(new ItemCraftingRequirement("minecraft:diamond_boots", 24, 50F));
+        // Diamond gear
+        craftingMap.put("minecraft:diamond_sword", new ItemCraftingRequirement("minecraft:diamond_sword", 24, 50F));
+        craftingMap.put("minecraft:diamond_pickaxe", new ItemCraftingRequirement("minecraft:diamond_pickaxe", 24, 50F));
+        craftingMap.put("minecraft:diamond_axe", new ItemCraftingRequirement("minecraft:diamond_axe", 24, 50F));
+        craftingMap.put("minecraft:diamond_shovel", new ItemCraftingRequirement("minecraft:diamond_shovel", 24, 50F));
+        craftingMap.put("minecraft:diamond_hoe", new ItemCraftingRequirement("minecraft:diamond_hoe", 24, 50F));
+        craftingMap.put("minecraft:diamond_helmet", new ItemCraftingRequirement("minecraft:diamond_helmet", 24, 50F));
+        craftingMap.put("minecraft:diamond_chestplate", new ItemCraftingRequirement("minecraft:diamond_chestplate", 24, 50F));
+        craftingMap.put("minecraft:diamond_leggings", new ItemCraftingRequirement("minecraft:diamond_leggings", 24, 50F));
+        craftingMap.put("minecraft:diamond_boots", new ItemCraftingRequirement("minecraft:diamond_boots", 24, 50F));
 
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        // --- NEW: auto-generate crafting reqs for other mods’ tools/weapons/armor ---
+        // --- Auto-generate crafting reqs for other mods’ tools/weapons/armor ---
         Registries.ITEM.forEach(item -> {
             Identifier id = Registries.ITEM.getId(item);
             if (id == null) return;
@@ -481,16 +506,16 @@ public class ConfigGenerator {
             int levelReq = req.getSkillLevel();
             float expWorth = levelReq * 2.0F; // tweak to taste
 
-            items.add(new ItemCraftingRequirement(itemId, levelReq, expWorth));
+            // Don’t override manual tuning
+            craftingMap.putIfAbsent(itemId, new ItemCraftingRequirement(itemId, levelReq, expWorth));
         });
 
-        File dir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics");
-        File dir2 = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
+        File skillsDir = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills");
         File craftingReqs = new File(FabricLoader.getInstance().getConfigDir() + "/rpmechanics/skills/crafting_level_reqs.json");
         if (!craftingReqs.exists() && !craftingReqs.isDirectory()) {
             try {
-                dir.mkdirs();
-                mapper.writeValue(craftingReqs, items);
+                skillsDir.mkdirs();
+                mapper.writeValue(craftingReqs, new ArrayList<>(craftingMap.values()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -498,9 +523,9 @@ public class ConfigGenerator {
     }
 
     public static void genDefaultMilestones() {
-        ObjectMapper xmlMapper = new ObjectMapper();
-        xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        xmlMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
 
         List<SkillMilestone> milestones = new ArrayList<>();
 
@@ -519,12 +544,11 @@ public class ConfigGenerator {
         if (!milestonesFile.exists() && !milestonesFile.isDirectory()) {
             try {
                 dir.mkdirs();
-                xmlMapper.writeValue(milestonesFile, milestones);
+                mapper.writeValue(milestonesFile, milestones);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
     // Helper Methods
@@ -556,22 +580,13 @@ public class ConfigGenerator {
     // 4 = diamond / netherite
     private static int getRequiredToolTier(BlockState state) {
         if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) return 4;
-        if (state.isIn(BlockTags.NEEDS_IRON_TOOL))    return 3;
-        if (state.isIn(BlockTags.NEEDS_STONE_TOOL))   return 2;
+        if (state.isIn(BlockTags.NEEDS_IRON_TOOL)) return 3;
+        if (state.isIn(BlockTags.NEEDS_STONE_TOOL)) return 2;
 
         // Mineable with a pickaxe but no “needs_*_tool” tag → wood / stone-ish
-        if (state.isIn(BlockTags.PICKAXE_MINEABLE))   return 1;
+        if (state.isIn(BlockTags.PICKAXE_MINEABLE)) return 1;
 
         return 0;
-    }
-
-    private static boolean containsItemRequirement(List<ItemWithRequirements> list, String itemId) {
-        for (ItemWithRequirements entry : list) {
-            if (entry.getItemId().equals(itemId)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static int clampLevel(int value) {
@@ -587,7 +602,7 @@ public class ConfigGenerator {
     private static int scaleLevelFromStack(Item item, int base) {
         ItemStack stack = new ItemStack(item);
 
-        int durability   = stack.getMaxDamage();   // 0 if not damageable
+        int durability = stack.getMaxDamage();   // 0 if not damageable
         boolean enchFlag = stack.isEnchantable();  // true for most gear
 
         int level = base
@@ -609,7 +624,7 @@ public class ConfigGenerator {
         // Swords
         if (item instanceof SwordItem) {
             double dmg = getBaseAttackDamage(item);   // e.g. 7.0 for strong swords
-            int base = 6 + (int)Math.round(dmg * 2.0); // damage heavily influences level
+            int base = 6 + (int) Math.round(dmg * 2.0); // damage heavily influences level
             int level = scaleLevelFromStack(item, base);
             return new Requirements("swords", -1, level);
         }
